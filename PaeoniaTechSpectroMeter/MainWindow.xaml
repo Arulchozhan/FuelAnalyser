@@ -6,7 +6,7 @@
         xmlns:MessageHandler="clr-namespace:MessageHandler;assembly=MessageHandler"
         xmlns:local="clr-namespace:PaeoniaTechSpectroMeter"
         mc:Ignorable="d"
-        Title="PaeoniaTechSpectraAnalyzer" Height= "{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Title="FuelAnalyzer" Height= "{x:Static SystemParameters.PrimaryScreenHeight}" 
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"
        MinWidth="1000"
         MinHeight="720"
@@ -18,13 +18,13 @@
 
     <Grid>
         <DockPanel LastChildFill="True"
-                   Background="LightGray" Margin="0,10,0.333,0">
+                   Background="LightGray" Margin="0,1,0.333,0">
 
             <Grid x:Name="GrdHeader"
                   DockPanel.Dock="Top"
                   Height="45"
                   VerticalAlignment="Top"
-                  Background="LightBlue" Margin="0,0,10.333,0">
+                  Background="LightBlue" Margin="0,0,1,0">
 
 
 
@@ -100,25 +100,25 @@
                        Padding="0" />
 
                 <Label x:Name="LblAppName"
-                       Content="Paenio Tech Spectram Meter"
+                       Content="FuelAnalyser"
                        HorizontalAlignment="Left"
-                       Margin="10,5,0,0"
+                       Margin="10,0,0,0"
                        VerticalAlignment="Top"
-                       Width="167"
+                       Width="80"
                        FontSize="12"
                        Foreground="Black" />
                 <Label x:Name="LblVersion"
                        Content="0.0.0.1"
                        HorizontalAlignment="Left"
-                       Margin="173,7,0,0"
+                       Margin="95,0,0,0"
                        VerticalAlignment="Top"
                        Width="49"
                        FontSize="11"
-                       Foreground="Black" Height="22" RenderTransformOrigin="1.05,0.394" />
+                       Foreground="Black" Height="26" RenderTransformOrigin="1.05,0.394" />
 
                 <Label x:Name="LblCompany"
                        Content="Powered by:Paeonia Tech"
-                       Margin="10,28,0,0"
+                       Margin="2,23,0,0"
                        VerticalAlignment="Top"
                        FontSize="8"
                        Foreground="Black"
@@ -126,7 +126,7 @@
                        Width="103" />
                 <Label x:Name="LblDevelopper"
                        Content="Developed by: Arulchozhan"
-                       Margin="105,29,0,0"
+                       Margin="95,23,0,0"
                        VerticalAlignment="Top"
                        FontSize="8"
                        Foreground="Black"
@@ -148,25 +148,25 @@
             <Grid x:Name="GriMain"
                   DockPanel.Dock="Left" 
                   VerticalAlignment="Stretch"
-              	  Background="#FF707070" Margin="0,0,0,0">
-                <TabControl x:Name="TabCtrlSetup" Height= "604"
+              	  Background="LimeGreen" Margin="0,-0.333">
+                <TabControl x:Name="TabCtrlSetup" Height= "593"
                     SelectionChanged="Tabpage_updated"
             		Style="{StaticResource MainTabControlStyle}"
             		ItemContainerStyle="{StaticResource MainTabStyle}"
-            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="0,-15,1.333,-0.333" >
+            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="1,0,1,0" >
                     <TabItem x:Name="TabMain"
-            			Header="Measurement"  FontSize="10" VerticalAlignment="Stretch" Margin="0,0,0,0.333" >
+            			Header="Measurement"  FontSize="15" VerticalAlignment="Stretch" Margin="0,0,0,0.333" >
                     </TabItem>
 
                     <TabItem x:Name="TabSystemConfig"
-                                 Header="Detector Setting"  FontSize="10" Focusable="True"
+                                 Header="Detector Setting"  FontSize="15" Focusable="True"
                                  IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}"
                                  Background="Black" Margin="1.667,0,-6.333,0.333">
                         <Grid x:Name="GrdSystemConfig"  Width="auto" Height="auto"
                               />
                     </TabItem>
                     <TabItem x:Name="TabAdvancedSystemConfig"
-            			Header=" Advanced Config"  FontSize="10" Focusable="True"
+            			Header=" Advanced Config"  FontSize="15" Focusable="True"
                         IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" Margin="9.333,0,-3.333,0.333">
                         <Grid x:Name="GrdAppConfig" Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <!--

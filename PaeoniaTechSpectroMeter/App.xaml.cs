@@ -1,15 +1,15 @@
-﻿using FSM;
-using MessageHandler;
-using PaeoniaTechSpectroMeter.Model;
-using System;
-using System.Diagnostics;
-using System.Threading;
+﻿using System;
 using System.Windows;
-using System.Windows.Input;
-using Utilities;
-
 namespace PaeoniaTechSpectroMeter
 {
+    using FSM;
+    using MessageHandler;
+    using PaeoniaTechSpectroMeter.Model;
+    using System.Diagnostics;
+    using System.Threading;
+    using System.Windows.Input;
+    using Utilities;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
