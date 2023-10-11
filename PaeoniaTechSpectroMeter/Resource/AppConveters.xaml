@@ -1,0 +1,61 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  
+                    xmlns:CmmConveters="clr-namespace:CommonConveters;assembly=CommonConveters"
+                    xmlns:appConveter="clr-namespace:DefinationAndConveter;assembly=DefinationAndConveter"
+                   xmlns:mcpMonitor1="clr-namespace:MCPNet.MachineMonitor;assembly=MCPNet.MachineMonitor"
+                    xmlns:fsm="clr-namespace:FSM;assembly=FSM">
+
+   <!-- <fsm:SMStatusToBGBrushConveter x:Key="SMStatusToBGBrush" />
+    <fsm:SMCStatusToBGBrushConveter x:Key="SMCStatusToBGBrush" />
+    <fsm:STStatusToBGBrushConveter x:Key="STStatusToBrush" />
+    <fsm:STResultToBGBrushConveter x:Key="STResultToBrush" />
+-->
+    <appConveter:BoolToGreenBrushConveter x:Key="BoolToGreenBrush" />
+    <appConveter:MachineStatusTypeToBrushConveter x:Key="McStatusToBrush" />
+    <appConveter:StatusInfoTypeToBrushConveter x:Key="StatusInfoToBrush" />
+    <appConveter:StatusInfoTypeToFGBrushConveter x:Key="StatusInfoToFGBrush" />
+    <appConveter:SystemIconConverter x:Key="SystemIconConverter" />
+    <appConveter:DispensingJobEnableToFgBrushConveter x:Key="DispenJobEnabledToFG" />
+    <appConveter:LensPrecisorStatusToBGBrushConveter x:Key="LensPrecisorStatusToBG" />
+    <appConveter:IntArrToColorStringToSolidBrush x:Key="IntArrToSolidBG" />
+    <appConveter:TXDataReadingStatusToBrushConveter x:Key="TxDataReadSolidBR" />
+    <appConveter:RXDataReadingStatusToBrushConveter x:Key="RxDataReadSolidBR" />
+    <appConveter:IntGripperIndexStatusToBrushConveter x:Key="GripperIndexToBgBrush" />
+
+
+    <!--localConveter:PosZoneStatusToBgBrushesConveter x:Key="PosZoneStatusToBgBrushes" /-->
+<!--
+    <mcpMonitor1:TLBoolToBuzzerBrushConveter x:Key="TowerBuzzerStatusToBrush" />
+    <mcpMonitor1:TLBoolToGreenBrushConveter x:Key="TowerGreenStatusToBrush" />
+    <mcpMonitor1:TLBoolToRedBrushConveter x:Key="TowerRedStatusToBrush" />
+    <mcpMonitor1:TLBoolToYellowBrushConveter x:Key="TowerYellowStatusToBrush" />
+-->
+    <CmmConveters:EnumDescriptionConverter x:Key="EnumToDescriptionConverter" />
+    <CmmConveters:EnumDescriptionSourceConverter x:Key="EnumToDescriptionSourceConverter" />
+    <CmmConveters:BoolToInvertBoolConveter x:Key="BoolToInvertBool" />
+    <CmmConveters:BoolToVisibility x:Key="BoolToVisibilityCvtr" />
+    <CmmConveters:BoolToVisibilityCollapsed x:Key="BoolToVisibilityCvtrCollapsed" />
+    <CmmConveters:BoolToInvertVisibilityCollapsed x:Key="BoolToInvertVisibilityCollapsedCvtr" />
+    <CmmConveters:BoolToInvertVisibility x:Key="BoolToInvertVisibilityCvtr" />
+    <CmmConveters:DateTimeToTimeString x:Key="NowTime" />
+    <CmmConveters:DateTimeToDateString x:Key="NowDate" />
+    <CmmConveters:DateTimeToDateWithLongMonth x:Key="NowLongTime" />
+    <CmmConveters:DateTimeToDayName x:Key="NowDayName" />
+    <CmmConveters:DoubleToDecimalConverter x:Key="DoubleToDecimal" />
+
+    <CmmConveters:StringToInsideTab x:Key="TabInside" />
+    <CmmConveters:FloatTo3DecimalDisplay x:Key="FloadTo3D" />
+    <CmmConveters:FloatTo2DecimalDisplay x:Key="FloadTo2D" />
+    <CmmConveters:FloatTo1DecimalDisplay x:Key="FloadTo1D" />
+    <CmmConveters:FloatTo2DPercentDisplay x:Key="FloadTo2DPercent" />
+    <CmmConveters:DoubleTo0DecimalDisplay x:Key="DoubleTo0D" />
+    <CmmConveters:DoubleTo1DecimalDisplay x:Key="DoubleTo1D" />
+    <CmmConveters:DoubleTo2DecimalDisplay x:Key="DoubleTo2D" />
+    <CmmConveters:DoubleTo3DecimalDisplay x:Key="DoubleTo3D" />
+    <CmmConveters:DoubleTo4DecimalDisplay x:Key="DoubleTo4D" />
+
+   
+
+
+</ResourceDictionary>
