@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FSM;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Windows.Threading;
-using System.Windows;
-using System.Diagnostics;
+﻿using FSM;
 using MCPNet.MachineMonitor;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Threading;
 
 
 namespace PaeoniaTechSpectroMeter.Model
 {
- public  class MachineStatusMonitor : DispatcherObject, INotifyPropertyChanged
-    
+    public class MachineStatusMonitor : DispatcherObject, INotifyPropertyChanged
+
     {
         MachineStatus machineStatus = MachineStatus.UnInitialised;
         public MachineStatus MachineStatus
@@ -128,7 +125,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
         SMCStatus lastStatus = SMCStatus.UNKNOWN;
 
-     
+
 
         bool IsInitialising
         {

@@ -8,23 +8,26 @@
         mc:Ignorable="d"
         Title="FuelAnalyzer" Height= "{x:Static SystemParameters.PrimaryScreenHeight}" 
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"
-       MinWidth="1000"
+        Topmost="True"
+        WindowState="Maximized"
         MinHeight="720"
+        MinWidth="{x:Static SystemParameters.PrimaryScreenWidth}"
         SizeToContent="WidthAndHeight"
         BorderBrush="DeepSkyBlue"
-        BorderThickness="1">
-    <!--Loaded="Window_Loaded"
-        Closing="Window_Closing" -->
+        BorderThickness="1"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+
 
     <Grid>
         <DockPanel LastChildFill="True"
-                   Background="LightGray" Margin="0,1,0.333,0">
+                   Background="LightBlue" Margin="0,1,0.333,-1">
 
             <Grid x:Name="GrdHeader"
                   DockPanel.Dock="Top"
-                  Height="45"
+                  Height="40"
                   VerticalAlignment="Top"
-                  Background="LightBlue" Margin="0,0,1,0">
+                  Background="LightBlue" Margin="0,0,1.333,1">
 
 
 
@@ -32,11 +35,10 @@
                           Width="400"
                           DockPanel.Dock="Right"
                           HorizontalAlignment="Right"
-                          Background="#FFB8B8B8"
-                          Margin="0,0,0,1">
+                          Background="#FFB8B8B8" Margin="0,0,0,-14">
                     <DockPanel LastChildFill="True" Margin="0,0,0,1">
                         <Grid x:Name="GrdRecipePnl"
-                                  Height="30"
+                                  Height="39"
                                   VerticalAlignment="Top"
                                   IsEnabled="{Binding McStatusMonitor.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}"
                                   DockPanel.Dock="Top">
@@ -52,12 +54,12 @@
                                        HorizontalContentAlignment="Right" Height="24" />
 
                             <ComboBox x:Name="CbControlRecipeList"
-                                          Margin="100,5,175.8,0"
+                                          Margin="100,5,176,0"
                                           DataContext="{Binding RecipeMngr}"
                                           SelectedItem="{Binding SelectedControlRecipeName, UpdateSourceTrigger=PropertyChanged}"
                                           ItemsSource="{Binding ControlRecipeNameList}"
                                           VerticalAlignment="Top"
-                                          SelectionChanged="CbControlRecipe_SelectionChanged" Height="22" />
+                                          SelectionChanged="CbControlRecipe_SelectionChanged" Height="31" />
 
                             <Button x:Name="BtnSaveControlRecipe"
                                         Content="Save Parameter"
@@ -73,11 +75,50 @@
                 <!-- </DockPanel>
                 -->
 
+                <Grid x:Name="GrdLeftPannel"
+                          Width="500"
+                          DockPanel.Dock="Left"
+                          HorizontalAlignment="Left"
+                          Background="LightBlue"
+                          Margin="0,0,0,10">
+                    <DockPanel LastChildFill="True" Margin="0,0,0,0">
+                        <Grid x:Name="GrdTimeandTemp"
+                                  Height="39"
+                                  VerticalAlignment="Top"
+                                  IsEnabled="{Binding McStatusMonitor.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}"
+                                  DockPanel.Dock="Top">
 
+
+                            <Label x:Name="Tempdata"
+                                       Content="{Binding TemperatureData}"
+                                       FontSize="12"
+                                       Foreground="Black"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Center"
+                                       Margin="158,5,205,0"
+                                       Width="37"
+                                       HorizontalContentAlignment="Right" Height="24" />
+                            <Label x:Name="DateandTime"
+                                       Content="{Binding TemperatureData}"
+                                       FontSize="11"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,5,0,0"
+                                       Width="140"
+                                       HorizontalContentAlignment="Right" Height="24" />
+
+
+
+                        </Grid>
+
+
+                    </DockPanel>
+                </Grid>
             </Grid>
             <Grid x:Name="GrdFooter"
                   DockPanel.Dock="Bottom"
                   Height="50"
+                  Margin="0,15"
                   VerticalAlignment="Bottom"
                   Background="LightBlue">
                 <Image x:Name="image"
@@ -118,7 +159,7 @@
 
                 <Label x:Name="LblCompany"
                        Content="Powered by:Paeonia Tech"
-                       Margin="2,23,0,0"
+                       Margin="10,12,0,0"
                        VerticalAlignment="Top"
                        FontSize="8"
                        Foreground="Black"
@@ -126,7 +167,7 @@
                        Width="103" />
                 <Label x:Name="LblDevelopper"
                        Content="Developed by: Arulchozhan"
-                       Margin="95,23,0,0"
+                       Margin="10,28,0,0"
                        VerticalAlignment="Top"
                        FontSize="8"
                        Foreground="Black"
@@ -148,25 +189,33 @@
             <Grid x:Name="GriMain"
                   DockPanel.Dock="Left" 
                   VerticalAlignment="Stretch"
-              	  Background="LimeGreen" Margin="0,-0.333">
-                <TabControl x:Name="TabCtrlSetup" Height= "593"
+              	  Background="LightBlue" Margin="0,1,0,0">
+                <TabControl x:Name="TabCtrlSetup" Height= "561"
                     SelectionChanged="Tabpage_updated"
             		Style="{StaticResource MainTabControlStyle}"
             		ItemContainerStyle="{StaticResource MainTabStyle}"
-            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="1,0,1,0" >
+            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="1,0,1.333,0.667" >
                     <TabItem x:Name="TabMain"
-            			Header="Measurement"  FontSize="15" VerticalAlignment="Stretch" Margin="0,0,0,0.333" >
+            			Header="Measurement"  FontSize="12" VerticalAlignment="Stretch" Margin="0,0,-0.333,0" >
+                        <Grid x:Name="GrdMeasurement"  Width="auto" Height="auto"
+                              />
                     </TabItem>
-
+                    <TabItem x:Name="TabMeasurementSetting"
+                                 Header="MeasurementSetting" FontSize="12" Focusable="True"
+                                 IsEnabled="True"
+                                 Background="Black" Margin="1.333,0,-6.667,0">
+                        <Grid x:Name="GrdMeasurementConfig"  Width="auto" Height="auto"
+                              />
+                    </TabItem>
                     <TabItem x:Name="TabSystemConfig"
-                                 Header="Detector Setting"  FontSize="15" Focusable="True"
-                                 IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="Black" Margin="1.667,0,-6.333,0.333">
+                                 Header="Factory Setting" FontSize="12" Focusable="True"
+                                 IsEnabled="True"
+                                 Background="Black" Margin="1.333,0,-6.667,0">
                         <Grid x:Name="GrdSystemConfig"  Width="auto" Height="auto"
                               />
                     </TabItem>
                     <TabItem x:Name="TabAdvancedSystemConfig"
-            			Header=" Advanced Config"  FontSize="15" Focusable="True"
+            			Header=" Advanced Config"  FontSize="12" Focusable="True"
                         IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" Margin="9.333,0,-3.333,0.333">
                         <Grid x:Name="GrdAppConfig" Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <!--

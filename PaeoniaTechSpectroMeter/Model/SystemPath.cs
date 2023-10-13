@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Diagnostics;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
@@ -24,15 +20,10 @@ namespace PaeoniaTechSpectroMeter.Model
         public static string RootLogDirectory = "C:\\FuelAnalyzer Logs";
 
         public const string RecipeDirectory = "Recipe";
-       // public const string LastCntDirectory = "LastCnt";
         public const string LogDirectory = "Log";
-        //public const string LotDirectory = "Lot";
         public const string SystemDirectory = "System";
-      //  public const string WorkOrderDirectory = "WorkOrder";
-        //public const string VisionDirectory = "Vision";
         public const string ControlDirectory = "Control";
         public const string TimingLogDirectory = "TimingLog";
-       // public const string CapturedImageDirectory = "CapturedImage";
         public const string LotExt = ".csv";
         public const string VisExt = "mvp";
         public const string ControlExt = "mcp";
@@ -41,19 +32,6 @@ namespace PaeoniaTechSpectroMeter.Model
         public const string ImageExt = ".bmp";
 
         public const string ConfigFileName = "Config.xml";
-/*
-        public const string AxesConfigFileName = "AxesConfig.xml";
-        public const string AxesSpeedFileName = "AxesSpeed.xml";
-        public const string AxesTableFileName = "AxesTable.xml";
-        public const string AxesMiscFileName = "AxesMisc.xml";
-
-        public const string TowerLightFileName = "TowerLightConfig.xml";
-        public const string OtherDataFileName = "OtherData.xml";
-
-        public const string IoCardFileName = "IoCard.xml";
-        public const string InputFileName = "Input.xml";
-        public const string OutputFileName = "Output.xml";
-        */
 
         static public string GetTimingPath
         {
@@ -70,34 +48,12 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return RootInfoDirection + "\\" + RecipeDirectory + "\\" + ControlDirectory; }
         }
 
-      /*  static public string GetVisionRecipePath
-        {
-            get { return RootInfoDirection + "\\" + RecipeDirectory + "\\" + VisionDirectory; }
-        }
-        */
+
         static public string GetSystemPath
         {
             get { return RootDirectory + "\\" + SystemDirectory; }
         }
-/*
-        static public string GetLastCntPath
-        {
-            get { return RootInfoDirection + "\\" + LastCntDirectory; }
-        }
 
-        static public string GetWorkOrderPath
-        {
-            get { return RootInfoDirection + "\\" + WorkOrderDirectory; }
-        }
-        static public string GetCapturedImagePath
-        {
-            get { return RootInfoDirection + "\\" + CapturedImageDirectory; }
-        }
-         static public string GetLotPath
-        {
-            get { return RootInfoDirection + "\\" + LotDirectory; }
-        }
-        */
 
 
         static public string GetLogPath
@@ -105,7 +61,7 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return RootLogDirectory + "\\" + LogDirectory; }
         }
 
-       
+
         public string LoadedSystemPath
         {
             get { return GetSystemPath; }
@@ -118,13 +74,6 @@ namespace PaeoniaTechSpectroMeter.Model
             CreateDirectoryIfDontHave(GetRecipePath);
             CreateDirectoryIfDontHave(GetSystemPath);
             CreateDirectoryIfDontHave(GetControlRecipePath);
-/*
-            CreateDirectoryIfDontHave(GetLastCntPath);
-            CreateDirectoryIfDontHave(GetWorkOrderPath);
-            CreateDirectoryIfDontHave(GetCapturedImagePath);
-            CreateDirectoryIfDontHave(GetLotPath);
-            CreateDirectoryIfDontHave(GetVisionRecipePath);
-            */
 
             if (!excludelogs)
                 CreateDirectoryIfDontHave(GetTimingPath);

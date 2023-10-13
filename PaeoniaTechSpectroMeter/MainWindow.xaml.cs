@@ -24,6 +24,7 @@ namespace PaeoniaTechSpectroMeter
     {
         MainManager mmgr = null;
         CtrlAppConfig ctrlAppConfig = null;
+        CtrlFactorySetting ctrlFactorySetting = null;
         RecipeManager reMgr = null;
         List<UserControl> customControls = new List<UserControl>();
         List<StandardWindow> imageViewWindowList = new List<StandardWindow>();
@@ -142,6 +143,18 @@ namespace PaeoniaTechSpectroMeter
         void SetupPannels()
         {
 
+            ctrlFactorySetting = new CtrlFactorySetting();
+            MakeControlStrech(ctrlFactorySetting);
+            ctrlFactorySetting.Setup(mmgr); //.Cameradata
+            GrdSystemConfig.Children.Add(ctrlFactorySetting);
+            RegisterCustomControl(ctrlFactorySetting);
+            
+            ctrlAppConfig = new CtrlAppConfig();
+            ctrlAppConfig.Setup(mmgr.AppConfig);
+            MakeControlStrech(ctrlAppConfig);
+            GrdAppConfig.Children.Add(ctrlAppConfig);
+            RegisterCustomControl(ctrlAppConfig);
+
         }
 
         void MakeControlStrech(UserControl uc)
@@ -171,6 +184,7 @@ namespace PaeoniaTechSpectroMeter
         {
             bool isAccessGranted = mmgr.UserLogin.CurrentAccessLevel >= AccessLevel.ENGINEER;
             mmgr.DetectorConfigurationData.Samplingfreq.IsVisible = isAccessGranted ? true : false;
+            GrdRightPannel.Visibility= isAccessGranted ? Visibility.Visible : Visibility.Collapsed;
             TabSystemConfig.Visibility = isAccessGranted ? Visibility.Visible : Visibility.Collapsed;
             TabAdvancedSystemConfig.Visibility = isAccessGranted ? Visibility.Visible : Visibility.Collapsed;
             isAccessGranted = mmgr.UserLogin.CurrentAccessLevel >= AccessLevel.DEVELOPER;

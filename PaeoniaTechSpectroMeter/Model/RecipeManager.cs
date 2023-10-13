@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using PaeoniaTechSpectroMeter.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using PaeoniaTechSpectroMeter.Data;
-using Microsoft.Win32;
 //using MVPManager;
 using System.Windows;
-using System.Diagnostics;
 using Utilities;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
-  public  class RecipeManager : INotifyPropertyChanged //,IDispatcherUIDisplay
+    public class RecipeManager : INotifyPropertyChanged
     {
 
         #region INotifyPropertyChanged
@@ -128,7 +126,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
 
         }
-       
+
         public void SaveControlRecipe()
         {
 

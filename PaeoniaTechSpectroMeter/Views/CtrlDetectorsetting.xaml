@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="PaeoniaTechSpectroMeter.Views.CtrlCemerasetting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PaeoniaTechSpectroMeter.Views"
+             xmlns:DataUI="clr-namespace:MCPNet.Data.UI;assembly=MCPNet.Data"
+             xmlns:UI="clr-namespace:MCPNet.UI;assembly=MCPNet.UI"
+             xmlns:comconverters="clr-namespace:CommonConveters;assembly=CommonConveters"
+             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=Utilities"
+             mc:Ignorable="d" 
+             Background="#FFD4D4D4"
+             Height="700" 
+             Width="1280">
+    <Grid Margin="0,0,355,0">
+        <TabControl x:Name="TabCtrlStation"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    TabStripPlacement="Top" Width="1057" Background="#FFD4D4D4" SelectionChanged="TabCtrlStation_SelectionChanged">
+            <TabItem x:Name="TabSetting"
+                     Header="Settings">
+
+                <Grid >
+                    <Grid Margin="0,10,0.333,10" >
+                        <!--   <Controls:WpfPropertyGrid x:Name="DataGrdConfig"
+                                  Margin="0,0,92,54" />-->
+                        <!-- <ListBox HorizontalAlignment="Left"
+                                     x:Name="Settings"
+                                     Background="#FFD4D4D4"
+                                     Margin="39,10,0,40.8"
+                                     ItemsSource="{Binding AvailableInputList}"
+                                     Width="550" />
+                        -->
+                        <UI:SearchableDataItemList x:Name="SearchableItemList" 
+                                HorizontalAlignment="Left"
+                                       Margin="1,2,-556.667,17"
+                                                Width="200" />
+
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+
+    </Grid>
+</UserControl>

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UserAccess;
+﻿using UserAccess;
 namespace PaeoniaTechSpectroMeter.Model
 {
-   public class UserAccessControl: AccessControl
+    public class UserAccessControl : AccessControl
     {
         public static string PositionTeachingFeatureName = "Position Teaching";
         public static string CommonValueEntryFeatureName = "Commom Value Entry";
@@ -39,7 +35,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public AccessConfig DelaySetting { get { return delaySetting; } }
 
         //   AccessConfig bondSetting = new AccessConfig(BondSettingFeatureName, AccessLevel.ENGINEER);
-       // public AccessConfig BondSetting { get { return bondSetting; } }
+        // public AccessConfig BondSetting { get { return bondSetting; } }
 
         AccessConfig motionProfileConfig = new AccessConfig(MotionProfileFeatureName, AccessLevel.ENGINEER);
         public AccessConfig MotionProfileConfig { get { return motionProfileConfig; } }
@@ -50,10 +46,10 @@ namespace PaeoniaTechSpectroMeter.Model
         AccessConfig productionConfig = new AccessConfig(ProductionOptionsFeatureName, AccessLevel.ENGINEER);
         public AccessConfig ProductionConfig { get { return productionConfig; } }
 
-        AccessConfig commonValueEntryConfig = new AccessConfig(CommonValueEntryFeatureName, AccessLevel.ENGINEER,true);
+        AccessConfig commonValueEntryConfig = new AccessConfig(CommonValueEntryFeatureName, AccessLevel.ENGINEER, true);
         public AccessConfig CommonValueEntryConfig { get { return commonValueEntryConfig; } }
 
-    
+
         AccessConfig superUserAccessFeatures = new AccessConfig(SuperUserAccessFeatureName, AccessLevel.SUPERUSER, true);
         public AccessConfig SuperUserAccessFeatures { get { return superUserAccessFeatures; } }
 

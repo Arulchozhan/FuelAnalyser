@@ -53,6 +53,9 @@
     <Reference Include="DefinationAndConveter">
       <HintPath>..\..\Ref_dll\DefinationAndConveter.dll</HintPath>
     </Reference>
+    <Reference Include="Dias_Lisa">
+      <HintPath>..\..\Ref_dll\Dias_Lisa.dll</HintPath>
+    </Reference>
     <Reference Include="FSM">
       <HintPath>..\..\Ref_dll\FSM.dll</HintPath>
     </Reference>
@@ -74,6 +77,9 @@
     <Reference Include="MCPNet">
       <HintPath>..\..\Ref_dll\MCPNet.dll</HintPath>
     </Reference>
+    <Reference Include="MCPNet.ChartControl">
+      <HintPath>..\..\Ref_dll\MCPNet.ChartControl.dll</HintPath>
+    </Reference>
     <Reference Include="MCPNet.Data">
       <HintPath>..\..\Ref_dll\MCPNet.Data.dll</HintPath>
     </Reference>
@@ -85,6 +91,14 @@
     </Reference>
     <Reference Include="MCPNet.MachineMonitor">
       <HintPath>..\..\Ref_dll\MCPNet.MachineMonitor.dll</HintPath>
+    </Reference>
+    <Reference Include="MCPNet.Motion.PosModel, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Ref_dll\MCPNet.Motion.PosModel.dll</HintPath>
+    </Reference>
+    <Reference Include="MCPNet.Motion.UI, Version=1.0.4.19, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Ref_dll\MCPNet.Motion.UI.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.UI">
       <HintPath>..\..\Ref_dll\MCPNet.UI.dll</HintPath>
@@ -112,9 +126,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TCPSever">
-      <HintPath>..\..\Ref_dll\TCPSever.dll</HintPath>
-    </Reference>
     <Reference Include="UserAccess">
       <HintPath>..\..\Ref_dll\UserAccess.dll</HintPath>
     </Reference>
@@ -133,9 +144,16 @@
     <Compile Include="Data\ControlRecipe.cs" />
     <Compile Include="Data\DetectorConfigurationData.cs" />
     <Compile Include="Data\RunDataInfo.cs" />
+    <Compile Include="Model\ReadDetector.cs" />
     <Compile Include="Station\MachineEvents.cs" />
     <Compile Include="Views\CtrlAppConfig.xaml.cs">
       <DependentUpon>CtrlAppConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CtrlDetectorsetting.xaml.cs">
+      <DependentUpon>CtrlDetectorsetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CtrlFactorySetting.xaml.cs">
+      <DependentUpon>CtrlFactorySetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinWelcomeScreen.xaml.cs">
       <DependentUpon>WinWelcomeScreen.xaml</DependentUpon>
@@ -169,6 +187,14 @@
     <Page Include="Views\CtrlAppConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CtrlDetectorsetting.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CtrlFactorySetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WinWelcomeScreen.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -4,18 +4,18 @@ namespace PaeoniaTechSpectroMeter.Station
     public class MachineEvents
     {
 
-       
+
         public EventWaitHandle[] StationResetDoneEvents = null;
         public MachineEvents()
         {
 
 
 
-          StationResetDoneEvents = new EventWaitHandle[]
-          {
-                
-          };
-           
+            StationResetDoneEvents = new EventWaitHandle[]
+            {
+
+            };
+
 
         }
         public bool CheckIfOtherAllStationResetDone(int timeout)

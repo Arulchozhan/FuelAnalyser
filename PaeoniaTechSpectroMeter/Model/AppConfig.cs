@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using System.Reflection;
+using System.Xml.Serialization;
 using Utilities;
-//using fiberattach.Data;
-//using System.Drawing;
-using DefinationAndConveter;
-using MCPNet.Data.ValueData;
-using MCPNet.UI;
+
 
 namespace PaeoniaTechSpectroMeter.Model
 {
     public class AppConfig : FilterablePropertyBase, INotifyPropertyChanged
     {
         static string configName = "PaeoniaTechSpectroMeter.cfg";
-       
+
         [XmlIgnore]
         public string AppExeName = Assembly.GetExecutingAssembly().GetName().Name;
 
@@ -29,7 +22,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public string BuiltDate = File.GetCreationTime(Assembly.GetExecutingAssembly().Location).ToString("dd-MMM-yy [HH:mm]"); //  DateTime.Now.ToString("dd-MMM-yy [HH:mm]")  Assembly.GetExecutingAssembly().GetLinkerTime().ToString("dd-MMM-yy [HH:mm]");
 
 
-        string appName = "PaeoniaTechSpectroMeter";
+        string appName = "FuelAnalyser";
         [Category("Application")]
         [Description("AppConfig")]
         public string AppName { get { return appName; } set { appName = value; OnPropertyChanged("AppName"); } }
@@ -40,13 +33,27 @@ namespace PaeoniaTechSpectroMeter.Model
         [TypeConverter(typeof(YesNoPropertyType))]
         public bool SimulateMotors { get { return simulateMotors; } set { simulateMotors = value; OnPropertyChanged("SimulateMotors"); } }
 
+        string acsEtherNetMotionIP = "192.168.157.20";
+        [Category("Hardware Setting")]
+        [Description(" IP")]
+        public string AcsEtherNetMotionIP
+        {
+            get => acsEtherNetMotionIP;
+            set
+            {
+                acsEtherNetMotionIP = value;
+                OnPropertyChanged("IP");
+            }
+        }
+
+
         string appLogDirectory = "";
         [Category("Application")]
         [Description("AppLogDirectory")]
         public string AppLogDirectory { get { return appLogDirectory; } set { appLogDirectory = value; OnPropertyChanged("AppLogDirectory"); } }
 
         bool simulateIO = true;
-       
+
 
         string lastControlRecipeName = "";
         [Category("Last Recipe")]
@@ -61,10 +68,10 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         public static AppConfig LoadConfig()
         {
-           // string fullPath=null;
-             string fullPath = Path.Combine(SystemPath.RootDirectory, configName);
-            return (AppConfig)Serializer.LoadXml(typeof(AppConfig),  fullPath);
-         
+            // string fullPath=null;
+            string fullPath = Path.Combine(SystemPath.RootDirectory, configName);
+            return (AppConfig)Serializer.LoadXml(typeof(AppConfig), fullPath);
+
         }
 
 

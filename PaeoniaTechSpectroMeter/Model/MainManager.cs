@@ -1,8 +1,4 @@
-﻿//using GSpcIOLib;
-//using fiberattach.Station;
-//using MCPNet.IO.Config.Card;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Input;
@@ -10,17 +6,14 @@ using UserAccess;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
-    // using Commands;
+
     using COMPorts;
     using FSM;
-    // using whiteshadow.Data;
     using MCPNet.MachineMonitor;
     using MessageHandler;
     using PaeoniaTechSpectroMeter.Commands;
     using PaeoniaTechSpectroMeter.Data;
-    //using Newtonsoft.Json;
     using PaeoniaTechSpectroMeter.Station;
-    //using AnalogOutputDevices;
     using StorageMonitorService;
     using System.Diagnostics;
     using System.IO;
@@ -40,8 +33,8 @@ namespace PaeoniaTechSpectroMeter.Model
         #endregion
 
 
-        
-        
+
+
         string loadingStatus = "Loading...";
         public string LoadingStatus
         {
@@ -64,7 +57,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 Application.Current.Dispatcher.BeginInvoke(ac);
         }
 
-      
+
 
         public enum AccessLevel
         {
@@ -89,22 +82,22 @@ namespace PaeoniaTechSpectroMeter.Model
                 return mainSMC;
             }
         }
-     
-       
+
+
         MachineStatusMonitor mcStatusMonitor = null;
         public MachineStatusMonitor McStatusMonitor
         {
             get { return mcStatusMonitor; }
         }
 
-#pragma warning disable CS0649 // Field 'MainManager.mcEvents' is never assigned to, and will always have its default value null
-          MachineEvents mcEvents;
-#pragma warning restore CS0649 // Field 'MainManager.mcEvents' is never assigned to, and will always have its default value null
-           public MachineEvents McEvents
-           {
-               get { return mcEvents; }
-           }
-          
+
+        MachineEvents mcEvents;
+
+        public MachineEvents McEvents
+        {
+            get { return mcEvents; }
+        }
+
 
 
 
@@ -127,7 +120,7 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return comMgr; }
         }
 
-        
+
 
         SystemPath systemPath = null;
         public SystemPath SystemPath
@@ -140,8 +133,8 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             get { return recipeMngr; }
         }
-     
-      MainWindow mainWinInts = null;
+
+        MainWindow mainWinInts = null;
         public MainWindow MainWinInts
         {
             get { return mainWinInts; }
@@ -158,7 +151,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             get { return accessControl; }
         }
-       
+
         UserLogging userLogin = null;
         public UserLogging UserLogin
         {
@@ -177,12 +170,12 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return runDataInfo; }
         }
 
-      
-       
 
 
-       
-          SPC spc_convertion = null;
+
+
+
+        SPC spc_convertion = null;
         public SPC Spc_convertion
         {
             get { return spc_convertion; }
@@ -197,7 +190,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-      
+
 
 
 
@@ -258,7 +251,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
         void RegisterCustomMotionProfiles()
         {
-            
+
 
         }
 
@@ -268,7 +261,7 @@ namespace PaeoniaTechSpectroMeter.Model
             string serr = "";
             try
             {
-              
+
             }
             catch (Exception ex)
             {
@@ -298,254 +291,185 @@ namespace PaeoniaTechSpectroMeter.Model
             mainSMC.OnStoppedResetRun -= mainSMC_OnStoppedResetRun;
             mainSMC.OnStoppedResetRun += mainSMC_OnStoppedResetRun;
         }
-      
-     
+
+
         public void InitStations()
-         {
-
-        
- }
+        {
 
 
-         bool mainSMC_OnStartEveryAutoRun(SMCEventArgs args)
-         {
-             bool success = false;
-             do
-             {
+        }
 
 
-
-#pragma warning disable CS0219 // The variable 'stopping' is assigned but its value is never used
-                 bool stopping = false;
-#pragma warning restore CS0219 // The variable 'stopping' is assigned but its value is never used
-                 //stop bh btm camera... 
-                 //if (visionMngr.ImgProcessors.Length >= 4)
-                 //    visionMngr.ImgProcessors[3].TryStopContinousGrab(ref stopping);
-
-                 CheckBasicSupplyAndSafetyDoors();
-
-                 EnableInterlockForAllMotors();
-
-                 string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
-                 errorEventMngr.ProcessEvent(runmode + " Resumed");
-
-                 success = true;
-             }
+        bool mainSMC_OnStartEveryAutoRun(SMCEventArgs args)
+        {
+            bool success = false;
+            do
+            {
 
 
 
-             while (false);
-             return success;
-         }
 
-         bool mainSMC_OnStoppedAutoRun(SMCEventArgs args)
-         {
-             try
-             {
+                CheckBasicSupplyAndSafetyDoors();
 
-                 EnableInterlockForAllMotors();
-                 //               output.ReleaseFrontDoorLock();
+                EnableInterlockForAllMotors();
 
-                 if (mainSMC.HasSingleCycleComplete ||
-                     mainSMC.HasAutoCycleComplete)
-                 {
-                     mainSMC.ResetCurrentStatePointers();
-                     if (mainSMC.HasSingleCycleComplete)
-                         mcStatusMonitor.SetOverallStatus("Single Cycle Completed!");
-                     else if (mainSMC.HasAutoCycleComplete)
-                         mcStatusMonitor.SetOverallStatus("Auto Cycle Completed!");
-                 }
+                string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
+                errorEventMngr.ProcessEvent(runmode + " Resumed");
 
-                 string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
-                 errorEventMngr.ProcessEvent(runmode + " Stopped!");
-             }
+                success = true;
+            }
+
+
+
+            while (false);
+            return success;
+        }
+
+        bool mainSMC_OnStoppedAutoRun(SMCEventArgs args)
+        {
+            try
+            {
+
+                EnableInterlockForAllMotors();
+                //               output.ReleaseFrontDoorLock();
+
+                if (mainSMC.HasSingleCycleComplete ||
+                    mainSMC.HasAutoCycleComplete)
+                {
+                    mainSMC.ResetCurrentStatePointers();
+                    if (mainSMC.HasSingleCycleComplete)
+                        mcStatusMonitor.SetOverallStatus("Single Cycle Completed!");
+                    else if (mainSMC.HasAutoCycleComplete)
+                        mcStatusMonitor.SetOverallStatus("Auto Cycle Completed!");
+                }
+
+                string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
+                errorEventMngr.ProcessEvent(runmode + " Stopped!");
+            }
 #pragma warning disable CS0168 // The variable 'ex' is declared but never used
-             catch (Exception ex)
+            catch (Exception ex)
 #pragma warning restore CS0168 // The variable 'ex' is declared but never used
-             {
+            {
 
-             }
-             //
-             return true;
-         }
+            }
+            //
+            return true;
+        }
 
-         bool mainSMC_OnStoppedResetRun(SMCEventArgs args)
-         {
-            /* try
-             {
+        bool mainSMC_OnStoppedResetRun(SMCEventArgs args)
+        {
+            return true;
+        }
 
-                 EnableInterlockForAllMotors();
+        bool mainSMC_OnStoppedInitalRun(SMCEventArgs args)
+        {
+            return true;
+        }
 
-                 for (int i = 0; i < mainSMC.StateMachinesStations.Count; i++)
-                 {
-                     StateMachineStation st = mainSMC.StateMachinesStations[i];
-                  
-                     int errorCode = st.CheckForAllClear();
-                     if (errorCode != FSMInnerErrorCode.NO_ERROR)
-                     {
-                         string serr = StationCustomErrorCodes.GetErrorDescription(errorCode, st.Name);
-                         mcStatusMonitor.SetMachineStatus(MachineStatus.Error);
-                         ShowMessageBox(serr, StatusInfoType.Warning);
-                     }
-                 }
-             }
-             catch (Exception ex)
-             {
-                 ShowMessageBox(ex.Message, StatusInfoType.Error);
-             }
-             */
-             return true;
-         }
+        MessageBoxImage GetMessageIconByInfoType(StatusInfoType infoType)
+        {
+            switch (infoType)
+            {
+                case StatusInfoType.Error:
+                    return MessageBoxImage.Error;
+                case StatusInfoType.Statement:
+                    return MessageBoxImage.Information;
+                case StatusInfoType.Warning:
+                    return MessageBoxImage.Warning;
+                default:
+                    break;
+            }
+            return MessageBoxImage.Information;
+        }
 
-         bool mainSMC_OnStoppedInitalRun(SMCEventArgs args)
-         {
-             /*try
-             {
-                 EnableInterlockForAllMotors();
-                 for (int i = 0; i < mainSMC.StateMachinesStations.Count; i++)
-                 {
-                     StateMachineStation st = mainSMC.StateMachinesStations[i];
-                     int errorCode = st.CheckForAllClear();
-                    if (errorCode != FSMInnerErrorCode.NO_ERROR)
-                     {
-                         string serr = StationCustomErrorCodes.GetErrorDescription(errorCode, st.Name);
-                         mcStatusMonitor.SetMachineStatus(MachineStatus.Error);
-                         ShowMessageBox(serr, StatusInfoType.Warning);
-                     }
-                 }
-             }
-             catch (Exception ex)
-             {
-                 ShowMessageBox(ex.Message, StatusInfoType.Error);
-             }
-             */
-             return true;
-         }
+        string GetTitleMessageByInfoType(StatusInfoType infoType)
+        {
+            switch (infoType)
+            {
+                case StatusInfoType.Error:
+                    return "Error";
+                case StatusInfoType.Statement:
+                    return "Information";
+                case StatusInfoType.Warning:
+                    return "Warning";
+                default:
+                    break;
+            }
+            return "Unknwon";
+        }
 
-         MessageBoxImage GetMessageIconByInfoType(StatusInfoType infoType)
-         {
-             switch (infoType)
-             {
-                 case StatusInfoType.Error:
-                     return MessageBoxImage.Error;
-                 case StatusInfoType.Statement:
-                     return MessageBoxImage.Information;
-                 case StatusInfoType.Warning:
-                     return MessageBoxImage.Warning;
-                 default:
-                     break;
-             }
-             return MessageBoxImage.Information;
-         }
+        AutoResetEvent waitMainMessageBoxClose = new AutoResetEvent(false);
+        public void ShowMessageBox(string message, StatusInfoType infoType)
+        {
+            Action ac = new Action(() =>
+            {
+                string title = GetTitleMessageByInfoType(infoType);
+                MessageBoxImage img = GetMessageIconByInfoType(infoType);
+                MessageBox.Show(mainWinInts, message, title, MessageBoxButton.OK,
+                                img);
+                waitMainMessageBoxClose.Set();
 
-         string GetTitleMessageByInfoType(StatusInfoType infoType)
-         {
-             switch (infoType)
-             {
-                 case StatusInfoType.Error:
-                     return "Error";
-                 case StatusInfoType.Statement:
-                     return "Information";
-                 case StatusInfoType.Warning:
-                     return "Warning";
-                 default:
-                     break;
-             }
-             return "Unknwon";
-         }
+                mcStatusMonitor.SetOverallStatus(message, infoType);
+            });
 
-         AutoResetEvent waitMainMessageBoxClose = new AutoResetEvent(false);
-         public void ShowMessageBox(string message, StatusInfoType infoType)
-         {
-             Action ac = new Action(() =>
-             {
-                 string title = GetTitleMessageByInfoType(infoType);
-                 MessageBoxImage img = GetMessageIconByInfoType(infoType);
-                 MessageBox.Show(mainWinInts, message, title, MessageBoxButton.OK,
-                                 img);
-                 waitMainMessageBoxClose.Set();
+            if (Dispatcher.CheckAccess())
+            {
+                ac();
+            }
+            else
+            {
+                Dispatcher.BeginInvoke(ac);
+                bool ok = false;
+                while (!ok)
+                {
+                    ok = waitMainMessageBoxClose.WaitOne(10);
+                    Thread.Sleep(10);
+                    if (ok) break;
+                }
+            }
 
-                 mcStatusMonitor.SetOverallStatus(message, infoType);
-             });
-
-             if (Dispatcher.CheckAccess())
-             {
-                 ac();
-             }
-             else
-             {
-                 Dispatcher.BeginInvoke(ac);
-                 bool ok = false;
-                 while (!ok)
-                 {
-                     ok = waitMainMessageBoxClose.WaitOne(10);
-                     Thread.Sleep(10);
-                     if (ok) break;
-                 }
-             }
-
-         }
-         bool mainSMC_OnStartAutoRun(SMCEventArgs args)
-         {
-             bool success = false;
-             do
-             {
-                 if (args.Handled)
-                     break;
+        }
+        bool mainSMC_OnStartAutoRun(SMCEventArgs args)
+        {
+            bool success = false;
+            do
+            {
+                if (args.Handled)
+                    break;
 
 
-                 CheckBasicSupplyAndSafetyDoors();
+                CheckBasicSupplyAndSafetyDoors();
 
-                 //processControlCfg.ElevatorIndexingTest = false;
-                 if (mainSMC.IsSingleCycleMode)
-                 {
-                     if (!PromptSingleCycleSelection())
-                     {
-                         mcStatusMonitor.SetOverallStatus("User cancelled Single Cycle Run Mode!");
-                         args.Handled = true;
-                         break;
-                     }
-                 }
+                //processControlCfg.ElevatorIndexingTest = false;
+                if (mainSMC.IsSingleCycleMode)
+                {
+                    if (!PromptSingleCycleSelection())
+                    {
+                        mcStatusMonitor.SetOverallStatus("User cancelled Single Cycle Run Mode!");
+                        args.Handled = true;
+                        break;
+                    }
+                }
 
-                 EnableInterlockForAllMotors();
+                EnableInterlockForAllMotors();
 
-                 string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
-                 errorEventMngr.ProcessEvent(runmode + " Start");
+                string runmode = mainSMC.IsSingleCycleMode ? "Single Cycle" : "Auto Run";
+                errorEventMngr.ProcessEvent(runmode + " Start");
 
 
-                 success = true;
-             }
-             while (false);
-             return success;
-         }
-         private void CheckBasicSupplyAndSafetyDoors()
-         {
-            
-         }
+                success = true;
+            }
+            while (false);
+            return success;
+        }
+        private void CheckBasicSupplyAndSafetyDoors()
+        {
 
-         bool PromptSingleCycleSelection()
-         {
-             /* try
-              {
-                  WinSingleCycleSelection win = new WinSingleCycleSelection();
+        }
 
-                  if (!(bool)win.ShowDialog()) return false;
+        bool PromptSingleCycleSelection()
+        {
 
-                  //                runDataInfo.AutoProcessingLens = runDataInfo.ManualSelectedLens;
-                  processControlCfg.SingleCyclePanel = win.Panel;
-                  processControlCfg.SingleCyclePcb = win.LF;
-                  //runDataInfo.ManualSelectedLens          = processControlCfg.SingleCycleLens;
-                  //runDataInfo.CurrentPCBUnit              = win.Pcb;
-                  //runDataInfo.CurrentPanel                = win.Panel;
-
-                  return true;
-              }
-              catch (Exception ex)
-              {
-                  MessageBox.Show(ex.Message);
-                  return false;
-              }
-              */
 
             return true;
         }
@@ -556,36 +480,17 @@ namespace PaeoniaTechSpectroMeter.Model
             do
             {
 
-             /*   MessageBoxResult r = App.UIDispatcher.ShowMessageBox(StationCustomMessages.SystemHomingWarming,
-                                                                     "Homing???", MessageBoxButton.YesNo,
-                                                                    MessageBoxImage.Warning);
 
-                if (r != MessageBoxResult.Yes)
-                {
-                    mcStatusMonitor.SetOverallStatus("User Canceled");
-                    args.Handled = true;
-                   break;
-                }
-                */
-
-               // if (!input.Simulation && input.IpAirPressureSw.IsOff())
-                   // throw new Exception("Main air Pressure is not enough!");
-
-              
                 EnableInterlockForAllMotors();
-               // motors.DisableAll();
+
                 Thread.Sleep(100);
                 string serr = "";
-              //  string serr = output.SetRelayOutputOn();
+                //  string serr = output.SetRelayOutputOn();
                 if (serr != "")
                     throw new Exception(serr);
 
                 Thread.Sleep(100);
-           /*     {
-                    if (!output.HasRelayOn)
-                        throw new Exception("Relays failed to ON");
-                }
-                */
+
 
                 EnableInterlockForAllMotors();
                 success = true;
@@ -595,20 +500,14 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         void EnableInterlockForAllMotors()
         {
-          //  for (int i = 0; i < Motors.AllMotors.Count; i++)
-            //    Motors.AllMotors[i].DisableMotionInterlock = false;
+
         }
 
 
         void LoadCameraOffsetConfig()
         {
             LoadingStatus = "Loading Camera Offset Config";
-            //toolCameraCalibration = ToolCameraCalibrations.LoadConfig();
-            //if (toolCameraCalibration == null) 
-            //{
-            //    toolCameraCalibration = new ToolCameraCalibrations();
-            //    ToolCameraCalibrations.SaveConfig(toolCameraCalibration);
-            //}
+
             errorEventMngr.ProcessEvent("Camera Offset Loaded");
         }
 
@@ -628,18 +527,18 @@ namespace PaeoniaTechSpectroMeter.Model
         void LoadDataConfig()
         {
             LoadingStatus = "Loading Data Config";
-           
+
             hasAppConfigLoaded = true;
             errorEventMngr.ProcessEvent("Data Config Loaded");
         }
 
         void LoadProductionConfig()
         {
-          
+
         }
         void LoadProcessControlConfig()
         {
-           
+
         }
 
         bool hasAppConfigLoaded = false;
@@ -670,50 +569,7 @@ namespace PaeoniaTechSpectroMeter.Model
         private string InitMotorModule()
         {
             string serr = "";
-            /*
-            string serr = "";
-            do
-            {
-                LoadingStatus = "Loading Motor Configuration!";
-                serr = LoadMotorConfig();
-                if (serr != "")
-                    break;
 
-                errorEventMngr.ProcessEvent("Motors Config Loaded");
-
-                LoadingStatus = "Initializing Motors";
-
-                //int i = output.ACSChannel.GetDefaultTimeout();
-                if (output.ACSChannel != null && appConfig.UseACSSingleChannel)
-
-                    SPiiPlus660.AssignChannel(output.ACSChannel);
-
-                serr = motors.Init(appConfig);
-                if (serr != "")
-                    break;
-
-                errorEventMngr.ProcessEvent("Motors Initialized");
-                interlocks.Setup(input, output, motors, appConfig);//, appPosZones
-                interlocks.CreateCustomDelegates();
-                LoadingStatus = "Motors OK";
-
-                //Motion Profiles
-                LoadingStatus = "Initializing Motion Profiles";
-                mtrProfileMgr.Init(SystemPath.GetSystemPath, motors.AllMotors);
-                //RegisterCustomMotionProfiles();
-                mtrProfileMgr.Load();
-                UpdateOptionsForMotionProfileRequrement();
-                errorEventMngr.ProcessEvent("Motion Profiles Initialized and Loaded");
-                LoadingStatus = "Motion Profiles OK";
-
-                //Moiton Zone
-                LoadingStatus = "Initializing Motion Zones";
-               // appPosZones.InitAllZone(motors);
-                errorEventMngr.ProcessEvent("Motion Zone Initialized and Loaded");
-                LoadingStatus = "Motion Zones OK";
-            }
-            while (false);
-            */
             return serr;
 
         }
@@ -721,7 +577,7 @@ namespace PaeoniaTechSpectroMeter.Model
         private string InitIOModule()
         {
             string serr = "";
-           
+
             return serr;
         }
         void mcStatusMonitor_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -731,11 +587,11 @@ namespace PaeoniaTechSpectroMeter.Model
 
         private void AssignTowerLightOutputs()
         {
-           
+
         }
         public void UpdateCustomTowerLightSetting()
         {
-          
+
         }
         void input_OnEMOSwitchOnDetected(object sender, EventArgs e)
         {
@@ -743,7 +599,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         void UpdateOptionsForMotionProfileRequrement()
         {
-          
+
 
         }
 
@@ -774,7 +630,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public void InitControlInstances()
         {
 
-         
+
             systemPath = new SystemPath();
             //ioCard = new IOCard();
             recipeMngr = new RecipeManager();
@@ -785,17 +641,17 @@ namespace PaeoniaTechSpectroMeter.Model
             mcStatusMonitor = new MachineStatusMonitor();
             accessControl = new UserAccessControl();
             userLogin = new UserLogging(SystemPath.RootDirectory + "\\");
-          
+
             towerLight = new TowerLight();
             runDataInfo = new RunDataInfo();
             cleaner = new StorageMonitor();
             //serialtest = new Serialtest(this);
-           // lisa = new Lisa_(this);
-          //  modelData = new ModelData();
-         //   pmut_inst = new pMUT_(this);
+            // lisa = new Lisa_(this);
+            //  modelData = new ModelData();
+            //   pmut_inst = new pMUT_(this);
             spc_convertion = new SPC();
             referencedata = new LogWritter.LogWriter();
-    
+
         }
         public void AssignMainWinInts(MainWindow mainWinInts)
         {
@@ -809,12 +665,12 @@ namespace PaeoniaTechSpectroMeter.Model
 
         private void ShowProductionOptions()
         {
-         //   mainWinInts.ShowProductionOptionWindow();
+            //   mainWinInts.ShowProductionOptionWindow();
         }
 
         private void ShowOfflineDebuggingFlagWindow()
         {
-          //  mainWinInts.ShowOfflineDebugFlagWindow();
+            //  mainWinInts.ShowOfflineDebugFlagWindow();
         }
         private void ShowAdvancedOptionsWindow()
         {
@@ -826,62 +682,53 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         private void ShowPowerMapWindow()
         {
-          //  mainWinInts.ShowPowerMapVisualizerWindow();
+            //  mainWinInts.ShowPowerMapVisualizerWindow();
         }
         private void ShowSecondPowerMeterCOMTerminal()
-                {
-               /*   if (txPowerMeterDevice is PFSeriesPowerMeter)
-                    {
-                       powerScanner.StopReading();
-                    }
+        {
+            /*   if (txPowerMeterDevice is PFSeriesPowerMeter)
+                 {
+                    powerScanner.StopReading();
+                 }
 
-                    COMPort cp = comMgr.GetCOMPortObjectByID(appConfig.PowerMeterDeviceCOMID);
-                    if (cp != null)
-                    {
-                        mainWinInts.ShowCOMTerminal(cp);
-                    }
-                    */
-                }
-      
+                 COMPort cp = comMgr.GetCOMPortObjectByID(appConfig.PowerMeterDeviceCOMID);
+                 if (cp != null)
+                 {
+                     mainWinInts.ShowCOMTerminal(cp);
+                 }
+                 */
+        }
+
 
         public void ShowPowerMeterCOMSetting()
         {
-            /*
-            powerScanner.StopReading();
-            mainWinInts.ShowCOMSetting(txPowerMeterDevice.Comport);
-            txPowerMeterDevice.Init(appConfig.SimulatePowerMeter, txPowerMeterDevice.Comport);
-            if (!appConfig.SimulatePowerMeter && !txPowerMeterDevice.CheckOnLine())
-            {
-                throw new Exception("Power Meter Deivce is not on line!");
-            }
-            powerScanner.StartReading(readingLens: (ProcessLens)runDataInfo.ManualSelectedLens); */
         }
 
         private void ShowFiberPowerSourceDevieTestWindow()
-                {
-             //       mainWinInts.ShowFiberPowerSourceDevieTester(fiberPowerSourceDevice);
-                }
+        {
+            //       mainWinInts.ShowFiberPowerSourceDevieTester(fiberPowerSourceDevice);
+        }
 
-                private void ShowPowerSourceCOMTerminal()
-                {
-                //    mainWinInts.ShowCOMTerminal(fiberPowerSourceDevice.ComPort);
-                }
+        private void ShowPowerSourceCOMTerminal()
+        {
+            //    mainWinInts.ShowCOMTerminal(fiberPowerSourceDevice.ComPort);
+        }
 
-                private void ShowPowerSourceCOMSetting()
-                {
-                  // mainWinInts.ShowCOMSetting(fiberPowerSourceDevice.ComPort);
-                }
+        private void ShowPowerSourceCOMSetting()
+        {
+            // mainWinInts.ShowCOMSetting(fiberPowerSourceDevice.ComPort);
+        }
 
-                private void ShowMusashiCOMSettingWindow()
-                {
-                  //  mainWinInts.ShowCOMSetting(musashihDispenser.Comport);
-                }
+        private void ShowMusashiCOMSettingWindow()
+        {
+            //  mainWinInts.ShowCOMSetting(musashihDispenser.Comport);
+        }
 
-                private void ShowPowerMeterCOMTerminal()
-                {
-                // powerScanner.StopReading();
-                // mainWinInts.ShowCOMTerminal(txPowerMeterDevice.Comport);
-                }
+        private void ShowPowerMeterCOMTerminal()
+        {
+            // powerScanner.StopReading();
+            // mainWinInts.ShowCOMTerminal(txPowerMeterDevice.Comport);
+        }
         private void ShowPowerScannerWindow()
         {
             //mainWinInts.ShowPowerScannerWindow();
@@ -889,30 +736,9 @@ namespace PaeoniaTechSpectroMeter.Model
 
         private void ShowStationRunStatusWindows()
         {
-          //  mainWinInts.ShowStationsRunStatusWindow();
+            //  mainWinInts.ShowStationsRunStatusWindow();
         }
-        /*
-                private void ShowActiveAlignDataWindow()
-                {
-                 //   mainWinInts.ShowActiveAlignmentDataWindow();
-                }
 
-                private void ShowHillClimbChartDataWindow()
-                {
-                  //  mainWinInts.ShowActiveHillClimbChartDataWindow();
-                }
-                private void ShowPowerMapWindow()
-                {
-                 //   mainWinInts.ShowPowerMapVisualizerWindow();
-                }
-                private void ShowDispensingToolCalibrationWindow()
-                {
-                 //   mainWinInts.ShowToolCameraCalibrationWindow(toolCameraCalibration.DispensingTool, motors.BondDispenserX, motors.BondDispenserY, motors.BondDispenserZ, null);
-                }
-                private void ShowPowerScannerWindow()
-                {
-                   // mainWinInts.ShowPowerScannerWindow();
-                }*/
         private void ShowVisionInspecitonData()
         {
             //    mainWinInts.ShowAllVisionInspectionData();
@@ -925,9 +751,6 @@ namespace PaeoniaTechSpectroMeter.Model
 
         private void ShowProcessControlConfigEditor()
         {
-            //visionKitManager.UpdateDrawDrawingEnableToProcessControl();
-            //mainWinInts.ShowProcessControlObjectEditor();
-            //visionKitManager.UpdateDrawingEnableOptionsFromProcessControl();
         }
 
         private void ShowPosZoneMonitor()
@@ -936,7 +759,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         private void ShowPosZoneEditor()
         {
-          // mainWinInts.ShowZoneManager();
+            // mainWinInts.ShowZoneManager();
         }
 
         private void ShowMCPDllVersions()
@@ -949,7 +772,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         private void ShowMVPDllVersions()
         {
-          //  mainWinInts.ShowMVPDllVersionInfo();
+            //  mainWinInts.ShowMVPDllVersionInfo();
         }
         private void ShowEventSycnManagers()
         {
@@ -958,32 +781,32 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-      
+
         public void LoadInputConfiguration()
         {
-            
+
 
         }
 
         public void LoadOutputConfiguration()
         {
-           
+
         }
 
         void CloseIO()
         {
-          
+
         }
 
         void DisableAllMotors()
         {
-           
+
         }
 
         private void ReleaseUnitLocking()
         {
         }
-       
+
         public void LoadControlRecipe(string recipeName)
         {
             LoadingStatus = "Control Recipe Loading...[" + recipeName + "]";
@@ -997,34 +820,34 @@ namespace PaeoniaTechSpectroMeter.Model
             ControlRecipe ctrlRecipe = recipeMngr.ControlRecipe;
             AssignData(ctrlRecipe.DetectorConfigurationData);
             //AssignFTIRData(ctrlRecipe.FTIR_Param);
-           // AssignanalysisData(ctrlRecipe.Analysis_data);
-           // AssignPLSData(ctrlRecipe.pls_data);
-         
+            // AssignanalysisData(ctrlRecipe.Analysis_data);
+            // AssignPLSData(ctrlRecipe.pls_data);
+
         }
         public void AssignData(DetectorConfigurationData detectorConfigurationData)
         {
-           this.detectorConfigurationData = detectorConfigurationData;
-           //lisa.Stepdata = cameradata.Stepvalue.HoldValueString;
+            this.detectorConfigurationData = detectorConfigurationData;
+            //lisa.Stepdata = cameradata.Stepvalue.HoldValueString;
         }
 
         public void AssignFTIRData()//FTIR_Param fTIR_Param)
         {
-          //  this.FTIR_Param_ = fTIR_Param;
-           // lisa.Stepdata = fTIR_Param.Stepvalue.HoldValueString;
+            //  this.FTIR_Param_ = fTIR_Param;
+            // lisa.Stepdata = fTIR_Param.Stepvalue.HoldValueString;
             // lisa.Stepdata = cameradata.Stepvalue.HoldValueString;
         }
 
-       
+
         public void SaveControlRecipe()
         {
             recipeMngr.SaveControlRecipe();
         }
-       
+
         public void ShowMotionProfileTest()
         {
-          //  mainWinInts.ShowMotionProfileTest();
+            //  mainWinInts.ShowMotionProfileTest();
         }
-       
+
         public void ShowStateListWindows()
         {
             mainWinInts.ShowStationStateListWindows();
@@ -1068,7 +891,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 mcStatusMonitor.PropertyChanged += mcStatusMonitor_PropertyChanged;
 
                 LoadAppConfig();
-               // LoadDataConfig();
+                // LoadDataConfig();
                 if (appConfig.AppLogDirectory != "" &&
                     Directory.Exists(appConfig.AppLogDirectory))
                 {
@@ -1079,7 +902,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
                 //cleaner
                 cleaner.Init(SystemPath.SystemDirectory);
-              //  cleaner.OnCleaningDone += Cleaner_OnCleaningDone;
+                //  cleaner.OnCleaningDone += Cleaner_OnCleaningDone;
 
                 LoadProcessControlConfig();
                 UpdateErrorEventLogFlags();
@@ -1087,7 +910,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 LoadProductionConfig();
                 //motors.Simulation = appConfig.SimulateMotors;
                 runDataInfo.Init(appConfig);
-               serr = InitIOModule();
+                serr = InitIOModule();
                 if (serr != "")
                     break;
 
@@ -1095,68 +918,46 @@ namespace PaeoniaTechSpectroMeter.Model
                 if (serr != "")
                     break;
 
-               /* LoadingStatus = "COM Ports Initialization";
-                comMgr.Init(SystemPath.RootDirectory + "\\", 3);
-                LoadingStatus = "COM Ports OK";
 
-                // LoadingStatus = "Vision Initialization";
-                //       InitVision();
-                // errorEventMngr.ProcessEvent("Vision Initialized");
-                //  LoadingStatus = "Initializing Camera Offset Calibration Data";
-                //LoadCameraOffsetConfig();
-                //LoadingStatus = "Vision Calibration Data OK";
-
-                //Init Power Meters
-                LoadingStatus = "Init Power Meter";
-                string simu = appConfig.SimulatePowerMeter ? " [Simulation]" : "";
-                string tserr = InitPowerMeterDevices();
-                if (tserr != "")
-                    MessageBox.Show(tserr);
-                else
-                    LoadingStatus = "Power Meter OK" + simu;
-
-
-    */
-                //Init Stations
                 LoadingStatus = "Init Stations";
                 InitStations();
                 LoadingStatus = "Stations OK";
 
-              
-  
+
+
 
                 //recipeMngr.Init(visionMngr);
                 LoadLastUsedControlRecipes();
                 // stations.AssignStationsRecipeData();
                 AssignStationsRecipeData();
-               //  tcpServer.CreateHandle(appConfig.PlcDefultNetid);
+                //  tcpServer.CreateHandle(appConfig.PlcDefultNetid);
 
                 //  motors.DisableAll();
                 Thread.Sleep(500);
                 errorEventMngr.ProcessEvent("Ready");
                 InitCommands();
-               // serialtest.cratedatalog();
+                // serialtest.cratedatalog();
                 Create_referencedataLog();
                 //lisa.AssignData(cameradata);
-               // lisa.AssignFTIRData(FTIR_Param_);
+                // lisa.AssignFTIRData(FTIR_Param_);
                 //lisa.AssignanalysisData(Analysis_data_);
-               // lisa.AssignPl
-                
-               // lisa.Refdatalog_Read();
+                // lisa.AssignPl
+
+                // lisa.Refdatalog_Read();
 
             }
             while (false);
 
             return serr;
         }
-        
+
         public void Create_referencedataLog()
         {
 
             try
             {
-              String SDir = SystemPath.RootDirectory;
-              
+                String SDir = SystemPath.RootDirectory;
+
                 referencedata.IsAppendFileCount = false;
                 referencedata.IsMonthlyBasedFolder = false;
                 referencedata.IsTimeStampPrefixOnFileName = false;
@@ -1170,7 +971,7 @@ namespace PaeoniaTechSpectroMeter.Model
                     //  referencedata.HeaderString = " Output(v)";
                 }
 
-              //  lisa.Refdatalog_Read();
+                //  lisa.Refdatalog_Read();
 
 
             }
@@ -1182,17 +983,15 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         public void CloseAll()
         {
-            //if (powerScanner != null)
-            //    powerScanner.StopReading();
 
             ReleaseUnitLocking();
 
             CloseIO();
             DisableAllMotors();
-           // CloseVisions();
+            // CloseVisions();
 
         }
-       
-      
+
+
     }
 }
