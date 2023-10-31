@@ -24,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,8 +55,9 @@
     <Reference Include="DefinationAndConveter">
       <HintPath>..\..\Ref_dll\DefinationAndConveter.dll</HintPath>
     </Reference>
-    <Reference Include="Dias_Lisa">
-      <HintPath>..\..\Ref_dll\Dias_Lisa.dll</HintPath>
+    <Reference Include="Dias_Lisa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dias_Lisa.dll</HintPath>
     </Reference>
     <Reference Include="FSM">
       <HintPath>..\..\Ref_dll\FSM.dll</HintPath>
@@ -106,6 +109,7 @@
     <Reference Include="MessageHandler">
       <HintPath>..\..\Ref_dll\MessageHandler.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Python.Runtime">
       <HintPath>..\..\Python.Runtime.dll</HintPath>
     </Reference>
@@ -117,6 +121,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -143,17 +149,21 @@
     </ApplicationDefinition>
     <Compile Include="Data\ControlRecipe.cs" />
     <Compile Include="Data\DetectorConfigurationData.cs" />
+    <Compile Include="Data\MeasurementConfigurationData.cs" />
     <Compile Include="Data\RunDataInfo.cs" />
     <Compile Include="Model\ReadDetector.cs" />
     <Compile Include="Station\MachineEvents.cs" />
     <Compile Include="Views\CtrlAppConfig.xaml.cs">
       <DependentUpon>CtrlAppConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CtrlDetectorsetting.xaml.cs">
-      <DependentUpon>CtrlDetectorsetting.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CtrlFactorySetting.xaml.cs">
       <DependentUpon>CtrlFactorySetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CtrlMeasurement.xaml.cs">
+      <DependentUpon>CtrlMeasurement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CtrlMeasurementSetting.xaml.cs">
+      <DependentUpon>CtrlMeasurementSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinWelcomeScreen.xaml.cs">
       <DependentUpon>WinWelcomeScreen.xaml</DependentUpon>
@@ -161,6 +171,7 @@
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -171,6 +182,7 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Page Include="Resource\AppColor.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -188,11 +200,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CtrlDetectorsetting.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\CtrlFactorySetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CtrlMeasurement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CtrlMeasurementSetting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,7 +256,9 @@
     <Folder Include="StationHelper\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LISA_DLL.dll" />
+    <Content Include="LISA_DLL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,6 +25,8 @@ namespace PaeoniaTechSpectroMeter
         MainManager mmgr = null;
         CtrlAppConfig ctrlAppConfig = null;
         CtrlFactorySetting ctrlFactorySetting = null;
+        CtrlMeasurement ctrlMeasurement = null;
+        CtrlMeasurementSetting ctrlMeasurementSetting = null;
         RecipeManager reMgr = null;
         List<UserControl> customControls = new List<UserControl>();
         List<StandardWindow> imageViewWindowList = new List<StandardWindow>();
@@ -112,8 +114,14 @@ namespace PaeoniaTechSpectroMeter
                 TabCtrlSetup.SelectionChanged -= Tabpage_updated;
                 TabCtrlSetup.SelectionChanged += Tabpage_updated;
                 UpdateLayout();
+                 DispatcherTimer LiveTime = new DispatcherTimer();
+                LiveTime.Interval = TimeSpan.FromSeconds(1);
+                LiveTime.Tick += timer_Tick;
+                LiveTime.Start();
+            
 
-                forceClose = false;
+
+            forceClose = false;
                 if (!App.HasPauseStartUpKeyPressed)
                     MessageListener.Instance.ClearList();
                 else
@@ -140,15 +148,42 @@ namespace PaeoniaTechSpectroMeter
                 Close();
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// 
+        void timer_Tick(object sender, EventArgs e)
+        {
+          //  DateandTime.Content = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
+        }
+
         void SetupPannels()
         {
+            /// <Factoryseeting>
+            /// in this pannel we set the detctor/emitter pulse setting 
+            /// </Factoryseeting>
+
+            
+
+            ctrlMeasurement = new CtrlMeasurement(mmgr);
+            MakeControlStrech(ctrlMeasurement);
+            GrdMeasurement.Children.Add(ctrlMeasurement);
+            RegisterCustomControl(ctrlMeasurement);
+
+
+            ctrlMeasurementSetting = new CtrlMeasurementSetting();
+            MakeControlStrech(ctrlMeasurementSetting);
+            ctrlMeasurementSetting.Setup(mmgr); //.Cameradata
+            GrdMeasurementConfig.Children.Add(ctrlMeasurementSetting);
+            RegisterCustomControl(ctrlMeasurementSetting);
+
 
             ctrlFactorySetting = new CtrlFactorySetting();
             MakeControlStrech(ctrlFactorySetting);
             ctrlFactorySetting.Setup(mmgr); //.Cameradata
             GrdSystemConfig.Children.Add(ctrlFactorySetting);
             RegisterCustomControl(ctrlFactorySetting);
-            
+
             ctrlAppConfig = new CtrlAppConfig();
             ctrlAppConfig.Setup(mmgr.AppConfig);
             MakeControlStrech(ctrlAppConfig);
@@ -159,7 +194,7 @@ namespace PaeoniaTechSpectroMeter
 
         void MakeControlStrech(UserControl uc)
         {
-            uc.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            uc.HorizontalAlignment =HorizontalAlignment.Stretch;
             uc.VerticalAlignment = VerticalAlignment.Stretch;
         }
         void RegisterCustomControl(UserControl uc)

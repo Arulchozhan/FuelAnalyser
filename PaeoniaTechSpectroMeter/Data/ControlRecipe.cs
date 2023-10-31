@@ -33,6 +33,17 @@ namespace PaeoniaTechSpectroMeter.Data
             }
         }
 
+        MeasurementConfigurationData measurementConfigurationData = null;
+        public MeasurementConfigurationData MeasurementConfigurationData
+        {
+            get { return measurementConfigurationData; }
+            set
+            {
+                measurementConfigurationData = value;
+                OnPropertyChanged("MeasurementConfigurationData");
+            }
+        }
+
 
 
         public ControlRecipe()
@@ -45,6 +56,9 @@ namespace PaeoniaTechSpectroMeter.Data
 
             if (detectorConfigurationData == null)
                 detectorConfigurationData = new DetectorConfigurationData();
+            if (measurementConfigurationData == null)
+                measurementConfigurationData = new MeasurementConfigurationData();
+
 
 
         }

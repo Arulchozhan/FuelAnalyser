@@ -80,7 +80,9 @@ namespace PaeoniaTechSpectroMeter.Model
             if (!excludelogs)
                 CreateDirectoryIfDontHave(GetLogPath);
         }
-        void CreateDirectoryIfDontHave(string path)
+
+
+        public void CreateDirectoryIfDontHave(string path)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

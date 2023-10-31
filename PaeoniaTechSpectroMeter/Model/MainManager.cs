@@ -114,6 +114,12 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return detectorConfigurationData; }
         }
 
+        MeasurementConfigurationData measurementConfigurationData = null;
+        public MeasurementConfigurationData MeasurementConfigurationData 
+        {
+            get { return measurementConfigurationData; }
+        }
+
         COMPortsManager comMgr = null;
         public COMPortsManager ComMgr
         {
@@ -181,6 +187,11 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return spc_convertion; }
         }
 
+        private ReadDetector readDetector = null;
+        public ReadDetector ReadDetector
+        {
+            get { return readDetector; }
+        }
 
 
         LogWritter.LogWriter referencedata = new LogWritter.LogWriter();
@@ -189,7 +200,7 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return referencedata; }
         }
 
-
+       
 
 
 
@@ -650,6 +661,7 @@ namespace PaeoniaTechSpectroMeter.Model
             //  modelData = new ModelData();
             //   pmut_inst = new pMUT_(this);
             spc_convertion = new SPC();
+            readDetector = new ReadDetector(this);
             referencedata = new LogWritter.LogWriter();
 
         }
@@ -819,18 +831,25 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             ControlRecipe ctrlRecipe = recipeMngr.ControlRecipe;
             AssignData(ctrlRecipe.DetectorConfigurationData);
+            AssignMeasurementData(ctrlRecipe.MeasurementConfigurationData);
             //AssignFTIRData(ctrlRecipe.FTIR_Param);
             // AssignanalysisData(ctrlRecipe.Analysis_data);
             // AssignPLSData(ctrlRecipe.pls_data);
 
         }
+
+        public void AssignMeasurementData(MeasurementConfigurationData measurementConfigurationData)
+        {
+            this.measurementConfigurationData = measurementConfigurationData;
+        }
+
         public void AssignData(DetectorConfigurationData detectorConfigurationData)
         {
             this.detectorConfigurationData = detectorConfigurationData;
-            //lisa.Stepdata = cameradata.Stepvalue.HoldValueString;
+            
         }
 
-        public void AssignFTIRData()//FTIR_Param fTIR_Param)
+        public void AssignFTIRData()
         {
             //  this.FTIR_Param_ = fTIR_Param;
             // lisa.Stepdata = fTIR_Param.Stepvalue.HoldValueString;
@@ -936,7 +955,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 Thread.Sleep(500);
                 errorEventMngr.ProcessEvent("Ready");
                 InitCommands();
-                // serialtest.cratedatalog();
+               
                 Create_referencedataLog();
                 //lisa.AssignData(cameradata);
                 // lisa.AssignFTIRData(FTIR_Param_);
@@ -944,7 +963,23 @@ namespace PaeoniaTechSpectroMeter.Model
                 // lisa.AssignPl
 
                 // lisa.Refdatalog_Read();
-
+               // serr = "";
+                LoadingStatus = "Read Baseline";
+                serr = this.ReadDetector.ReadBaselineInfo("testc");
+                if (serr != "")
+                    break;
+                LoadingStatus = "Wavelenth Reading";
+                serr = this.ReadDetector.ReadPixelWavelength("testpath");
+                if (serr != "")
+                    break;
+                LoadingStatus = "Read Background";
+                serr = ReadDetector.ReadBackground("testpath");
+                if (serr != "")
+                    break;
+                LoadingStatus = "Detector Login";
+                serr = ReadDetector.LisaConnect();
+                if (serr != "")
+                    break;
             }
             while (false);
 

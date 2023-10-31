@@ -6,12 +6,13 @@
         xmlns:MessageHandler="clr-namespace:MessageHandler;assembly=MessageHandler"
         xmlns:local="clr-namespace:PaeoniaTechSpectroMeter"
         mc:Ignorable="d"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="FuelAnalyzer" Height= "{x:Static SystemParameters.PrimaryScreenHeight}" 
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"
         Topmost="True"
-        WindowState="Maximized"
+       
         MinHeight="720"
-        MinWidth="{x:Static SystemParameters.PrimaryScreenWidth}"
+        MinWidth="1000"
         SizeToContent="WidthAndHeight"
         BorderBrush="DeepSkyBlue"
         BorderThickness="1"
@@ -21,21 +22,30 @@
 
     <Grid>
         <DockPanel LastChildFill="True"
-                   Background="LightBlue" Margin="0,1,0.333,-1">
+                   Background="White" Margin="0,1,0.333,-1">
 
             <Grid x:Name="GrdHeader"
+                  ShowGridLines="False"
                   DockPanel.Dock="Top"
-                  Height="40"
+                  Height="11"
                   VerticalAlignment="Top"
-                  Background="LightBlue" Margin="0,0,1.333,1">
+                  Background="LightGray" Margin="0,0,1.333,1" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
 
 
 
                 <Grid x:Name="GrdRightPannel"
                           Width="400"
                           DockPanel.Dock="Right"
-                          HorizontalAlignment="Right"
-                          Background="#FFB8B8B8" Margin="0,0,0,-14">
+                          HorizontalAlignment="Center"
+                          Background="LightGray" Margin="0,0,0,26">
                     <DockPanel LastChildFill="True" Margin="0,0,0,1">
                         <Grid x:Name="GrdRecipePnl"
                                   Height="39"
@@ -74,13 +84,14 @@
                 </Grid>
                 <!-- </DockPanel>
                 -->
-
+                <!--
                 <Grid x:Name="GrdLeftPannel"
-                          Width="500"
+                          Width="486"
+                          Height="39"
                           DockPanel.Dock="Left"
-                          HorizontalAlignment="Left"
-                          Background="LightBlue"
-                          Margin="0,0,0,10">
+                          HorizontalAlignment="Right"
+                          Background="LightGray"
+                          Margin="0,0,4,1">
                     <DockPanel LastChildFill="True" Margin="0,0,0,0">
                         <Grid x:Name="GrdTimeandTemp"
                                   Height="39"
@@ -91,34 +102,34 @@
 
                             <Label x:Name="Tempdata"
                                        Content="{Binding TemperatureData}"
-                                       FontSize="12"
+                                       FontSize="20"
                                        Foreground="Black"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Center"
-                                       Margin="158,5,205,0"
+                                       Margin="45,0,388,0"
                                        Width="37"
-                                       HorizontalContentAlignment="Right" Height="24" />
+                                       HorizontalContentAlignment="Right" Height="39" />
                             <Label x:Name="DateandTime"
-                                       Content="{Binding TemperatureData}"
-                                       FontSize="11"
+                                       Content=""
+                                       FontSize="20"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Right"
-                                       Margin="0,5,0,0"
-                                       Width="140"
-                                       HorizontalContentAlignment="Right" Height="24" />
-
-
+                                       Margin="0,0,10,0"
+                                       Width="250"
+                                       HorizontalContentAlignment="Right" Height="39" />
 
                         </Grid>
 
 
                     </DockPanel>
                 </Grid>
+                -->
             </Grid>
             <Grid x:Name="GrdFooter"
                   DockPanel.Dock="Bottom"
                   Height="50"
                   Margin="0,15"
+                  Visibility="Hidden"
                   VerticalAlignment="Bottom"
                   Background="LightBlue">
                 <Image x:Name="image"
@@ -189,34 +200,35 @@
             <Grid x:Name="GriMain"
                   DockPanel.Dock="Left" 
                   VerticalAlignment="Stretch"
-              	  Background="LightBlue" Margin="0,1,0,0">
-                <TabControl x:Name="TabCtrlSetup" Height= "561"
+              	  Background="White" Margin="0,-12,0,-0.333">
+                <TabControl x:Name="TabCtrlSetup" Height= "609"
                     SelectionChanged="Tabpage_updated"
+                            Background="White"
             		Style="{StaticResource MainTabControlStyle}"
             		ItemContainerStyle="{StaticResource MainTabStyle}"
-            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="1,0,1.333,0.667" >
+            		IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="1,0,1.333,0" >
                     <TabItem x:Name="TabMain"
-            			Header="Measurement"  FontSize="12" VerticalAlignment="Stretch" Margin="0,0,-0.333,0" >
-                        <Grid x:Name="GrdMeasurement"  Width="auto" Height="auto"
+            			Header="Measurement"  FontSize="12" Background="White" VerticalAlignment="Stretch" Margin="0,0,-0.333,-9" >
+                        <Grid x:Name="GrdMeasurement" ShowGridLines="False" Background="White" Width="auto" Height="auto" Margin="0,-25,0.333,-85"
                               />
                     </TabItem>
                     <TabItem x:Name="TabMeasurementSetting"
                                  Header="MeasurementSetting" FontSize="12" Focusable="True"
                                  IsEnabled="True"
-                                 Background="Black" Margin="1.333,0,-6.667,0">
+                                 Background="Black" Margin="6.333,0,-11.667,-9">
                         <Grid x:Name="GrdMeasurementConfig"  Width="auto" Height="auto"
                               />
                     </TabItem>
                     <TabItem x:Name="TabSystemConfig"
                                  Header="Factory Setting" FontSize="12" Focusable="True"
                                  IsEnabled="True"
-                                 Background="Black" Margin="1.333,0,-6.667,0">
+                                 Background="Black" Margin="16,0,-20.667,-9">
                         <Grid x:Name="GrdSystemConfig"  Width="auto" Height="auto"
                               />
                     </TabItem>
                     <TabItem x:Name="TabAdvancedSystemConfig"
             			Header=" Advanced Config"  FontSize="12" Focusable="True"
-                        IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" Margin="9.333,0,-3.333,0.333">
+                        IsEnabled="{Binding MainSMC.IsBusy, Converter={StaticResource BoolToInvertBool}, UpdateSourceTrigger=PropertyChanged}" Margin="25.667,0,-19.667,-9">
                         <Grid x:Name="GrdAppConfig" Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                             <!--
                             <WindowsFormsHost x:Name="CtrlWinFormHost" HorizontalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto"></WindowsFormsHost>
