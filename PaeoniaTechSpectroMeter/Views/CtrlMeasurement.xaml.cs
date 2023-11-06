@@ -44,8 +44,8 @@ namespace PaeoniaTechSpectroMeter.Views
                 //  serr = mmgr.ReadDetector.ReadPixelWavelength("testpath");
                 //  serr = mmgr.ReadDetector.ReadBackground("testpath");
                 // serr = mmgr.ReadDetector.LisaConnect();
-                // mmgr.ReadDetector.StartMeasurement(32, 16);
-                mmgr.ReadDetector.ImportPythonTest();
+                 mmgr.ReadDetector.StartMeasurement(32, 16);
+              //  mmgr.ReadDetector.ImportPythonTest();
                // if (serr != "")
                    // MessageBox.Show(serr, "Measurements read feild ");
 
