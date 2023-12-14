@@ -485,7 +485,7 @@ namespace PaeoniaTechSpectroMeter.Views
             currentTime = DateTime.Now;
             LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
             mmgr.AppConfig.BgchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
-            mmgr.SaveControlRecipe();
+            //mmgr.SaveControlRecipe();
             backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
             currentLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
             newBackgroundLineSeries.Visibility = Visibility.Collapsed;
