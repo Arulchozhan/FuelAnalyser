@@ -34,7 +34,7 @@
                FontSize="18.667"
                Foreground="White" />
         <Label x:Name="LblVersion"
-               Content="0.0.0.0"
+               Content="1.0.0.0"
                HorizontalAlignment="Left"
                Margin="182,94,0,0"
                VerticalAlignment="Top"
@@ -60,7 +60,7 @@
                    Foreground="White"
                    Height="25" />
         <Label x:Name="LblBuilt"
-               Content="0.0.0.0"
+               Content="1.0.0.0"
                HorizontalAlignment="Left"
                Margin="182,111,0,0"
                VerticalAlignment="Top"
