@@ -154,10 +154,12 @@ namespace PaeoniaTechSpectroMeter.Views
             if (allDataItems.Count > 0)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog
+                
                 {
                     Filter = "PDF files (*.pdf)|*.pdf",
                     Title = "Save PDF file"
                 };
+                saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
