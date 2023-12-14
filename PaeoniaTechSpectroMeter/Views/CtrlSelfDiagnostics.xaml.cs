@@ -78,6 +78,7 @@ namespace PaeoniaTechSpectroMeter.Views
         public CtrlSelfDiagnostics(MainManager mmgr)
         {
             this.mmgr = mmgr;
+            this.DataContext = mmgr.ReadDetector;
             InitializeComponent();
             GetCurrentBackground();
             if (mmgr.AppConfig.Perfchk == "PASS")
@@ -231,7 +232,8 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)    
         {
             //IsInstrumentUpToStandard();c
-           // Master testing mearge
+            // Master testing mearge
+           mmgr.ReadDetector.AnalysisSelectionEnable = false;
 
             if (IsInstrumentUpToStandard())
             {
@@ -245,6 +247,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
                 InfoMessageTextBlock.Text = "Ensure no fuel inside before testing instrument or scanning new background.";
                 InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+                
             }
             else
             {
@@ -268,7 +271,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
 
             }
-
+            mmgr.ReadDetector.AnalysisSelectionEnable = true;
         }
 
         private bool IsInstrumentUpToStandard()
@@ -317,6 +320,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void BtnScanNewBackground_Click(object sender, RoutedEventArgs e)
         {
+
             BtnResetToFactoryBackground.IsEnabled = false;
             BtnTestInstrument.IsEnabled = false;
 

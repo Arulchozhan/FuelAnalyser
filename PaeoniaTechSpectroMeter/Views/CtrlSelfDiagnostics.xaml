@@ -60,7 +60,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Border Width="280" Height="60" HorizontalAlignment="Center" Style="{StaticResource ButtonBorderStyle}">
-                        <Button x:Name="BtnTestInstrument" Content="Test Instrument" Style="{StaticResource ButtonStyle}"  Click="BtnTestInstrument_Click"/>
+                        <Button x:Name="BtnTestInstrument" Content="Test Instrument"  IsEnabled="{Binding AnalysisSelectionEnable}" Style="{StaticResource ButtonStyle}"  Click="BtnTestInstrument_Click"/>
                     </Border>
                 </Grid>
             </Grid>
@@ -104,10 +104,10 @@
                         <ColumnDefinition Width="223*"/>
                     </Grid.ColumnDefinitions>
                     <Border Width="280" Height="60" HorizontalAlignment="Left" Style="{StaticResource ButtonBorderStyle}" Margin="10,14,0,13" Grid.ColumnSpan="2">
-                        <Button x:Name="BtnScanNewBackground"   Content="Scan New Background" Style="{StaticResource ButtonStyle}" Click="BtnScanNewBackground_Click"/>
+                        <Button x:Name="BtnScanNewBackground"   Content="Scan New Background" Style="{StaticResource ButtonStyle}"  IsEnabled="{Binding AnalysisSelectionEnable}" Click="BtnScanNewBackground_Click"/>
                     </Border>
                     <Border Width="280" Height="60" Style="{StaticResource ButtonBorderStyle}" Margin="50,14,33.884,13" Grid.Column="1">
-                        <Button x:Name="BtnResetToFactoryBackground" Content="Reset to Factory Background" Style="{StaticResource ButtonStyle}" Click="BtnResetToFactoryBackground_Click"/>
+                        <Button x:Name="BtnResetToFactoryBackground"   IsEnabled="{Binding AnalysisSelectionEnable}" Content="Reset to Factory Background" Style="{StaticResource ButtonStyle}" Click="BtnResetToFactoryBackground_Click"/>
                     </Border>
                     <Border x:Name="SaveNewBorder" Width="221" Height="60" Style="{StaticResource ButtonBorderStyle}" HorizontalAlignment="Right" Margin="0,14,10,13" Visibility="Collapsed" Grid.Column="2" Grid.ColumnSpan="2" >
                         <Button x:Name="BtnSaveNewBackground" Content="Save New Background" Style="{StaticResource SaveButtonStyle}" Visibility="Collapsed" Click="BtnSaveNewBackground_Click"/>
