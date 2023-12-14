@@ -1,0 +1,200 @@
+﻿<UserControl x:Class="PaeoniaTechSpectroMeter.Views.CtrlMeasurement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PaeoniaTechSpectroMeter.Views"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d"  d:DesignHeight="760" MinWidth="1280"  d:DesignWidth="{x:Static SystemParameters.PrimaryScreenWidth}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bvc"></BooleanToVisibilityConverter>
+        <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid>
+                            <Border x:Name="PART_Track" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="8"/>
+                            <Border x:Name="PART_Indicator" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Foreground}" CornerRadius="8"  HorizontalAlignment="Left"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Width="1280" Background="White" ShowGridLines="False" >
+
+        <Grid Width="1180" Height="70" Margin="5,0,5,0" VerticalAlignment="Top" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Image Source="C:\FuelAnalyzer\bin\Icon\MeasurementB_Icon.png" Width="36" Height="36" Margin="0,0,5,0"/>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Measurement" Style="{StaticResource TextBlockStyle}"/>
+
+
+            </StackPanel>
+
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Center"  >
+
+                <Button x:Name="BtnRepeatMeasurement" Content="Save and Repeat Measurement" Visibility="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" IsEnabled="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}"  Style="{StaticResource ButtonStyle}" Click="BtnRepeatMeasurement_Click" Margin="0,0,50,0"  Width="346"/>
+
+                <Button x:Name="BtnMeasurement" Content="{Binding MeasuremantBtnContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ButtonStyle}" Click="BtnMeasurement_Click"/>
+            </StackPanel>
+        </Grid>
+        <Border x:Name="border" Width="1180" Height="64" Margin="10,95,5,0" VerticalAlignment="Top" Style="{StaticResource BorderStyle}">
+            <Grid Width="1150" Height="54" HorizontalAlignment="Left" Margin="10,0,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Image Source="C:\FuelAnalyzer\bin\Icon\Info_Icon.png" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="520" Text="{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ÏnfoTextBlockStyle}"/>
+                </StackPanel>
+                <ProgressBar x:Name ="MeasurementProgressupdate" Grid.Column="1" Width="645" Height="14"  HorizontalAlignment="Left" Style="{StaticResource ProgressBarStyle}" Value = "{Binding  Path=MeasurementStatusCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum = "{Binding  Path=MeasurementMaxCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,20,0,20" />
+
+            </Grid>
+        </Border>
+
+        <Grid Width="1180" Height="230" Margin="0,180,5,0" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="Analysis Type" Style="{StaticResource ProductInfoTextBlockStyle}"/>
+                <ComboBox x:Name="Chemicaltype" VerticalAlignment="Bottom" SelectedItem="0" SelectedIndex="{Binding SelectedAnalysistype,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Chemicaltype_SelectionChanged" IsEnabled="{Binding AnalysisSelectionEnable}" Height="61" Style="{StaticResource ComboBoxContainerStyle}">
+                    <ComboBoxItem Content="Methanol" Height="60" Style="{StaticResource ComboBoxItemContainerStyle}"/>
+                    <ComboBoxItem Content="Ethanol" Height="60" Style="{StaticResource ComboBoxItemContainerStyle}"/>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="0"   Grid.Column="1" Margin="10,0,10,10">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="Sample Type"  Style="{StaticResource ProductInfoTextBlockStyle}"/>
+                <TextBox x:Name= "Sampletype" VerticalAlignment="Bottom" Height="61" Background="#F9F9F9"  IsEnabled="False" Style="{StaticResource TextBoxStyle}"/>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="2" Margin="10,0,0,10">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="Pass No." Style="{StaticResource ProductInfoTextBlockStyle}"/>
+                <TextBox VerticalAlignment="Bottom" Height="61" IsEnabled="False" Text="{Binding PassNo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat=D3}"  Style="{StaticResource TextBoxStyle}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,10,0">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text="Sample Name" Style="{StaticResource ProductInfoTextBlockStyle}" />
+                <TextBox VerticalAlignment="Bottom" Height="61" IsEnabled="{Binding AnalysisSelectionEnable}"  Text="{Binding Path=SampleFileName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2" Margin="10,10,0,0">
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Text=" Operator" Style="{StaticResource ProductInfoTextBlockStyle}"/>
+                <TextBox VerticalAlignment="Bottom" Height="61" IsEnabled="{Binding AnalysisSelectionEnable}" Text="{Binding Path=OpearatorName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}" />
+            </Grid>
+
+        </Grid>
+        <Grid Width="1182" Height="220" Margin="0,450,5,0"  VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Image Source="C:\FuelAnalyzer\bin\Icon\Concentration_Icon.png" Width="28" Height="28" Margin="0,5,5,0"/>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Concentration" Style="{StaticResource SystemInfoTextBlockStyle}"/>
+            </StackPanel>
+
+            <StackPanel  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+                <Button x:Name="BtnChangeLoc" Content="Change Save Location" Margin="5" Style="{StaticResource WhiteButtonSyle}" Click="BtnChangeLocation_Click" />
+
+                <Button x:Name="BtnSave"  Content="Save" Margin="5,5,0,5" IsEnabled="{Binding IsReadytoSave, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ButtonStyle}" Click="BtnSave_Click" />
+
+
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.Column="0" Margin="0,15,5,10"  Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityCvtr}}" >
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10">
+                     <Run Text="Ethanol" FontWeight="600" FontSize="20" />
+                     <Run Text=" (0-100) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding EthanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolTextBlockStyle}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Margin="0,15,5,10"  Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToInvertVisibilityCvtr}}" >
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10">
+                       <Run Text="Methanol" FontWeight="600" FontSize="20" />
+                       <Run Text=" (0-100) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolTextBlockStyle}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1" Margin="5,15,5,10" Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityCvtr}}">
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10">
+                     <Run Text="Denaturant" FontWeight="600" FontSize="20" />
+                     <Run Text=" (0-75) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DenaturantConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolTextBlockStyle}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2" Margin="5,20,5,10" Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityCvtr}}">
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10" >
+                     <Run Text="Methanol" FontWeight="600" FontSize="20" />
+                     <Run Text=" (0-15) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolTextBlockStyle}" />
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="3" Margin="5,15,0,10" Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityCvtr}}">
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10">
+                     <Run Text="Water" FontWeight="600" FontSize="20" />
+                     <Run Text=" (0-2) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding WaterConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolTextBlockStyle}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+
+
+
+
+        <!-- 
+        <DockPanel x:Name = "LayoutRoot" Margin = "11,90,9,465">
+            <Border BorderThickness = "1" BorderBrush = "Green" Margin="0,0,0,0.333" Width="1244" Height="30" >
+                 <DockPanel  Background = "White" Margin="1,1,9,1">
+                    <TextBlock FontSize="15" Foreground="ForestGreen" 
+                      Text = "{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="657" Height="20" />
+                     <ProgressBar x:Name = "MeasurementProgressupdate" Value = "{Binding  Path=MeasurementStatusCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Margin = "1,1,1.333,1" Maximum = "{Binding  Path=MeasurementMaxCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  
+                       Height = "20" IsIndeterminate = "False" Width="549" />
+                          <TextBlock HorizontalAlignment = "Center" Margin = "10" Text = "Measurement Status" />
+                           </DockPanel>
+             </Border>
+         </DockPanel>
+         -->
+
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=Utilities"
+             x:Class="PaeoniaTechSpectroMeter.Views.CtrlAppConfig"
+             mc:Ignorable="d"
+             Background="White"
+             Height="600"
+             Width="556.874">
+    <Grid>
+
+        <Controls:WpfPropertyGrid x:Name="ProGrdConfig"
+                                  Margin="0,0,92,54" />
+        <Button x:Name="BtnSave"
+                Content="Save"
+                HorizontalAlignment="Left"
+                Margin="10,0,0,10"
+                Width="93"
+                Click="BtnSave_Click"
+                Height="27"
+                VerticalAlignment="Bottom" />
+
+    </Grid>
+</UserControl>

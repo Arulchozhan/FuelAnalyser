@@ -1,0 +1,190 @@
+﻿<UserControl x:Class="HistoryTest.Views.HistoryPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" xmlns:local="clr-namespace:HistoryTest.Styles.Converters" xmlns:local1="clr-namespace:HistoryTest.Views" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             d:DesignHeight="760" d:DesignWidth="1280">
+    <!--<UserControl.DataContext>
+        <local1:HistoryPageViewModel/>
+    </UserControl.DataContext>-->
+
+    <UserControl.Resources>
+        <local:ValueToColorConverter x:Key="ValueToColorConverter"/>
+    </UserControl.Resources>
+    
+
+    <Grid Width="1280">
+        
+        <Grid Width="1232" Height="70" Margin="0,0,0,0" VerticalAlignment="Top" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Image Source="..\Images\History_Icon.jpg" Width="36" Height="36" Margin="0,0,5,0"/>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="History" Style="{StaticResource TextBlockStyle}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button x:Name="ExportAsPDFBtn" Content="Export As PDF" Margin="5" Visibility="Collapsed" Style="{StaticResource WhiteButtonSyle}" Click="ExportAsPDFBtn_Click" />
+
+                <Button x:Name="ExportTableBtn" Content="Export Table" Margin="5" Style="{StaticResource ButtonStyle}" Click="ExportTableBtn_Click"/>
+            </StackPanel>
+        </Grid>
+        <Grid Width="1232" Margin="0,60,0,0">
+            <DataGrid x:Name="history_dataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"  Style="{StaticResource DataGridStyle}" RowHeight="40" Margin="0,15,0,50" ItemsSource="{Binding DataItems, Mode=TwoWay}" > 
+                <!--<i:Interaction.Behaviors>
+                    <local1:
+                </i:Interaction.Behaviors>-->
+                <!--<i:Interaction.Behaviors>
+                    <local1:DataGridItemsSourceBehavior ItemsSource="{Binding DataView}" />
+                </i:Interaction.Behaviors>-->
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridHeaderStyle}"/>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Time Stamp" Binding="{Binding Timestamp}"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Pass No." Binding="{Binding PassNo}"/>
+                    <DataGridTextColumn Header="Operator" Binding="{Binding Operator}"/>
+                    <DataGridTextColumn Header="Analysis Type" Binding="{Binding AnalysisType}"/>
+                    <DataGridTextColumn Header="Sample Type" Binding="{Binding SampleType}"/>
+                    <DataGridTextColumn Header="Ethanol" Binding="{Binding Ethanol, TargetNullValue='-'}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                        <Setter Property="Background" Value="#f3eaea"/>
+                                        <Setter Property="Foreground" Value="#e6a6a6"/>
+
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                        <Setter Property="Background" Value="#eee8d5"/>
+                                        <Setter Property="Foreground" Value="#cc9432"/>
+
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                        <Setter Property="Background" Value="#dff6dd"/>
+                                        <Setter Property="Foreground" Value="#0f7b0f"/>
+
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Denaturant" Binding="{Binding Denaturant, TargetNullValue='-'}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                        <Setter Property="Background" Value="#f3eaea"/>
+                                        <Setter Property="Foreground" Value="#e6a6a6"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                        <Setter Property="Background" Value="#eee8d5"/>
+                                        <Setter Property="Foreground" Value="#cc9432"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                        <Setter Property="Background" Value="#dff6dd"/>
+                                        <Setter Property="Foreground" Value="#0f7b0f"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Methanol" Binding="{Binding Methanol, TargetNullValue='-'}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                        <Setter Property="Background" Value="#f3eaea"/>
+                                        <Setter Property="Foreground" Value="#e6a6a6"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                        <Setter Property="Background" Value="#eee8d5"/>
+                                        <Setter Property="Foreground" Value="#cc9432"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                        <Setter Property="Background" Value="#dff6dd"/>
+                                        <Setter Property="Foreground" Value="#0f7b0f"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Water" Binding="{Binding Water, TargetNullValue='-'}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                        <Setter Property="Background" Value="#f3eaea"/>
+                                        <Setter Property="Foreground" Value="#e6a6a6"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                        <Setter Property="Background" Value="#eee8d5"/>
+                                        <Setter Property="Foreground" Value="#cc9432"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                        <Setter Property="Background" Value="#dff6dd"/>
+                                        <Setter Property="Foreground" Value="#0f7b0f"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+
+                    <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}"/> -->
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <StackPanel x:Name="PageNumberPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,100" >
+                <Button x:Name="PreviousBtn" Content="&lt;" Click="btnPreviousPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Left" />
+                <ItemsControl ItemsSource="{Binding PageNumbers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Background="AliceBlue" Content="{Binding}" Margin="5" Padding="8" Command="{Binding DataContext.PageButtonClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding}" HorizontalAlignment="Center" Width="30" Height="30">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid>
+                                            <Ellipse x:Name="EllipseBackground" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}" />
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="EllipseBackground" Property="Fill" Value="Blue"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="AliceBlue"/>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button x:Name="NextBtn" Content=">" Click="btnNextPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Right"/>
+                
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
