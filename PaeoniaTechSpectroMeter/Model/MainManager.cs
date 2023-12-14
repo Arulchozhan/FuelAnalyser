@@ -985,7 +985,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 if (serr != "")
                     break;
                 LoadingStatus = "Detector Login";
-               // serr = ReadDetector.LisaConnect();
+                serr = ReadDetector.LisaConnect();
                 if (serr != "")
                     break;
 
