@@ -382,8 +382,9 @@ namespace PaeoniaTechSpectroMeter.Model
             string serr = "";
 
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-          
-            var result = dialog.ShowDialog();
+            if (UserChooseDir != "" && Directory.Exists(UserChooseDir))
+               dialog.SelectedPath = UserChooseDir;
+              var result = dialog.ShowDialog();
             // string path= dialog.SelectedPath;
             if (result.ToString() != string.Empty)
             {
