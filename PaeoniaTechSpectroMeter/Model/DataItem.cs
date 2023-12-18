@@ -14,10 +14,10 @@ namespace PaeoniaTechSpectroMeter.Model
         public string Operator { get; set; }
         public string AnalysisType { get; set; }
         public string SampleType { get; set; }
-        public int? Ethanol { get; set; }
-        public int? Denaturant { get; set; }
-        public int? Methanol { get; set; }
-        public int? Water { get; set; }
+        public double? Ethanol { get; set; }
+        public double? Denaturant { get; set; }
+        public double? Methanol { get; set; }
+        public double? Water { get; set; }
 
         public bool IsSelected { get; set; }
 

@@ -136,226 +136,209 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            List<DataItem> allDataItems = GetAllDataItems();
-            //string serr = "";
-            //serr = mmgr.ReadDetector.LogData();
-            //if (serr != "")
-            //    MessageBox.Show(serr, "Save File");
-
-            if (!mmgr.ReadDetector.IsDataSavedDB)
+            try
             {
-
-
-                // save datga
-                mmgr.ReadDetector.IsDataSavedDB=true;
+                if (!mmgr.ReadDetector.IsDataSavedDB)
+                {
+                    mmgr.ReadDetector.SaveMeasurementData();
+                    mmgr.ReadDetector.SaveFilePDF();
+                }
+                else
+                {
+                    MessageBox.Show("Data is already saved.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            
 
-            if (allDataItems.Count > 0)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
+            //List<DataItem> allDataItems = GetAllDataItems();
+            //if (allDataItems.Count > 0)
+            //{
+            //    SaveFileDialog saveFileDialog = new SaveFileDialog
                 
-                {
-                    Filter = "PDF files (*.pdf)|*.pdf",
-                    Title = "Save PDF file"
-                };
-                saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
+            //    {
+            //        Filter = "PDF files (*.pdf)|*.pdf",
+            //        Title = "Save PDF file"
+            //    };
+            //    saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
 
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
-                    using (var pdf = new PdfDocument(writer))
-                    {
-                        CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
-                        //pageEvent.SetTotalPages(totalPages);
-                        pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
+            //    if (saveFileDialog.ShowDialog() == true)
+            //    {
+            //        using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
+            //        using (var pdf = new PdfDocument(writer))
+            //        {
+            //            CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
+            //            //pageEvent.SetTotalPages(totalPages);
+            //            pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
 
-                        using (var document = new Document(pdf))
-                        {
-                            int totalPages = allDataItems.Count;
-                            Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
-                                .SetFontColor(ColorConstants.WHITE)
-                                .SetFontSize(16)
-                                .SetBold();
-                            string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
-                            ImageData imageData = ImageDataFactory.Create(logoPath);
-                            Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
-
-
-                            Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
-                            headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                            headerTable.SetBackgroundColor(ColorConstants.BLUE);
+            //            using (var document = new Document(pdf))
+            //            {
+            //                int totalPages = allDataItems.Count;
+            //                Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
+            //                    .SetFontColor(ColorConstants.WHITE)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
+            //                ImageData imageData = ImageDataFactory.Create(logoPath);
+            //                Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
 
 
-                            Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
-                            headerTable.AddCell(titleCell);
+            //                Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+            //                headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+            //                headerTable.SetBackgroundColor(ColorConstants.BLUE);
 
 
-                            Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                            headerTable.AddCell(logoCell);
+            //                Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
+            //                headerTable.AddCell(titleCell);
 
 
-                            document.Add(headerTable);
-
-                            document.Add(new Paragraph("\n"));
-
-                            Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
-                                .SetFontSize(16)
-                                .SetBold();
-                            document.Add(reportTitle);
-                            document.Add(new Paragraph("\n"));
-
-                            History history = new History();
-                            Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
-                            document.Add(additionalInfoTable);
-
-                            document.Add(new Paragraph("\n"));
-                            Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
-                                .SetFontSize(16)
-                                .SetBold();
-                            document.Add(equipmentInfo);
-                            document.Add(new Paragraph("\n"));
-
-                            Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
-                            document.Add(equipmentInfoTable);
+            //                Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+            //                headerTable.AddCell(logoCell);
 
 
+            //                document.Add(headerTable);
 
-                            // Add a new page
-                            //document.Add(new AreaBreak());
+            //                document.Add(new Paragraph("\n"));
+
+            //                Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                document.Add(reportTitle);
+            //                document.Add(new Paragraph("\n"));
+
+            //                History history = new History();
+            //                Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
+            //                document.Add(additionalInfoTable);
+
+            //                document.Add(new Paragraph("\n"));
+            //                Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                document.Add(equipmentInfo);
+            //                document.Add(new Paragraph("\n"));
+
+            //                Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+            //                document.Add(equipmentInfoTable);
 
 
 
-
-                            allDataItems.Sort((x, y) => x.Batch.GetValueOrDefault() - y.Batch.GetValueOrDefault());
-
-                            // Initialize batch number for the first item
-                            int currentBatchNumber = allDataItems[0].Batch.GetValueOrDefault();
-                            int pageNumber = 1;
-
-                            foreach (var itemGroup in allDataItems.GroupBy(item => item.Batch.GetValueOrDefault()))
-                            {
-                                // Start a new page for a new batch
-                                document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-
-                                Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
-                                document.Add(sampleReport);
-                                document.Add(new Paragraph("\n"));
+            //                // Add a new page
+            //                //document.Add(new AreaBreak());
 
 
 
-                                var operatorNames = itemGroup.Select(item => item.Operator).Distinct();
-                                string concatenatedOperatorNames = string.Join(", ", operatorNames);
 
-                                // Add summary information for the batch
-                                Table summarySelectedItemsTable = history.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
-                                document.Add(summarySelectedItemsTable);
+            //                allDataItems.Sort((x, y) => x.Batch.GetValueOrDefault() - y.Batch.GetValueOrDefault());
 
-                                document.Add(new Paragraph("\n"));
-                                Paragraph avgResultInfo = new Paragraph("AVERAGE RESULT").SetFontColor(ColorConstants.BLACK)
-                                    .SetFontSize(16)
-                                    .SetBold();
-                                document.Add(avgResultInfo);
-                                document.Add(new Paragraph("\n"));
+            //                // Initialize batch number for the first item
+            //                int currentBatchNumber = allDataItems[0].Batch.GetValueOrDefault();
+            //                int pageNumber = 1;
 
-                                // Calculate average values for the batch
-                                //double avgEthanol = itemGroup.Average(item => item.Ethanol ?? 0);
-                                //double avgDenaturant = itemGroup.Average(item => item.Denaturant ?? 0);
-                                //double avgMethanol = itemGroup.Average(item => item.Methanol ?? 0);
-                                //double avgWater = itemGroup.Average(item => item.Water ?? 0);
+            //                foreach (var itemGroup in allDataItems.GroupBy(item => item.Batch.GetValueOrDefault()))
+            //                {
+            //                    // Start a new page for a new batch
+            //                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                double? avgEthanol = itemGroup.Select(item => item.Ethanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgDenaturant = itemGroup.Select(item => item.Denaturant).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgMethanol = itemGroup.Select(item => item.Methanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgWater = itemGroup.Select(item => item.Water).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+            //                    Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
+            //                    document.Add(sampleReport);
+            //                    document.Add(new Paragraph("\n"));
 
 
 
-                                // Create a single row table for average results
-                                Table avgResultItemsTable = history.CreateAverageResultItemsTable(
-                                    new DataItem
-                                    {
-                                        Ethanol = (int)avgEthanol,
-                                        Denaturant = (int)avgDenaturant,
-                                        Methanol = (int)avgMethanol,
-                                        Water = (int)avgWater
-                                    }
-                                );
-                                document.Add(avgResultItemsTable);
+            //                    var operatorNames = itemGroup.Select(item => item.Operator).Distinct();
+            //                    string concatenatedOperatorNames = string.Join(", ", operatorNames);
 
-                                document.Add(new Paragraph("\n"));
-                                Paragraph passesResultInfo = new Paragraph("PASSES RESULTS").SetFontColor(ColorConstants.BLACK)
-                                    .SetFontSize(16)
-                                    .SetBold();
-                                document.Add(passesResultInfo);
-                                document.Add(new Paragraph("\n"));
+            //                    // Add summary information for the batch
+            //                    Table summarySelectedItemsTable = history.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
+            //                    document.Add(summarySelectedItemsTable);
 
-                                // Create a table for all items in the batch
-                                Table selectedItemsTable = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Pass No.")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Time Stamp")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Ethanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Denaturant (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Methanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Water (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    document.Add(new Paragraph("\n"));
+            //                    Paragraph avgResultInfo = new Paragraph("AVERAGE RESULT").SetFontColor(ColorConstants.BLACK)
+            //                        .SetFontSize(16)
+            //                        .SetBold();
+            //                    document.Add(avgResultInfo);
+            //                    document.Add(new Paragraph("\n"));
 
-                                foreach (var item in itemGroup)
-                                {
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.PassNo.ToString())));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Timestamp.ToString())));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Ethanol != null ? item.Ethanol.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Denaturant != null ? item.Denaturant.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Methanol != null ? item.Methanol.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Water != null ? item.Water.ToString() : "-")));
-                                }
+            //                    // Calculate average values for the batch
+            //                    //double avgEthanol = itemGroup.Average(item => item.Ethanol ?? 0);
+            //                    //double avgDenaturant = itemGroup.Average(item => item.Denaturant ?? 0);
+            //                    //double avgMethanol = itemGroup.Average(item => item.Methanol ?? 0);
+            //                    //double avgWater = itemGroup.Average(item => item.Water ?? 0);
+
+            //                    double? avgEthanol = itemGroup.Select(item => item.Ethanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgDenaturant = itemGroup.Select(item => item.Denaturant).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgMethanol = itemGroup.Select(item => item.Methanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgWater = itemGroup.Select(item => item.Water).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
 
 
 
-                                document.Add(selectedItemsTable);
-                                pageNumber++;
-                                //MessageBox.Show($"hello{ itemGroup.Count()}");
-                            }
-                            //pageEvent.SetTotalPages(pdf.GetNumberOfPages());
-                            pageEvent.SetTotalPages(totalPages);
-                            //pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
-                            //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new History.FooterEventHandler()); // Add a footer to each page
-                        }
+            //                    // Create a single row table for average results
+            //                    Table avgResultItemsTable = history.CreateAverageResultItemsTable(
+            //                        new DataItem
+            //                        {
+            //                            Ethanol = (double)avgEthanol,
+            //                            Denaturant = (double)avgDenaturant,
+            //                            Methanol = (double)avgMethanol,
+            //                            Water = (double)avgWater
+            //                        }
+            //                    );
+            //                    document.Add(avgResultItemsTable);
+
+            //                    document.Add(new Paragraph("\n"));
+            //                    Paragraph passesResultInfo = new Paragraph("PASSES RESULTS").SetFontColor(ColorConstants.BLACK)
+            //                        .SetFontSize(16)
+            //                        .SetBold();
+            //                    document.Add(passesResultInfo);
+            //                    document.Add(new Paragraph("\n"));
+
+            //                    // Create a table for all items in the batch
+            //                    Table selectedItemsTable = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Pass No.")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Time Stamp")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Ethanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Denaturant (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Methanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Water (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+
+            //                    foreach (var item in itemGroup)
+            //                    {
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.PassNo.ToString())));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Timestamp.ToString())));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Ethanol != null ? item.Ethanol.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Denaturant != null ? item.Denaturant.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Methanol != null ? item.Methanol.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Water != null ? item.Water.ToString() : "-")));
+            //                    }
 
 
-                        MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("No items selected for export.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            /*
-            if (allDataItems.Count > 0)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "CSV files (*.csv)|*.csv",
-                    Title = "Save CSV file"
-                };
 
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    using (var writer = new StreamWriter(saveFileDialog.FileName))
-                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                    {
-                        csv.Context.RegisterClassMap<DataItemMap>();
-                        csv.WriteRecords(allDataItems);
-                    }
+            //                    document.Add(selectedItemsTable);
+            //                    pageNumber++;
+            //                    //MessageBox.Show($"hello{ itemGroup.Count()}");
+            //                }
+            //                //pageEvent.SetTotalPages(pdf.GetNumberOfPages());
+            //                pageEvent.SetTotalPages(totalPages);
+            //                //pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
+            //                //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new History.FooterEventHandler()); // Add a footer to each page
+            //            }
 
-                    MessageBox.Show("CSV file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            */
 
+            //            MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("No items selected for export.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //}
+          
 
         }
         private List<DataItem> GetAllDataItems()
@@ -427,198 +410,195 @@ namespace PaeoniaTechSpectroMeter.Views
         }
         private void BtnRepeatMeasurement_Click(object sender, RoutedEventArgs e)
         {
-            List<DataItem> allDataItems = GetAllDataItems();
-
             if (!mmgr.ReadDetector.IsDataSavedDB)
             {
-
-
-                // save data to db
+                mmgr.ReadDetector.SaveMeasurementData();
                 mmgr.ReadDetector.IsDataSavedDB = true;
-                
+                mmgr.ReadDetector.SaveFilePDF();
             }
 
+            //List<DataItem> allDataItems = GetAllDataItems();
 
-            if (allDataItems.Count > 0)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "PDF files (*.pdf)|*.pdf",
-                    Title = "Save PDF file"
-                };
+            //if (allDataItems.Count > 0)
+            //{
+            //    SaveFileDialog saveFileDialog = new SaveFileDialog
+            //    {
+            //        Filter = "PDF files (*.pdf)|*.pdf",
+            //        Title = "Save PDF file"
+            //    };
 
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
-                    using (var pdf = new PdfDocument(writer))
-                    {
-                        CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
-                        //pageEvent.SetTotalPages(totalPages);
-                        pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
+            //    if (saveFileDialog.ShowDialog() == true)
+            //    {
+            //        using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
+            //        using (var pdf = new PdfDocument(writer))
+            //        {
+            //            CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
+            //            //pageEvent.SetTotalPages(totalPages);
+            //            pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
 
-                        using (var document = new Document(pdf))
-                        {
-                            int totalPages = allDataItems.Count;
-                            Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
-                                .SetFontColor(ColorConstants.WHITE)
-                                .SetFontSize(16)
-                                .SetBold();
-                            string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
-                            ImageData imageData = ImageDataFactory.Create(logoPath);
-                            Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
-
-
-                            Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
-                            headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                            headerTable.SetBackgroundColor(ColorConstants.BLUE);
+            //            using (var document = new Document(pdf))
+            //            {
+            //                int totalPages = allDataItems.Count;
+            //                Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
+            //                    .SetFontColor(ColorConstants.WHITE)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
+            //                ImageData imageData = ImageDataFactory.Create(logoPath);
+            //                Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
 
 
-                            Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
-                            headerTable.AddCell(titleCell);
+            //                Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+            //                headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+            //                headerTable.SetBackgroundColor(ColorConstants.BLUE);
 
 
-                            Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                            headerTable.AddCell(logoCell);
+            //                Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
+            //                headerTable.AddCell(titleCell);
 
 
-                            document.Add(headerTable);
-
-                            document.Add(new Paragraph("\n"));
-
-                            Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
-                                .SetFontSize(16)
-                                .SetBold();
-                            document.Add(reportTitle);
-                            document.Add(new Paragraph("\n"));
-
-                            History history = new History();
-                            Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
-                            document.Add(additionalInfoTable);
-
-                            document.Add(new Paragraph("\n"));
-                            Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
-                                .SetFontSize(16)
-                                .SetBold();
-                            document.Add(equipmentInfo);
-                            document.Add(new Paragraph("\n"));
-
-                            Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
-                            document.Add(equipmentInfoTable);
+            //                Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+            //                headerTable.AddCell(logoCell);
 
 
+            //                document.Add(headerTable);
 
-                            // Add a new page
-                            //document.Add(new AreaBreak());
+            //                document.Add(new Paragraph("\n"));
+
+            //                Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                document.Add(reportTitle);
+            //                document.Add(new Paragraph("\n"));
+
+            //                History history = new History();
+            //                Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
+            //                document.Add(additionalInfoTable);
+
+            //                document.Add(new Paragraph("\n"));
+            //                Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
+            //                    .SetFontSize(16)
+            //                    .SetBold();
+            //                document.Add(equipmentInfo);
+            //                document.Add(new Paragraph("\n"));
+
+            //                Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+            //                document.Add(equipmentInfoTable);
 
 
 
-
-                            allDataItems.Sort((x, y) => x.Batch.GetValueOrDefault() - y.Batch.GetValueOrDefault());
-
-                            // Initialize batch number for the first item
-                            int currentBatchNumber = allDataItems[0].Batch.GetValueOrDefault();
-                            int pageNumber = 1;
-
-                            foreach (var itemGroup in allDataItems.GroupBy(item => item.Batch.GetValueOrDefault()))
-                            {
-                                // Start a new page for a new batch
-                                document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-
-                                Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
-                                document.Add(sampleReport);
-                                document.Add(new Paragraph("\n"));
+            //                // Add a new page
+            //                //document.Add(new AreaBreak());
 
 
 
-                                var operatorNames = itemGroup.Select(item => item.Operator).Distinct();
-                                string concatenatedOperatorNames = string.Join(", ", operatorNames);
 
-                                // Add summary information for the batch
-                                Table summarySelectedItemsTable = history.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
-                                document.Add(summarySelectedItemsTable);
+            //                allDataItems.Sort((x, y) => x.Batch.GetValueOrDefault() - y.Batch.GetValueOrDefault());
 
-                                document.Add(new Paragraph("\n"));
-                                Paragraph avgResultInfo = new Paragraph("AVERAGE RESULT").SetFontColor(ColorConstants.BLACK)
-                                    .SetFontSize(16)
-                                    .SetBold();
-                                document.Add(avgResultInfo);
-                                document.Add(new Paragraph("\n"));
+            //                // Initialize batch number for the first item
+            //                int currentBatchNumber = allDataItems[0].Batch.GetValueOrDefault();
+            //                int pageNumber = 1;
 
-                                // Calculate average values for the batch
-                                //double avgEthanol = itemGroup.Average(item => item.Ethanol ?? 0);
-                                //double avgDenaturant = itemGroup.Average(item => item.Denaturant ?? 0);
-                                //double avgMethanol = itemGroup.Average(item => item.Methanol ?? 0);
-                                //double avgWater = itemGroup.Average(item => item.Water ?? 0);
+            //                foreach (var itemGroup in allDataItems.GroupBy(item => item.Batch.GetValueOrDefault()))
+            //                {
+            //                    // Start a new page for a new batch
+            //                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                double? avgEthanol = itemGroup.Select(item => item.Ethanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgDenaturant = itemGroup.Select(item => item.Denaturant).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgMethanol = itemGroup.Select(item => item.Methanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
-
-                                double? avgWater = itemGroup.Select(item => item.Water).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+            //                    Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
+            //                    document.Add(sampleReport);
+            //                    document.Add(new Paragraph("\n"));
 
 
 
-                                // Create a single row table for average results
-                                Table avgResultItemsTable = history.CreateAverageResultItemsTable(
-                                    new DataItem
-                                    {
-                                        Ethanol = (int)avgEthanol,
-                                        Denaturant = (int)avgDenaturant,
-                                        Methanol = (int)avgMethanol,
-                                        Water = (int)avgWater
-                                    }
-                                );
-                                document.Add(avgResultItemsTable);
+            //                    var operatorNames = itemGroup.Select(item => item.Operator).Distinct();
+            //                    string concatenatedOperatorNames = string.Join(", ", operatorNames);
 
-                                document.Add(new Paragraph("\n"));
-                                Paragraph passesResultInfo = new Paragraph("PASSES RESULTS").SetFontColor(ColorConstants.BLACK)
-                                    .SetFontSize(16)
-                                    .SetBold();
-                                document.Add(passesResultInfo);
-                                document.Add(new Paragraph("\n"));
+            //                    // Add summary information for the batch
+            //                    Table summarySelectedItemsTable = history.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
+            //                    document.Add(summarySelectedItemsTable);
 
-                                // Create a table for all items in the batch
-                                Table selectedItemsTable = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Pass No.")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Time Stamp")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Ethanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Denaturant (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Methanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
-                                selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Water (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    document.Add(new Paragraph("\n"));
+            //                    Paragraph avgResultInfo = new Paragraph("AVERAGE RESULT").SetFontColor(ColorConstants.BLACK)
+            //                        .SetFontSize(16)
+            //                        .SetBold();
+            //                    document.Add(avgResultInfo);
+            //                    document.Add(new Paragraph("\n"));
 
-                                foreach (var item in itemGroup)
-                                {
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.PassNo.ToString())));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Timestamp.ToString())));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Ethanol != null ? item.Ethanol.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Denaturant != null ? item.Denaturant.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Methanol != null ? item.Methanol.ToString() : "-")));
-                                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Water != null ? item.Water.ToString() : "-")));
-                                }
+            //                    // Calculate average values for the batch
+            //                    //double avgEthanol = itemGroup.Average(item => item.Ethanol ?? 0);
+            //                    //double avgDenaturant = itemGroup.Average(item => item.Denaturant ?? 0);
+            //                    //double avgMethanol = itemGroup.Average(item => item.Methanol ?? 0);
+            //                    //double avgWater = itemGroup.Average(item => item.Water ?? 0);
+
+            //                    double? avgEthanol = itemGroup.Select(item => item.Ethanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgDenaturant = itemGroup.Select(item => item.Denaturant).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgMethanol = itemGroup.Select(item => item.Methanol).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
+
+            //                    double? avgWater = itemGroup.Select(item => item.Water).Where(value => value.HasValue).Select(value => value.Value).DefaultIfEmpty().Average();
 
 
 
-                                document.Add(selectedItemsTable);
-                                pageNumber++;
-                                //MessageBox.Show($"hello{ itemGroup.Count()}");
-                            }
-                            //pageEvent.SetTotalPages(pdf.GetNumberOfPages());
-                            pageEvent.SetTotalPages(totalPages);
-                            //pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
-                            //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new History.FooterEventHandler()); // Add a footer to each page
-                        }
+            //                    // Create a single row table for average results
+            //                    Table avgResultItemsTable = history.CreateAverageResultItemsTable(
+            //                        new DataItem
+            //                        {
+            //                            Ethanol = (double)avgEthanol,
+            //                            Denaturant = (double)avgDenaturant,
+            //                            Methanol = (double)avgMethanol,
+            //                            Water = (double)avgWater
+            //                        }
+            //                    );
+            //                    document.Add(avgResultItemsTable);
+
+            //                    document.Add(new Paragraph("\n"));
+            //                    Paragraph passesResultInfo = new Paragraph("PASSES RESULTS").SetFontColor(ColorConstants.BLACK)
+            //                        .SetFontSize(16)
+            //                        .SetBold();
+            //                    document.Add(passesResultInfo);
+            //                    document.Add(new Paragraph("\n"));
+
+            //                    // Create a table for all items in the batch
+            //                    Table selectedItemsTable = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Pass No.")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Time Stamp")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Ethanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Denaturant (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Methanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            //                    selectedItemsTable.AddCell(new Cell().Add(new Paragraph("Water (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+
+            //                    foreach (var item in itemGroup)
+            //                    {
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.PassNo.ToString())));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Timestamp.ToString())));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Ethanol != null ? item.Ethanol.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Denaturant != null ? item.Denaturant.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Methanol != null ? item.Methanol.ToString() : "-")));
+            //                        selectedItemsTable.AddCell(new Cell().Add(new Paragraph(item.Water != null ? item.Water.ToString() : "-")));
+            //                    }
 
 
-                        MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("No items selected for export.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+
+            //                    document.Add(selectedItemsTable);
+            //                    pageNumber++;
+            //                    //MessageBox.Show($"hello{ itemGroup.Count()}");
+            //                }
+            //                //pageEvent.SetTotalPages(pdf.GetNumberOfPages());
+            //                pageEvent.SetTotalPages(totalPages);
+            //                //pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
+            //                //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new History.FooterEventHandler()); // Add a footer to each page
+            //            }
+
+
+            //            MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("No items selected for export.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //}
 
             //BtnMeasurement.Click(sender);
             mmgr.ReadDetector.PassNo++;

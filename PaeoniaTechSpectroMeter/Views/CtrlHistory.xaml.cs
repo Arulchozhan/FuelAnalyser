@@ -108,10 +108,10 @@ namespace PaeoniaTechSpectroMeter.Views
                         Operator = row["Operator"].ToString(),
                         AnalysisType = row["Analysis Type"].ToString(),
                         SampleType = row["Sample Type"].ToString(),
-                        Ethanol = row["Ethanol"] is int ethanol ? (int?)ethanol : null,
-                        Denaturant = row["Denaturant"] is int denaturant ? (int?)denaturant : null,
-                        Methanol = row["Methanol"] is int methanol ? (int?)methanol : null,
-                        Water = row["Water"] is int water ? (int?)water : null,
+                        Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null,
+                        Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null,
+                        Methanol = row["Methanol"] is double methanol ? (double?)methanol : null,
+                        Water = row["Water"] is double water ? (double?)water : null,
                         Batch = row["Batch"] is int batch ? (int?)batch : null,
                     };
 
@@ -281,10 +281,10 @@ namespace PaeoniaTechSpectroMeter.Views
                 dataItem.Operator = row["Operator"]?.ToString();
                 dataItem.AnalysisType = row["Analysis Type"]?.ToString();
                 dataItem.SampleType = row["Sample Type"]?.ToString();
-                dataItem.Ethanol = row["Ethanol"] is int ethanol ? (int?)ethanol : null;
-                dataItem.Denaturant = row["Denaturant"] is int denaturant ? (int?)denaturant : null;
-                dataItem.Methanol = row["Methanol"] is int methanol ? (int?)methanol : null;
-                dataItem.Water = row["Water"] is int water ? (int?)water : null;
+                dataItem.Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null;
+                dataItem.Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null;
+                dataItem.Methanol = row["Methanol"] is double methanol ? (double?)methanol : null;
+                dataItem.Water = row["Water"] is double water ? (double?)water : null;
                 dataItem.Batch = row["Batch"] is int batch ? (int?)batch : null;
 
                 allItems.Add(dataItem);
@@ -422,10 +422,10 @@ namespace PaeoniaTechSpectroMeter.Views
                                 Table avgResultItemsTable = history.CreateAverageResultItemsTable(
                                     new DataItem
                                     {
-                                        Ethanol = (int)avgEthanol,
-                                        Denaturant = (int)avgDenaturant,
-                                        Methanol = (int)avgMethanol,
-                                        Water = (int)avgWater
+                                        Ethanol = (double)avgEthanol,
+                                        Denaturant = (double)avgDenaturant,
+                                        Methanol = (double)avgMethanol,
+                                        Water = (double)avgWater
                                     }
                                 );
                                 document.Add(avgResultItemsTable);

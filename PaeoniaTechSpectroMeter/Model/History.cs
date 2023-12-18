@@ -152,10 +152,10 @@ namespace PaeoniaTechSpectroMeter.Model
                         Operator = row["Operator"].ToString(),
                         AnalysisType = row["Analysis Type"].ToString(),
                         SampleType = row["Sample Type"].ToString(),
-                        Ethanol = row["Ethanol"] is int ethanol ? (int?)ethanol : null,
-                        Denaturant = row["Denaturant"] is int denaturant ? (int?)denaturant : null,
-                        Methanol = row["Methanol"] is int methanol ? (int?)methanol : null,
-                        Water = row["Water"] is int water ? (int?)water : null,
+                        Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null,
+                        Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null,
+                        Methanol = row["Methanol"] is double methanol ? (double?)methanol : null,
+                        Water = row["Water"] is double water ? (double?)water : null,
                         Batch = row["Batch"] is int batch ? (int?)batch : null,
                     };
 
@@ -326,10 +326,10 @@ namespace PaeoniaTechSpectroMeter.Model
             table.AddCell(new Cell().Add(new Paragraph("Methanol (0-15) Vol%")).SetTextAlignment(TextAlignment.CENTER));
             table.AddCell(new Cell().Add(new Paragraph("Water (0-2) Vol%")).SetTextAlignment(TextAlignment.CENTER));
 
-            int totalEthanolValue = item.Ethanol ?? 0;
-            int totalDenaturantValue = item.Denaturant ?? 0;
-            int totalMethanolValue = item.Methanol ?? 0;
-            int totalWaterValue = item.Water ?? 0;
+            double totalEthanolValue = item.Ethanol ?? 0;
+            double totalDenaturantValue = item.Denaturant ?? 0;
+            double totalMethanolValue = item.Methanol ?? 0;
+            double totalWaterValue = item.Water ?? 0;
 
             double avgEthanolValue = (double)totalEthanolValue;
             double avgDenaturantValue = (double)totalDenaturantValue;
