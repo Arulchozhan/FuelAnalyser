@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -26,7 +27,7 @@ namespace PaeoniaTechSpectroMeter.Model
         List<double> ftyOff = new List<double>();
         List<double> currentOff = new List<double>();
         List<double> ftyDiff = new List<double>();
-
+        object obj = new object();
         private double[] currentBackgroundData;
 
         private double[] factoryBackgroundData;
@@ -151,16 +152,52 @@ namespace PaeoniaTechSpectroMeter.Model
         public double[] GetNewBackgroundData()
         {
 
-            newBackgroundData = mmgr.ReadDetector.ReadPixelVolt(true);
-            return newBackgroundData;
-            //Random random = new Random();
-            //return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
+            List<List<double>> backgrounflstoflst = new List<List<double>>();
+            backgrounflstoflst.Clear();
+            int i = 0;
+            int measurementCount = mmgr.MeasurementConfigurationData.RepeatMeasurement.HoldValue;
+
+            while (i < measurementCount)
+            {
+
+
+                /* if (ls != Dias_Lisa.Lisa.LISA_Status.LISA_OK)
+                 {
+                     mmgr.ReadDetector.IsReading = false;
+                     return;
+                 }*/
+
+                lock (obj)
+                {
+                    if (!mmgr.ReadDetector.Readingfinished)
+                    {
+                        mmgr.ReadDetector.Readingfinished = true;
+
+                        newBackgroundData = mmgr.ReadDetector.ReadPixelVolt(true);
+                        backgrounflstoflst.Add(newBackgroundData.ToList());
+                        i++;
+                    }
+                    else
+                        Thread.Sleep(3);
+                }
+
+
+                //if (mmgr.ReadDetector.stopReq) break;
+
+
+
+                //Random random = new Random();
+                //return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
+            }
+            List<double> averages = backgrounflstoflst.Select(innerList => innerList.Average()).ToList();
+
+            return averages.ToArray();
+           // return newBackgroundData;
+
+
         }
 
 
+
     }
-
-
-
-
 }

@@ -756,7 +756,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-
+        
         void PAT_Sensor_Read(bool isBackgroundRead)
         {
             // List<Pixelresult_data1> Collected_result = new List<Pixelresult_data1>();

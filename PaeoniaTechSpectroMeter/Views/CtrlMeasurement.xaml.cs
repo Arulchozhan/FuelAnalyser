@@ -146,7 +146,7 @@ namespace PaeoniaTechSpectroMeter.Views
             {
 
 
-                // save datga
+              
                 mmgr.ReadDetector.IsDataSavedDB=true;
             }
 
