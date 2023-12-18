@@ -724,7 +724,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 MeasurementCompletedat = "Measuring...";
 
 
-                // MeasureSpectram = new Thread(PAT_Sensor_Read);
+               //  MeasureSpectram = new Thread(PAT_Sensor_Read);
                 // MeasureSpectram.Start();
 
                 var t = new Thread(() => PAT_Sensor_Read(false));
@@ -756,7 +756,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-
+        
         void PAT_Sensor_Read(bool isBackgroundRead)
         {
             // List<Pixelresult_data1> Collected_result = new List<Pixelresult_data1>();

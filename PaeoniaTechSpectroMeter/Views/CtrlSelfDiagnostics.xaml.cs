@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using Path = System.IO.Path;
 using iText.Layout.Element;
+using System.Threading;
 //using System.Windows.Forms;
 
 namespace PaeoniaTechSpectroMeter.Views
@@ -96,8 +97,9 @@ namespace PaeoniaTechSpectroMeter.Views
         private void GetCurrentBackground()  
         {
             currentBackgroundData = GetCurrentBackgroundData();  //git
-            //currentBackgroundData = mmgr.SelfDiagnostics.GetCurrentBackgroundData();
-
+                                                                 //currentBackgroundData = mmgr.SelfDiagnostics.GetCurrentBackgroundData();
+            Application.Current.Dispatcher.Invoke(() => {
+           
             currentLineSeries = new LineSeries
             {
                 Title = "Current Background",
@@ -112,6 +114,8 @@ namespace PaeoniaTechSpectroMeter.Views
             currentLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
 
             chart.Series.Add(currentLineSeries);
+            });
+
         }
 
         private double[] GetCurrentBackgroundData()
@@ -131,6 +135,8 @@ namespace PaeoniaTechSpectroMeter.Views
         {
             factoryBackgroundData = GetFactoryBackgroundData();
             //factoryBackgroundData = mmgr.SelfDiagnostics.GetFactoryBackgroundData();
+            Application.Current.Dispatcher.Invoke(() => {
+          
             factoryBackgroundLineSeries = new LineSeries
             {
                 Title = "Factory Background",
@@ -144,6 +150,7 @@ namespace PaeoniaTechSpectroMeter.Views
             backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1a1a1a"));
             factoryBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
             chart.Series.Add(factoryBackgroundLineSeries);
+            });
         }
 
         private double[] GetFactoryBackgroundData()
@@ -231,9 +238,11 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)    
         {
-            //IsInstrumentUpToStandard();c
-            // Master testing mearge
-           mmgr.ReadDetector.AnalysisSelectionEnable = false;
+           
+            //Task<bool> checkInstrument = IsInstrumentUpToStandard();
+             //bool  IsInstrumentUpToStandard1 = await checkInstrument;
+            mmgr.ReadDetector.AnalysisSelectionEnable = false;
+           // IsInstrumentUpToStandard
 
             if (IsInstrumentUpToStandard())
             {
@@ -274,7 +283,7 @@ namespace PaeoniaTechSpectroMeter.Views
             mmgr.ReadDetector.AnalysisSelectionEnable = true;
         }
 
-        private bool IsInstrumentUpToStandard()
+        private bool  IsInstrumentUpToStandard()
         {
             double[] spectrum;
             double[] ftydiff;
@@ -290,7 +299,8 @@ namespace PaeoniaTechSpectroMeter.Views
             ReadCsv(ftyoffPath, out ftyOff);
             ReadCsv(curroffPath, out currentOff);
             ftydiff = ftyOff.Zip(ftyAir, (x, y) => x - y).ToArray(); //ftydiff
-            spectrum = mmgr.SelfDiagnostics.GetNewBackgroundData(); // current spectrum
+            //Task<double[]> ReadSpectraTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
+            spectrum =mmgr.SelfDiagnostics.GetNewBackgroundData(); // current spectrum
             
          
 
@@ -317,12 +327,13 @@ namespace PaeoniaTechSpectroMeter.Views
 
             return true;
         }
-
+        Thread readBackground = null;
         private void BtnScanNewBackground_Click(object sender, RoutedEventArgs e)
         {
 
             BtnResetToFactoryBackground.IsEnabled = false;
             BtnTestInstrument.IsEnabled = false;
+            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
 
             BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
             BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
@@ -339,21 +350,29 @@ namespace PaeoniaTechSpectroMeter.Views
             }
             if (mmgr.ReadDetector.MeasuremantBtnContent == "Start Measurement")
             {
+                mmgr.ReadDetector.AnalysisSelectionEnable = false;
                 if (mmgr.AppConfig.Perfchk == "PASS")
                 {
-
+                   
                     InfoMessageTextBlock.Text = "Scanning new background...";
 
                     BtnScanNewBackground.Content = "Cancel Scan";
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
+                     readBackground = new Thread(GetNewBackground);
+                   // var readBackground = new Thread(() => GetNewBackground());
+                    readBackground.Start();
 
-                    GetNewBackground();
+                    //var readBackground1 = new Task(() => GetNewBackground());
+                    //readBackground.Start();
 
-                    ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/Info-GreenSign_Icon.png", UriKind.Relative));
-                    InfoMessageTextBlock.Text = "New background scan completed.";
-                    InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
-                    SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+
+                   // GetNewBackground();
+
+                    //ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/Info-GreenSign_Icon.png", UriKind.Relative));
+                    //InfoMessageTextBlock.Text = "New background scan completed.";
+                    //InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+                    //SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
                 }
                 else
                 {
@@ -365,12 +384,15 @@ namespace PaeoniaTechSpectroMeter.Views
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
 
-                    GetNewBackground();
+                    //   GetNewBackground();
+                    var readBackground = new Thread(() => GetNewBackground());
+                    readBackground.Start();
 
                     ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative));
                     InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
                     InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                 }
+                
 
             }
             else
@@ -417,15 +439,25 @@ namespace PaeoniaTechSpectroMeter.Views
 
         }
 
-        private void GetNewBackground()
+        private  void GetNewBackground()
         {
             //have to write logic to get New Background and all three lines together
             string ftytairPath = "C:\\FuelAnalyzer\\Ftyair" + ".csv";
             ReadCsv(ftytairPath, out ftyAir);
-            newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
+           // double[] resultTask = await Task.Run(() => mmgr.SelfDiagnostics.GetNewBackgroundData());
+
+
+           // Task<double[]> resultTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
+           // newBackgroundSpectrumData =  resultTask;
+           newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
 
             //
+           // newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
             newBackgroundData = newBackgroundSpectrumData.Zip(ftyAir, (x, y) => x - y).ToArray(); //using Linq method to 
+            Application.Current.Dispatcher.Invoke(() => {
+                // Update UI element here
+               
+            
             newBackgroundLineSeries = new LineSeries
             {
                 Title = "New Background",
@@ -439,10 +471,12 @@ namespace PaeoniaTechSpectroMeter.Views
             backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
             newBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
             chart.Series.Add(newBackgroundLineSeries);
-           GetCurrentBackground();
+            });
+            GetCurrentBackground();
            GetFactoryBackground();
 
-            BtnSaveNewBackground.Visibility = Visibility.Visible;
+            Application.Current.Dispatcher.Invoke(() => {
+                BtnSaveNewBackground.Visibility = Visibility.Visible;
             SaveNewBorder.Visibility = Visibility.Visible;
 
             BtnScanNewBackground.Content = "Scan new Background";
@@ -458,11 +492,14 @@ namespace PaeoniaTechSpectroMeter.Views
             BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
             BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
             InfoMessageTextBlock.Text = "New background scan completed.";
-           // LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
-           //mmgr.AppConfig.BgchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
+                // LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
+                //mmgr.AppConfig.BgchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
+            });
+
+            mmgr.ReadDetector.AnalysisSelectionEnable = true;
         }
 
-        private double[] GetNewBackgroundData()
+        private  async Task<double[]> GetNewBackgroundData()
         {
             Random random = new Random();
             return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
