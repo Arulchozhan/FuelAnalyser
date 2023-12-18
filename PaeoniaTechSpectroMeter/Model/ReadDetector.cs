@@ -724,7 +724,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 MeasurementCompletedat = "Measuring...";
 
 
-                // MeasureSpectram = new Thread(PAT_Sensor_Read);
+               //  MeasureSpectram = new Thread(PAT_Sensor_Read);
                 // MeasureSpectram.Start();
 
                 var t = new Thread(() => PAT_Sensor_Read(false));

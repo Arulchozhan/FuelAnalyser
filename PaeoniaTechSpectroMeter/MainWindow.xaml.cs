@@ -158,15 +158,24 @@ namespace PaeoniaTechSpectroMeter
         {
             CurrentDateandTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
         }
-
+        CtrlMeasurement measurementPage;
+        CtrlSelfDiagnostics selfDiagnosticsPage;
+        CtrlHistory historyPage;
+        CtrlFactorySetting factoryPage;
+        CtrlMeasurementSetting measurementSettingPage;
+        CtrlAppConfig advancedConfigPage;
         void SetupPannels()
         {
             /// <Factoryseeting>
             /// in this pannel we set the detctor/emitter pulse setting 
             /// </Factoryseeting>
 
-            
-
+             measurementPage = new CtrlMeasurement(mmgr);
+             selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr);
+             historyPage = new CtrlHistory(mmgr);
+             factoryPage = new CtrlFactorySetting();
+             measurementSettingPage = new CtrlMeasurementSetting();
+             advancedConfigPage = new CtrlAppConfig();
             //ctrlMeasurement = new CtrlMeasurement(mmgr);
             //MakeControlStrech(ctrlMeasurement);
             //GrdMeasurement.Children.Add(ctrlMeasurement);
@@ -219,34 +228,40 @@ namespace PaeoniaTechSpectroMeter
 
             if (selectedTabItem.Header.ToString() == "Meausrement")
             {
-                CtrlMeasurement measurementPage = new CtrlMeasurement(mmgr);
+                if (measurementPage ==null)
+                  measurementPage = new CtrlMeasurement(mmgr);
                 page_Content.Content = measurementPage;
             }
             else if (selectedTabItem.Header.ToString() == "Self-diagnostics")
             {
-                CtrlSelfDiagnostics selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr);
+                if (selfDiagnosticsPage == null)
+                 selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr); 
                 page_Content.Content = selfDiagnosticsPage;
             }
             else if (selectedTabItem.Header.ToString() == "History")
             {
-                CtrlHistory historyPage = new CtrlHistory(mmgr);
+                if (historyPage == null)
+                     historyPage = new CtrlHistory(mmgr);
                 page_Content.Content = historyPage;
             }
             else if (selectedTabItem.Header.ToString() == "Factory Setting")
             {
-                CtrlFactorySetting factoryPage = new CtrlFactorySetting();
+                if (factoryPage == null)
+                     factoryPage = new CtrlFactorySetting();
                 factoryPage.Setup(mmgr);
                 page_Content.Content = factoryPage;
             }
             else if (selectedTabItem.Header.ToString() == "MeasurementSetting")
             {
-                CtrlMeasurementSetting measurementSettingPage = new CtrlMeasurementSetting();
+                if (measurementPage == null)
+                 measurementSettingPage = new CtrlMeasurementSetting();
                 measurementSettingPage.Setup(mmgr);
                 page_Content.Content = measurementSettingPage;
             }
             else if (selectedTabItem.Header.ToString() == "AdvancedConfig")
             {
-                CtrlAppConfig advancedConfigPage = new CtrlAppConfig();
+                if (factoryPage == null)
+                   advancedConfigPage = new CtrlAppConfig();
                 advancedConfigPage.Setup(mmgr.AppConfig);
                 page_Content.Content = advancedConfigPage;
             }

@@ -149,7 +149,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
 
 
-        public double[] GetNewBackgroundData()
+        public double [] GetNewBackgroundData()
         {
 
             List<List<double>> backgrounflstoflst = new List<List<double>>();
@@ -159,7 +159,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
             while (i < measurementCount)
             {
-
+              
 
                 /* if (ls != Dias_Lisa.Lisa.LISA_Status.LISA_OK)
                  {
@@ -189,9 +189,14 @@ namespace PaeoniaTechSpectroMeter.Model
                 //Random random = new Random();
                 //return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
             }
-            List<double> averages = backgrounflstoflst.Select(innerList => innerList.Average()).ToList();
+            List<double> averages = backgrounflstoflst
+            .FirstOrDefault() // Take the first list to determine the count
+            .Select((_, index) => backgrounflstoflst.Select(list => list[index]).Average())
+            .ToList();
 
-            return averages.ToArray();
+            // List<double> averages = backgrounflstoflst.Select(innerList => innerList.Average()).ToList();
+
+             return averages.ToArray();
            // return newBackgroundData;
 
 
