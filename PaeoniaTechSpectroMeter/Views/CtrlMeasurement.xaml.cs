@@ -128,7 +128,7 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnChangeLocation_Click(object sender, RoutedEventArgs e)
         {
             string serr = ""; //Testing
-            serr= mmgr.ReadDetector.BrowseLocation();
+            serr= mmgr.ReadDetector.BrowseLocation(); //BrowseLocation
             if(serr!="")
                 MessageBox.Show(serr, "Change Location");
 
