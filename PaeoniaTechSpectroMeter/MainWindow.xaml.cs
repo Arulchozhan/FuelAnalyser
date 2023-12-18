@@ -166,12 +166,7 @@ namespace PaeoniaTechSpectroMeter
         {
             CurrentDateandTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
         }
-        CtrlMeasurement measurementPage;
-        CtrlSelfDiagnostics selfDiagnosticsPage;
-        CtrlHistory historyPage;
-        CtrlFactorySetting factoryPage;
-        CtrlMeasurementSetting measurementSettingPage;
-        CtrlAppConfig advancedConfigPage;
+     
         void SetupPannels()
         {
             /// <Factoryseeting>
