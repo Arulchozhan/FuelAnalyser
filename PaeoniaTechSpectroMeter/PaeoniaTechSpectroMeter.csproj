@@ -232,260 +232,237 @@
     <Resource Include="Icon\Tick.png" />
     <Resource Include="Icon\Vector.png" />
     <Resource Include="Icon\Warning.png" />
-    <Content Include="LISA_DLL.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\BouncyCastle.Cryptography.dll</HintPath>
+    <Reference Include="BouncyCastle.Cryptography">
+      <HintPath>..\..\..\Dll\dll\dll\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
     <Reference Include="CommonConveters">
-      <HintPath>..\..\Ref_dll\CommonConveters.dll</HintPath>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\CommonConveters.dll</HintPath>
     </Reference>
     <Reference Include="CommonServiceLocator">
-      <HintPath>..\..\Ref_dll\CommonServiceLocator.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="COMPorts">
-      <HintPath>..\..\Ref_dll\COMPorts.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\COMPorts.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper">
-      <HintPath>..\..\Ref_dll\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="CustomListview">
-      <HintPath>..\..\Ref_dll\CustomListview.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\CustomListview.dll</HintPath>
     </Reference>
     <Reference Include="CustomWindow">
-      <HintPath>..\..\Ref_dll\CustomWindow.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\CustomWindow.dll</HintPath>
     </Reference>
     <Reference Include="DefaultPassword">
-      <HintPath>..\..\Ref_dll\DefaultPassword.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\DefaultPassword.dll</HintPath>
     </Reference>
     <Reference Include="DefinationAndConveter">
-      <HintPath>..\..\Ref_dll\DefinationAndConveter.dll</HintPath>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\DefinationAndConveter.dll</HintPath>
     </Reference>
-    <Reference Include="Dias_Lisa">
-      <HintPath>..\..\old_LISAworking\Dias_Lisa.dll</HintPath>
+    <Reference Include="Dias_Lisa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dll\Lisa\Dias_Lisa.dll</HintPath>
     </Reference>
     <Reference Include="DotNetProjects.DataVisualization.Toolkit">
-      <HintPath>..\..\Ref_dll\DotNetProjects.DataVisualization.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\DotNetProjects.DataVisualization.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="FSM">
-      <HintPath>..\..\Ref_dll\FSM.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\FSM.dll</HintPath>
     </Reference>
     <Reference Include="FSM.UI">
-      <HintPath>..\..\Ref_dll\FSM.UI.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\FSM.UI.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\..\Ref_dll\GalaSoft.MvvmLight.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\..\Ref_dll\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\..\Ref_dll\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="itext.barcodes">
-      <HintPath>..\..\Ref_dll\itext.barcodes.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.barcodes.dll</HintPath>
     </Reference>
     <Reference Include="itext.bouncy-castle-adapter">
-      <HintPath>..\..\Ref_dll\itext.bouncy-castle-adapter.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.bouncy-castle-adapter.dll</HintPath>
     </Reference>
     <Reference Include="itext.bouncy-castle-connector">
-      <HintPath>..\..\Ref_dll\itext.bouncy-castle-connector.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.bouncy-castle-connector.dll</HintPath>
     </Reference>
     <Reference Include="itext.commons">
-      <HintPath>..\..\Ref_dll\itext.commons.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.commons.dll</HintPath>
     </Reference>
     <Reference Include="itext.forms">
-      <HintPath>..\..\Ref_dll\itext.forms.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.forms.dll</HintPath>
     </Reference>
     <Reference Include="itext.io">
-      <HintPath>..\..\Ref_dll\itext.io.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.io.dll</HintPath>
     </Reference>
     <Reference Include="itext.kernel">
-      <HintPath>..\..\Ref_dll\itext.kernel.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.kernel.dll</HintPath>
     </Reference>
     <Reference Include="itext.layout">
-      <HintPath>..\..\Ref_dll\itext.layout.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.layout.dll</HintPath>
     </Reference>
     <Reference Include="itext.pdfa">
-      <HintPath>..\..\Ref_dll\itext.pdfa.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.pdfa.dll</HintPath>
     </Reference>
     <Reference Include="itext.sign">
-      <HintPath>..\..\Ref_dll\itext.sign.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.sign.dll</HintPath>
     </Reference>
     <Reference Include="itext.styledxmlparser">
-      <HintPath>..\..\Ref_dll\itext.styledxmlparser.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.styledxmlparser.dll</HintPath>
     </Reference>
     <Reference Include="itext.svg">
-      <HintPath>..\..\Ref_dll\itext.svg.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\itext.svg.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts">
-      <HintPath>..\..\Ref_dll\LiveCharts.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\LiveCharts.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts.Wpf">
-      <HintPath>..\..\Ref_dll\LiveCharts.Wpf.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="LogWritter">
-      <HintPath>..\..\Ref_dll\LogWritter.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\LogWritter.dll</HintPath>
     </Reference>
     <Reference Include="MCP.StatisticsHelper">
-      <HintPath>..\..\Ref_dll\MCP.StatisticsHelper.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCP.StatisticsHelper.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet">
-      <HintPath>..\..\Ref_dll\MCPNet.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.AnalogIO">
-      <HintPath>..\..\Ref_dll\MCPNet.AnalogIO.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.AnalogIO.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.ChartControl">
-      <HintPath>..\..\Ref_dll\MCPNet.ChartControl.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.ChartControl.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.Data">
-      <HintPath>..\..\Ref_dll\MCPNet.Data.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.Data.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.General">
-      <HintPath>..\..\Ref_dll\MCPNet.General.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.General.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.Interface">
-      <HintPath>..\..\Ref_dll\MCPNet.Interface.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.Interface.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.ACSWagoEtherCAT">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.ACSWagoEtherCAT.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.ACSWagoEtherCAT.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.Ad7296">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.Ad7296.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.Ad7296.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.ADdll">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.ADdll.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.ADdll.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.Config.Card">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.Config.Card.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.Config.Card.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.Config.IOList">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.Config.IOList.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.Config.IOList.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.IO.UI">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="MCPNet.IO.Wago">
-      <HintPath>..\..\Ref_dll\MCPNet.IO.Wago.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.IO.UI.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.MachineMonitor">
-      <HintPath>..\..\Ref_dll\MCPNet.MachineMonitor.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.MachineMonitor.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.Motion.PosModel">
-      <HintPath>..\..\Ref_dll\MCPNet.Motion.PosModel.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.Motion.PosModel.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.Motion.UI">
-      <HintPath>..\..\Ref_dll\MCPNet.Motion.UI.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.Motion.UI.dll</HintPath>
     </Reference>
     <Reference Include="MCPNet.UI">
-      <HintPath>..\..\Ref_dll\MCPNet.UI.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MCPNet.UI.dll</HintPath>
     </Reference>
     <Reference Include="MessageHandler">
-      <HintPath>..\..\Ref_dll\MessageHandler.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\MessageHandler.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Bcl.HashCode.dll</HintPath>
+    <Reference Include="Microsoft.Bcl.HashCode">
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection">
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging">
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.Logging.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.Options.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.Options.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Microsoft.Extensions.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Primitives">
+      <HintPath>..\..\..\Dll\dll\dll\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenHardwareMonitorLib">
-      <HintPath>..\..\Ref_dll\OpenHardwareMonitorLib.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\OpenHardwareMonitorLib.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp">
-      <HintPath>..\..\Ref_dll\PdfSharp.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.Charting">
-      <HintPath>..\..\Ref_dll\PdfSharp.Charting.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\PdfSharp.Charting.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.Charting.resources">
-      <HintPath>..\..\Ref_dll\PdfSharp.Charting.resources.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\PdfSharp.Charting.resources.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.resources">
-      <HintPath>..\..\Ref_dll\PdfSharp.resources.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\PdfSharp.resources.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Python.Runtime">
-      <HintPath>..\..\Ref_dll\Python.Runtime.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Python.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Reicpe">
-      <HintPath>..\..\Ref_dll\Reicpe.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Reicpe.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Converters.Wpf">
-      <HintPath>..\..\Ref_dll\SharpVectors.Converters.Wpf.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\SharpVectors.Converters.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Core">
-      <HintPath>..\..\Ref_dll\SharpVectors.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpVectors.Css">
-      <HintPath>..\..\Ref_dll\SharpVectors.Css.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\SharpVectors.Core.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Dom">
-      <HintPath>..\..\Ref_dll\SharpVectors.Dom.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpVectors.Model">
-      <HintPath>..\..\Ref_dll\SharpVectors.Model.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\SharpVectors.Dom.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Rendering.Wpf">
-      <HintPath>..\..\Ref_dll\SharpVectors.Rendering.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpVectors.Runtime.Wpf">
-      <HintPath>..\..\Ref_dll\SharpVectors.Runtime.Wpf.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\SharpVectors.Rendering.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Sparrow.Chart.Wpf.40">
-      <HintPath>..\..\Ref_dll\Sparrow.Chart.Wpf.40.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Sparrow.Chart.Wpf.40.dll</HintPath>
     </Reference>
     <Reference Include="StorageMonitorService">
-      <HintPath>..\..\Ref_dll\StorageMonitorService.dll</HintPath>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\StorageMonitorService.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Buffers.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager">
-      <HintPath>..\..\Ref_dll\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
@@ -493,48 +470,53 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.Data.SqlXml" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Memory.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Numerics.Vectors.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ref_dll\System.Threading.Tasks.Extensions.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\..\Ref_dll\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TCPSever">
-      <HintPath>..\..\Ref_dll\TCPSever.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\TCPSever.dll</HintPath>
     </Reference>
     <Reference Include="UserAccess">
-      <HintPath>..\..\Ref_dll\UserAccess.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\UserAccess.dll</HintPath>
     </Reference>
     <Reference Include="Utilities">
-      <HintPath>..\..\Ref_dll\Utilities.dll</HintPath>
+      <HintPath>..\..\..\Dll\dll\dll\Utilities.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LISA_DLL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
