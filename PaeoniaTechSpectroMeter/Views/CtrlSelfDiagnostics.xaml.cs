@@ -424,7 +424,7 @@ namespace PaeoniaTechSpectroMeter.Views
             ReadCsv(ftytairPath, out ftyAir);
             newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
 
-
+            //
             newBackgroundData = newBackgroundSpectrumData.Zip(ftyAir, (x, y) => x - y).ToArray(); //using Linq method to 
             newBackgroundLineSeries = new LineSeries
             {
