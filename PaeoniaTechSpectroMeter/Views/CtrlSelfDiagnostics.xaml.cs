@@ -245,7 +245,7 @@ namespace PaeoniaTechSpectroMeter.Views
             //Task<bool> checkInstrument = IsInstrumentUpToStandard();
             //bool  IsInstrumentUpToStandard1 = await checkInstrument;
             mmgr.ReadDetector.AnalysisSelectionEnable = false;
-
+            mmgr.ReadDetector.MeasurementEnable=false;
             var perfmChk = new Thread(() => GetNewBackground(true));
             perfmChk.Start();
 
@@ -358,6 +358,7 @@ namespace PaeoniaTechSpectroMeter.Views
             if (mmgr.ReadDetector.MeasuremantBtnContent == "Start Measurement")
             {
                 mmgr.ReadDetector.AnalysisSelectionEnable = false;
+                mmgr.ReadDetector.MeasurementEnable = false;
                 if (mmgr.AppConfig.Perfchk == "PASS")
                 {
 
@@ -576,6 +577,7 @@ namespace PaeoniaTechSpectroMeter.Views
             }
 
             mmgr.ReadDetector.AnalysisSelectionEnable = true;
+            mmgr.ReadDetector.MeasurementEnable = true;
         }
 
         private bool Checking(ref List<double> currentOff, ref double[] spectrum, ref double[] ftydiff)

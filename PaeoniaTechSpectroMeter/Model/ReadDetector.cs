@@ -60,6 +60,7 @@ namespace PaeoniaTechSpectroMeter.Model
         private int selectedAnalysistype;
         bool analysisSelection;
         bool analysisSelectionEnable;
+        bool measurementEnable;
         private string sampleFileName = "";
         private int selectedSampleType;
         private int filecnt = 0;
@@ -355,6 +356,18 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("AnalysisSelectionEnable");
             }
         }
+        public bool MeasurementEnable
+        {
+            get => measurementEnable;
+            set
+            {
+                measurementEnable = value;
+                OnPropertyChanged("MeasurementEnable");
+            }
+        }
+
+      
+
 
         public string UserChooseDir
         {
@@ -419,6 +432,7 @@ namespace PaeoniaTechSpectroMeter.Model
             InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             _dataAccess = new DataAccess(_connectionString);
             history = new History(mmgr);
+            MeasurementEnable = true;
         }
 
 
@@ -1045,6 +1059,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             MeasuremantBtnContent = "Cancel Measurement";
             AnalysisSelectionEnable = false;
+            MeasurementEnable=true;
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
             Starttime = DateTime.Now;
@@ -1087,6 +1102,7 @@ namespace PaeoniaTechSpectroMeter.Model
             }
             Readingfinished = false; //flag changes 
             AnalysisSelectionEnable = true;
+            MeasurementEnable = true;
             stopReq = true;
             //  MeasurementCompletedat = $"Measurement Was Cancelled";
             MeasuremantBtnContent = "Start Measurement";
