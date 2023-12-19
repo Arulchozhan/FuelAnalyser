@@ -22,7 +22,7 @@ namespace PaeoniaTechSpectroMeter.Model
             {
                 return "Yellow";
             }
-            else if (doubleValue >= 51 && doubleValue <= 100)
+            else if (doubleValue >= 51 && doubleValue <= 200)
             {
                 return "Green";
             }

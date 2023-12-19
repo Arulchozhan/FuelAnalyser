@@ -41,7 +41,7 @@
 
                 <Button x:Name="BtnRepeatMeasurement" Content="Save and Repeat Measurement" Visibility="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" IsEnabled="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}"  Style="{StaticResource ButtonStyle}" Click="BtnRepeatMeasurement_Click" Margin="0,0,50,0"  Width="346"/>
 
-                <Button x:Name="BtnMeasurement" IsEnabled="{Binding AnalysisSelectionEnable}" Content="{Binding MeasuremantBtnContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ButtonStyle}" Click="BtnMeasurement_Click"/>
+                <Button x:Name="BtnMeasurement"  Content="{Binding MeasuremantBtnContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ButtonStyle}" Click="BtnMeasurement_Click"/>
             </StackPanel>
         </Grid>
         <Border x:Name="border" Width="1180" Height="64" Margin="10,95,5,0" VerticalAlignment="Top" Style="{StaticResource BorderStyle}">

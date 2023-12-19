@@ -327,11 +327,13 @@
     <Reference Include="itext.svg">
       <HintPath>..\..\Ref_dll\itext.svg.dll</HintPath>
     </Reference>
-    <Reference Include="LiveCharts">
-      <HintPath>..\..\Ref_dll\LiveCharts.dll</HintPath>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\LiveCharts.dll</HintPath>
     </Reference>
-    <Reference Include="LiveCharts.Wpf">
-      <HintPath>..\..\Ref_dll\LiveCharts.Wpf.dll</HintPath>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="LogWritter">
       <HintPath>..\..\Ref_dll\LogWritter.dll</HintPath>

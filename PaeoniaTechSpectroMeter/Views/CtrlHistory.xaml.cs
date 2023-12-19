@@ -47,6 +47,8 @@ namespace PaeoniaTechSpectroMeter.Views
         private ObservableCollection<DataItem> _dataItems;
         private Dictionary<int, List<DataItem>> selectedItemsPerPage = new Dictionary<int, List<DataItem>>();
 
+        History history;
+
         //public ObservableCollection<DataItem> DataItems { get; set; } = new ObservableCollection<DataItem>();
         public ObservableCollection<DataItem> DataItems
         {
@@ -81,8 +83,8 @@ namespace PaeoniaTechSpectroMeter.Views
             InitializeComponent();
 
             LoadData();
-            DataContext = new History();
-            
+            //DataContext = new History(mmgr);
+            history = new History(mmgr);
         }
 
 
@@ -349,7 +351,7 @@ namespace PaeoniaTechSpectroMeter.Views
                             document.Add(reportTitle);
                             document.Add(new Paragraph("\n"));
 
-                            History history = new History();
+                            //History history = new History(mmgr);
                             Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
                             document.Add(additionalInfoTable);
 
