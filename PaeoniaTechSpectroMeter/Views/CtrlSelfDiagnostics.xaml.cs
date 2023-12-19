@@ -84,36 +84,37 @@ namespace PaeoniaTechSpectroMeter.Views
             GetCurrentBackground();
             if (mmgr.AppConfig.Perfchk == "PASS")
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
-           else
+            else
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-WarningSign_Icon.png", UriKind.Relative));
 
-            this.LastTestedOn.Text ="Last tested on";
+            this.LastTestedOn.Text = "Last tested on";
             this.LastTestedTime.Text = mmgr.AppConfig.PerfchkTime;
-            this.LastScannedTextAndTime.Text =$"Last scanned / reset on " + mmgr.AppConfig.BgchkTime;
+            this.LastScannedTextAndTime.Text = $"Last scanned / reset on " + mmgr.AppConfig.BgchkTime;
             GetFactoryBackground();
 
         }
 
-        private void GetCurrentBackground()  
+        private void GetCurrentBackground()
         {
             currentBackgroundData = GetCurrentBackgroundData();  //git
                                                                  //currentBackgroundData = mmgr.SelfDiagnostics.GetCurrentBackgroundData();
-            Application.Current.Dispatcher.Invoke(() => {
-           
-            currentLineSeries = new LineSeries
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Title = "Current Background",
-                Values = new ChartValues<double>(currentBackgroundData),
-                StrokeThickness = 1,
-                Fill = Brushes.Transparent
-            };
 
-            currentLineSeries.PointGeometry = DefaultGeometries.Circle;
-            currentLineSeries.PointGeometrySize = 3;
-            backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
-            currentLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
+                currentLineSeries = new LineSeries
+                {
+                    Title = "Current Background",
+                    Values = new ChartValues<double>(currentBackgroundData),
+                    StrokeThickness = 1,
+                    Fill = Brushes.Transparent
+                };
 
-            chart.Series.Add(currentLineSeries);
+                currentLineSeries.PointGeometry = DefaultGeometries.Circle;
+                currentLineSeries.PointGeometrySize = 3;
+                backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
+                currentLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
+
+                chart.Series.Add(currentLineSeries);
             });
 
         }
@@ -135,21 +136,22 @@ namespace PaeoniaTechSpectroMeter.Views
         {
             factoryBackgroundData = GetFactoryBackgroundData();
             //factoryBackgroundData = mmgr.SelfDiagnostics.GetFactoryBackgroundData();
-            Application.Current.Dispatcher.Invoke(() => {
-          
-            factoryBackgroundLineSeries = new LineSeries
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Title = "Factory Background",
-                Values = new ChartValues<double>(factoryBackgroundData),
-                StrokeThickness = 1,
-                Fill = Brushes.Transparent
-            };
 
-            factoryBackgroundLineSeries.PointGeometry = DefaultGeometries.Circle;
-            factoryBackgroundLineSeries.PointGeometrySize = 3;
-            backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1a1a1a"));
-            factoryBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
-            chart.Series.Add(factoryBackgroundLineSeries);
+                factoryBackgroundLineSeries = new LineSeries
+                {
+                    Title = "Factory Background",
+                    Values = new ChartValues<double>(factoryBackgroundData),
+                    StrokeThickness = 1,
+                    Fill = Brushes.Transparent
+                };
+
+                factoryBackgroundLineSeries.PointGeometry = DefaultGeometries.Circle;
+                factoryBackgroundLineSeries.PointGeometrySize = 3;
+                backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1a1a1a"));
+                factoryBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
+                chart.Series.Add(factoryBackgroundLineSeries);
             });
         }
 
@@ -236,13 +238,17 @@ namespace PaeoniaTechSpectroMeter.Views
             SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
         }
 
-        private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)    
+        private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)
         {
-           
+
             //Task<bool> checkInstrument = IsInstrumentUpToStandard();
-             //bool  IsInstrumentUpToStandard1 = await checkInstrument;
+            //bool  IsInstrumentUpToStandard1 = await checkInstrument;
             mmgr.ReadDetector.AnalysisSelectionEnable = false;
-           // IsInstrumentUpToStandard
+
+            var perfmChk = new Thread(() => GetNewBackground(true));
+            perfmChk.Start();
+
+            /*
 
             if (IsInstrumentUpToStandard())
             {
@@ -250,13 +256,13 @@ namespace PaeoniaTechSpectroMeter.Views
                 LastTestedOn.Text = "Last tested on";
                 LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
                 mmgr.AppConfig.Perfchk = "PASS";
-                mmgr.AppConfig.PerfchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
+                mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
 
                 ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
                 InfoMessageTextBlock.Text = "Ensure no fuel inside before testing instrument or scanning new background.";
                 InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
-                
+
             }
             else
             {
@@ -281,15 +287,16 @@ namespace PaeoniaTechSpectroMeter.Views
 
             }
             mmgr.ReadDetector.AnalysisSelectionEnable = true;
+            */
         }
 
-        private bool  IsInstrumentUpToStandard()
+        private bool IsInstrumentUpToStandard()
         {
             double[] spectrum;
             double[] ftydiff;
-            double average=0;
+            double average = 0;
             double testvalue = 0;
-           
+
             string ftytairPath = "C:\\FuelAnalyzer\\Ftyair" + ".csv";
             string ftyoffPath = "C:\\FuelAnalyzer\\Ftyoff" + ".csv";
 
@@ -299,14 +306,13 @@ namespace PaeoniaTechSpectroMeter.Views
             ReadCsv(ftyoffPath, out ftyOff);
             ReadCsv(curroffPath, out currentOff);
             ftydiff = ftyOff.Zip(ftyAir, (x, y) => x - y).ToArray(); //ftydiff
-            //Task<double[]> ReadSpectraTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
-            spectrum =mmgr.SelfDiagnostics.GetNewBackgroundData(); // current spectrum
-            
-         
+                                                                     //Task<double[]> ReadSpectraTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
+
+            spectrum = mmgr.SelfDiagnostics.GetNewBackgroundData(); // current spectrum
 
             for (int k = 0; k < spectrum.Length; k++)
             {
-                testvalue = Math.Abs((currentOff[k]- spectrum[k] -ftydiff[k]) / ftydiff[k]);
+                testvalue = Math.Abs((currentOff[k] - spectrum[k] - ftydiff[k]) / ftydiff[k]);
                 average += testvalue;
                 if (testvalue >= 0.3)
                 {
@@ -314,7 +320,7 @@ namespace PaeoniaTechSpectroMeter.Views
                     //LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
                     //mmgr.AppConfig.Perfchk = "Failed";
                     //mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
-                    
+
                     return false;
                 }
             }
@@ -322,7 +328,7 @@ namespace PaeoniaTechSpectroMeter.Views
             if (average >= 0.2)
             {
                 return false;
-            
+
             }
 
             return true;
@@ -353,21 +359,24 @@ namespace PaeoniaTechSpectroMeter.Views
                 mmgr.ReadDetector.AnalysisSelectionEnable = false;
                 if (mmgr.AppConfig.Perfchk == "PASS")
                 {
-                   
+
                     InfoMessageTextBlock.Text = "Scanning new background...";
 
                     BtnScanNewBackground.Content = "Cancel Scan";
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
-                     readBackground = new Thread(GetNewBackground);
-                   // var readBackground = new Thread(() => GetNewBackground());
+
+                    var readBackground = new Thread(() => GetNewBackground(false));
                     readBackground.Start();
+                    // readBackground = new Thread(GetNewBackground);
+                    // var readBackground = new Thread(() => GetNewBackground());
+                    //  readBackground.Start();
 
                     //var readBackground1 = new Task(() => GetNewBackground());
                     //readBackground.Start();
 
 
-                   // GetNewBackground();
+                    // GetNewBackground();
 
                     //ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/Info-GreenSign_Icon.png", UriKind.Relative));
                     //InfoMessageTextBlock.Text = "New background scan completed.";
@@ -385,14 +394,14 @@ namespace PaeoniaTechSpectroMeter.Views
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
 
                     //   GetNewBackground();
-                    var readBackground = new Thread(() => GetNewBackground());
+                    var readBackground = new Thread(() => GetNewBackground(false));
                     readBackground.Start();
 
-                    ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative));
-                    InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
-                    InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+                    //ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative));
+                    //InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
+                    //InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                 }
-                
+
 
             }
             else
@@ -439,67 +448,216 @@ namespace PaeoniaTechSpectroMeter.Views
 
         }
 
-        private  void GetNewBackground()
+        private void GetNewBackground(bool IsInstrumentchk)
         {
-            //have to write logic to get New Background and all three lines together
-            string ftytairPath = "C:\\FuelAnalyzer\\Ftyair" + ".csv";
-            ReadCsv(ftytairPath, out ftyAir);
-           // double[] resultTask = await Task.Run(() => mmgr.SelfDiagnostics.GetNewBackgroundData());
-
-
-           // Task<double[]> resultTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
-           // newBackgroundSpectrumData =  resultTask;
-           newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
-
-            //
-           // newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
-            newBackgroundData = newBackgroundSpectrumData.Zip(ftyAir, (x, y) => x - y).ToArray(); //using Linq method to 
-            Application.Current.Dispatcher.Invoke(() => {
-                // Update UI element here
-               
-            
-            newBackgroundLineSeries = new LineSeries
+            if (!IsInstrumentchk)
             {
-                Title = "New Background",
-                Values = new ChartValues<double>(newBackgroundData),
-                StrokeThickness = 1,
-                Fill = Brushes.Transparent
-            };
 
-            newBackgroundLineSeries.PointGeometry = DefaultGeometries.Circle;
-            newBackgroundLineSeries.PointGeometrySize = 3;
-            backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
-            newBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
-            chart.Series.Add(newBackgroundLineSeries);
-            });
-            GetCurrentBackground();
-           GetFactoryBackground();
+                string ftytairPath = "C:\\FuelAnalyzer\\Ftyair" + ".csv";
+                ReadCsv(ftytairPath, out ftyAir);
+                newBackgroundSpectrumData = mmgr.SelfDiagnostics.GetNewBackgroundData();
+                newBackgroundData = newBackgroundSpectrumData.Zip(ftyAir, (x, y) => x - y).ToArray(); //using Linq method to 
 
-            Application.Current.Dispatcher.Invoke(() => {
-                BtnSaveNewBackground.Visibility = Visibility.Visible;
-            SaveNewBorder.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    newBackgroundLineSeries = new LineSeries
+                    {
+                        Title = "New Background",
+                        Values = new ChartValues<double>(newBackgroundData),
+                        StrokeThickness = 1,
+                        Fill = Brushes.Transparent
+                    };
 
-            BtnScanNewBackground.Content = "Scan new Background";
-            BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-            BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    newBackgroundLineSeries.PointGeometry = DefaultGeometries.Circle;
+                    newBackgroundLineSeries.PointGeometrySize = 3;
+                    backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+                    newBackgroundLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
+                    chart.Series.Add(newBackgroundLineSeries);
+                });
+                GetCurrentBackground();
+                GetFactoryBackground();
 
-            BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-            BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BtnSaveNewBackground.Visibility = Visibility.Visible;
+                    SaveNewBorder.Visibility = Visibility.Visible;
 
-            BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-            BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnScanNewBackground.Content = "Scan new Background";
+                    BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
 
-            BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-            BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
-            InfoMessageTextBlock.Text = "New background scan completed.";
-                // LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
-                //mmgr.AppConfig.BgchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
-            });
+                    BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+
+                    BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+
+                    BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    if (mmgr.AppConfig.Perfchk == "PASS")
+                    {
+                        ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/Info-GreenSign_Icon.png", UriKind.Relative));
+                        InfoMessageTextBlock.Text = "New background scan completed.";
+                        InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+                        SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+                    }
+                    else
+                    {
+                        ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative));
+                        InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
+                        InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+                    }
+
+                    // InfoMessageTextBlock.Text = "New background scan completed.";
+                    // LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
+                    //mmgr.AppConfig.BgchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
+                });
+
+
+
+
+            }
+            else
+            {
+                double[] spectrum;
+                double[] ftydiff;
+                double average = 0;
+                double testvalue = 0;
+
+                string ftytairPath = "C:\\FuelAnalyzer\\Ftyair" + ".csv";
+                string ftyoffPath = "C:\\FuelAnalyzer\\Ftyoff" + ".csv";
+
+                string curroffPath = "C:\\FuelAnalyzer\\Currentoff" + ".csv";
+
+                ReadCsv(ftytairPath, out ftyAir);
+                ReadCsv(ftyoffPath, out ftyOff);
+                ReadCsv(curroffPath, out currentOff);
+                ftydiff = ftyOff.Zip(ftyAir, (x, y) => x - y).ToArray(); //ftydiff
+                                                                         //Task<double[]> ReadSpectraTask = mmgr.SelfDiagnostics.GetNewBackgroundData();
+
+                spectrum = mmgr.SelfDiagnostics.GetNewBackgroundData(); // current spectrum
+                ///
+                /// Checking(ref currentOff, ref spectrum,ref ftydiff)
+                /// 
+                /// 
+                ///
+                Checking(ref currentOff, ref spectrum, ref ftydiff);
+                /*
+                for (int k = 0; k < spectrum.Length; k++)
+                {
+                    testvalue = Math.Abs((currentOff[k] - spectrum[k] - ftydiff[k]) / ftydiff[k]);
+                    average += testvalue;
+                    if (testvalue >= 0.3)
+                    {
+
+
+                        //LastTestedOn.Text = "Last tested on";
+                        //LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
+                        //mmgr.AppConfig.Perfchk = "Failed";
+                        //mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
+
+                         return false;
+                        //break;
+                    }
+                }
+                average /= spectrum.Length;
+                if (average >= 0.2)
+                {
+                    return false;
+
+                }
+
+                return true;
+                */
+
+
+
+            }
 
             mmgr.ReadDetector.AnalysisSelectionEnable = true;
         }
 
-        private  async Task<double[]> GetNewBackgroundData()
+        private bool Checking(ref List<double> currentOff, ref double[] spectrum, ref double[] ftydiff)
+        {
+            double average = 0;
+            double testvalue = 0;
+            for (int k = 0; k < spectrum.Length; k++)
+            {
+                testvalue = Math.Abs((currentOff[k] - spectrum[k] - ftydiff[k]) / ftydiff[k]);
+                average += testvalue;
+                if (testvalue >= 0.3)
+                {
+
+
+                    mmgr.AppConfig.Perfchk = "Failed";
+                    mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative)); //"C:\\FuelAnalyzer\\bin\\Icon\\Performance-WarningSign_Icon.png"
+                        InfoMessageTextBlock.Text = "Instrument is not up to standard. Perform cleaning and run “test instrument”. If this message remains, please contact WI.";
+                        InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+
+                        PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-WarningSign_Icon.png", UriKind.Relative));
+                        SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+
+                        BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                        BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+
+                        BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                        BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+                    
+                    LastTestedOn.Text = "Last tested on";
+                    LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
+                    });
+                    return false;
+                    //break;
+                }
+            }
+            average /= spectrum.Length;
+            if (average >= 0.2)
+            {
+                mmgr.AppConfig.Perfchk = "Failed";
+                mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative)); //"C:\\FuelAnalyzer\\bin\\Icon\\Performance-WarningSign_Icon.png"
+                    InfoMessageTextBlock.Text = "Instrument is not up to standard. Perform cleaning and run “test instrument”. If this message remains, please contact WI.";
+                    InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+
+                    PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-WarningSign_Icon.png", UriKind.Relative));
+                    SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
+
+                    BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+
+                    BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
+                    BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+               
+                LastTestedOn.Text = "Last tested on";
+                LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
+                });
+                return false;
+
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                currentTime = DateTime.Now;
+                LastTestedOn.Text = "Last tested on";
+                LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
+                mmgr.AppConfig.Perfchk = "PASS";
+                mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
+
+                PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
+
+                ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
+                InfoMessageTextBlock.Text = "Ensure no fuel inside before testing instrument or scanning new background.";
+                InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+            });
+            return true;
+
+        }
+
+        private async Task<double[]> GetNewBackgroundData()
         {
             Random random = new Random();
             return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
@@ -551,7 +709,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 InfoMessageTextBlock.Text = "Instrument is not up to standard. Background updated to new background.";
                 InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
             }
-           
+
             BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
             BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
 
