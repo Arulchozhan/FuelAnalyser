@@ -13,6 +13,26 @@ using Python.Runtime;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using PaeoniaTechSpectroMeter.Database;
+using System.Configuration;
+using iText.Kernel.Pdf;
+using static PaeoniaTechSpectroMeter.Model.History;
+using iText.Layout;
+using System.Windows.Documents;
+using iText.Kernel.Colors;
+using iText.IO.Image;
+using System.Windows.Controls.DataVisualization;
+using iText.Layout.Element;
+using Image = iText.Layout.Element.Image;
+using TextAlignment = iText.Layout.Properties.TextAlignment;
+using Paragraph = iText.Layout.Element.Paragraph;
+using Table = iText.Layout.Element.Table;
+using iText.Layout.Properties;
+using UnitValue = iText.Layout.Properties.UnitValue;
+using System.Windows;
+using MessageBox = System.Windows.MessageBox;
+using UserControl = System.Windows.Controls.UserControl;
+using Microsoft.Win32;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
@@ -47,10 +67,10 @@ namespace PaeoniaTechSpectroMeter.Model
         private int measurementStatusCont = 0;
         private int measurementMaxCont = 100;
         bool readingfinished = false;
-        private string ethanolConcentration;
-        private string methanolConcentration;
-        private string denaturantConcentration;
-        private string waterConcentration;
+        private double ethanolConcentration;
+        private double methanolConcentration;
+        private double denaturantConcentration;
+        private double waterConcentration;
         private int pyExceptionCount = 0;
         private int passNo = 1;
         private bool isDataSavedDB = false;
@@ -62,15 +82,30 @@ namespace PaeoniaTechSpectroMeter.Model
         volatile bool stopReq = false;
         private DateTime starttime;
         private string measurementCompletedat = "";
+        private bool isMeasurementCompleted;
         private string userChooseDir = "";
         private bool isRepeatmeasure = false;
-        private bool isReadytoSave= false;
-
+        private bool isReadytoSave = false;
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
+        private DataAccess _dataAccess;
 
         Thread MeasureSpectram = null;
         //private Lisa.LISA_Status ls;
 
+        private string infoIconSource;
 
+        private History history;
+
+
+        public string InfoIconSource
+        {
+            get => infoIconSource;
+            set
+            {
+                infoIconSource = value;
+                OnPropertyChanged(nameof(InfoIconSource));
+            }
+        }
 
         public string DetectorTemperature
         {
@@ -160,7 +195,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("IsDataSavedDB");
             }
         }
-     
+
         public bool IsRepeatmeasure
         {
             get
@@ -210,7 +245,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-        public string EthanolConcentration
+        public double EthanolConcentration
         {
             get => ethanolConcentration;
             set
@@ -220,7 +255,7 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
-        public string MethanolConcentration
+        public double MethanolConcentration
         {
             get => methanolConcentration;
             set
@@ -229,7 +264,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("MethanolConcentration");
             }
         }
-        public String DenaturantConcentration
+        public double DenaturantConcentration
         {
             get => denaturantConcentration;
 
@@ -239,7 +274,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("DenaturantConcentration");
             }
         }
-        public String WaterConcentration
+        public double WaterConcentration
         {
             get => waterConcentration;
             set
@@ -253,7 +288,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public string MeasuremantBtnContent
         {
             get { return measurementContent; } //?? (measurementContent = "Start Measurement");
-             set
+            set
             {
                 measurementContent = value;
                 OnPropertyChanged("MeasuremantBtnContent");
@@ -291,6 +326,15 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
+        public bool IsMeasurementCompleted
+        {
+            get => isMeasurementCompleted;
+            set
+            {
+                isMeasurementCompleted = value;
+                OnPropertyChanged(nameof(IsMeasurementCompleted));
+            }
+        }
         public bool AnalysisSelection
         {
             get => analysisSelection;
@@ -385,9 +429,10 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasuremantBtnContent = "Start Measurement";
             MeasurementCompletedat = $"Ready to measure";
             AnalysisSelectionEnable = true;
+            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+            _dataAccess = new DataAccess(_connectionString);
+            history = new History(mmgr);
             MeasurementEnable = true;
-
-
         }
 
 
@@ -397,8 +442,8 @@ namespace PaeoniaTechSpectroMeter.Model
 
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             if (UserChooseDir != "" && Directory.Exists(UserChooseDir))
-               dialog.SelectedPath = UserChooseDir;
-              var result = dialog.ShowDialog();
+                dialog.SelectedPath = UserChooseDir;
+            var result = dialog.ShowDialog();
             // string path= dialog.SelectedPath;
             if (result.ToString() != string.Empty)
             {
@@ -713,11 +758,303 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         public bool checkfeildentryexist()
         {
-            if (string.IsNullOrWhiteSpace(OpearatorName) || string.IsNullOrWhiteSpace(PassNo.ToString()) || string.IsNullOrWhiteSpace(SampleFileName)) //implement query logic if the combination exists 
-                return true;
+            //if (string.IsNullOrWhiteSpace(OpearatorName) || string.IsNullOrWhiteSpace(PassNo.ToString()) || string.IsNullOrWhiteSpace(SampleFileName)) //implement query logic if the combination exists 
+            //    return true;
+            if (string.IsNullOrWhiteSpace(OpearatorName) || PassNo == 0 || string.IsNullOrWhiteSpace(SampleFileName))
+                return false;
+            if (SelectedAnalysistype == 0)
+            {
+                string analysisType = "Methanol";
+                string checkFieldEntry = "SELECT COUNT(*) FROM Measurement WHERE [Pass No.] = @PassNo AND [Name] = @SampleFileName AND [Analysis type] = @analysisType AND [Time Stamp] >= @Starttime";
+
+                try
+                {
+                    Dictionary<string, object> parameters = new Dictionary<string, object>
+                    {
+
+                        { "@PassNo", PassNo },
+                        { "@SampleFileName", SampleFileName },
+                        { "@analysisType", analysisType },
+                        { "@Starttime", DateTime.Today }
+                    };
+
+                    foreach (var parameter in parameters.ToList())
+                    {
+                        if (parameter.Value == null)
+                        {
+                            parameters[parameter.Key] = DBNull.Value;
+                        }
+                    }
+                    return _dataAccess.CheckData(checkFieldEntry, parameters);
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                string analysisType = "Ethanol";
+                string checkFieldEntry = "SELECT COUNT(*) FROM Measurement WHERE [Pass No.] = @PassNo AND [Name] = @SampleFileName AND [Analysis type] = @analysisType AND [Time Stamp] >= @Starttime";
+
+                try
+                {
+                    Dictionary<string, object> parameters = new Dictionary<string, object>
+                    {
+
+                        { "@PassNo", PassNo },
+                        { "@SampleFileName", SampleFileName },
+                        { "@analysisType", analysisType },
+                        { "@Starttime", DateTime.Today }
+                    };
+
+                    foreach (var parameter in parameters.ToList())
+                    {
+                        if (parameter.Value == null)
+                        {
+                            parameters[parameter.Key] = DBNull.Value;
+                        }
+                    }
+                    return _dataAccess.CheckData(checkFieldEntry, parameters);
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+
+        }
+        public bool SaveMeasurementData()
+        {
+            if (!checkfeildentryexist())
+            {
+                if (_dataAccess == null)
+                {
+                    return false;
+                }
+
+                string getLatestBatchQuery = "SELECT MAX(Batch) AS LatestBatch FROM Measurement";
+
+                try
+                {
+                    int latestBatch = _dataAccess.GetScalarValue<int>(getLatestBatchQuery);
+                    int nextBatch = (PassNo == 1) ? latestBatch + 1 : latestBatch;
+                    string pass_No = PassNo.ToString("D3");
+
+                    if (SelectedAnalysistype == 1)
+                    {
+                        string analysisType = "Ethanol";
+                        string sampleType = "Fuel Ethanol";
+                        string savedMeasurementQuery = @"INSERT INTO Measurement ([Time Stamp], [Name], [Pass No.], [Operator], [Analysis type], [Sample Type], [Ethanol], [Denaturant], [Methanol], [Water], [Batch]) VALUES (GETDATE(), @SampleFileName, @pass_No, @OpearatorName, @analysisType, @sampleType, @EthanolConcentration,@DenaturantConcentration , @MethanolConcentration, @WaterConcentration, @nextBatch)";
+
+                        Dictionary<string, object> parameters = new Dictionary<string, object>
+                        {
+                            { "@SampleFileName", SampleFileName },
+                            { "@pass_No", pass_No },
+                            { "@OpearatorName", OpearatorName },
+                            { "@analysisType", analysisType },
+                            { "@sampleType", sampleType },
+                            { "@EthanolConcentration", EthanolConcentration},
+                            { "@DenaturantConcentration", DenaturantConcentration},
+                            { "@MethanolConcentration",MethanolConcentration},
+                            { "@WaterConcentration", WaterConcentration },
+                            { "@nextBatch", nextBatch}
+                        };
+
+                        // Replace null values with DBNull.Value
+                        foreach (var parameter in parameters.ToList())
+                        {
+                            if (parameter.Value == null)
+                            {
+                                parameters[parameter.Key] = DBNull.Value;
+                            }
+                        }
+
+                        return _dataAccess.InsertData(savedMeasurementQuery, parameters);
+                    }
+                    else
+                    {
+                        string analysisType = "Methanol";
+                        string sampleType = "Fuel Methanol";
+                        string savedMeasurementQuery = @"INSERT INTO Measurement ([Time Stamp], [Name], [Pass No.], [Operator], [Analysis type], [Sample Type], [Methanol], [Batch]) VALUES (GETDATE(), @SampleFileName, @pass_No, @OpearatorName, @analysisType, @sampleType, @MethanolConcentration, @nextBatch)";
+
+                        Dictionary<string, object> parameters = new Dictionary<string, object>
+                        {
+                            { "@SampleFileName", SampleFileName },
+                            { "@pass_No", pass_No },
+                            { "@OpearatorName", OpearatorName },
+                            { "@analysisType", analysisType },
+                            { "@sampleType", sampleType },
+                            { "@MethanolConcentration",MethanolConcentration},
+                            { "@nextBatch", nextBatch}
+                        };
+
+                        // Replace null values with DBNull.Value
+                        foreach (var parameter in parameters.ToList())
+                        {
+                            if (parameter.Value == null)
+                            {
+                                parameters[parameter.Key] = DBNull.Value;
+                            }
+                        }
+
+                        return _dataAccess.InsertData(savedMeasurementQuery, parameters);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details (you can use a logging framework or print to console)
+                    Console.WriteLine($"Exception: {ex.Message}");
+                    return false; // Or rethrow the exception if needed
+                }
+            }
 
             return false;
         }
+
+        public void SaveFilePDF()
+        {
+            //string test = mmgr.AppConfig.Perfchk;
+            //List<DataItem> allDataItems = GetAllDataItems();
+            //if (allDataItems.Count > 0)
+            //{
+            string analysisType;
+            if (SelectedAnalysistype == 0)
+            {
+                analysisType = "Methanol";
+            }
+            else
+            {
+                analysisType = "Ethanol";
+            }
+            string filePath = $"{SampleFileName}_{PassNo.ToString("D3")}_{DateTime.Now:yyyyMMdd}_{analysisType}.pdf";
+                //Path.Combine(UserChooseDir, SampleFileName + "_" + PassNo + "_" + DateTime.Now.ToString() + "_" + analysisType);
+
+            //SaveFileDialog saveFileDialog = new SaveFileDialog
+
+            //{
+            //    Filter = "PDF files (*.pdf)|*.pdf",
+            //    Title = "Save PDF file"
+            //};
+            //saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
+
+            //if (saveFileDialog.ShowDialog() == true)
+            //{
+                //using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
+                using (var writer = new PdfWriter(Path.Combine(UserChooseDir, filePath)))
+                using (var pdf = new PdfDocument(writer))
+                {
+                    CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
+                    //pageEvent.SetTotalPages(totalPages);
+                    pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
+
+                    using (var document = new Document(pdf))
+                    {
+                        //int totalPages = allDataItems.Count;
+                        Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
+                            .SetFontColor(ColorConstants.WHITE)
+                            .SetFontSize(16)
+                            .SetBold();
+                        string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
+                        ImageData imageData = ImageDataFactory.Create(logoPath);
+                        Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
+
+
+                        Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+                        headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                        headerTable.SetBackgroundColor(ColorConstants.BLUE);
+
+
+                        Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
+                        headerTable.AddCell(titleCell);
+
+
+                        Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                        headerTable.AddCell(logoCell);
+
+
+                        document.Add(headerTable);
+
+                        document.Add(new Paragraph("\n"));
+
+                        Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
+                            .SetFontSize(16)
+                            .SetBold();
+                        document.Add(reportTitle);
+                        document.Add(new Paragraph("\n"));
+
+                        Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
+                        document.Add(additionalInfoTable);
+
+                        document.Add(new Paragraph("\n"));
+                        Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
+                            .SetFontSize(16)
+                            .SetBold();
+                        document.Add(equipmentInfo);
+                        document.Add(new Paragraph("\n"));
+
+                        Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+                        document.Add(equipmentInfoTable);
+
+                        int pageNumber = 1;
+
+                        document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+                        Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
+                        document.Add(sampleReport);
+                        document.Add(new Paragraph("\n"));
+
+                        Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
+                        document.Add(summarySelectedItemsTable);
+
+                        document.Add(new Paragraph("\n"));
+
+                        Paragraph passesResultInfo = new Paragraph("PASS RESULTS").SetFontColor(ColorConstants.BLACK)
+                            .SetFontSize(16)
+                            .SetBold();
+                        document.Add(passesResultInfo);
+                        document.Add(new Paragraph("\n"));
+
+                        Table selectedItemsTable = history.PassResultTable();
+                        document.Add(selectedItemsTable);
+
+
+                    }
+
+
+                    //MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            //}
+
+        }
+
+        private List<DataItem> GetAllDataItems()
+        {
+
+            List<DataItem> allItems = new List<DataItem>();
+            allItems.Clear();
+
+            DataItem dataItem = new DataItem();
+
+            dataItem.Timestamp = System.DateTime.Now;
+            dataItem.Name = mmgr.ReadDetector.SampleFileName; // "test";//.ToString();
+            dataItem.PassNo = mmgr.ReadDetector.PassNo.ToString("D3"); //"001"; //["Pass No."]?.ToString();
+            dataItem.Operator = mmgr.ReadDetector.OpearatorName; //"Arul";//row["Operator"]?.ToString();
+            dataItem.AnalysisType = "eth";//row["Analysis Type"]?.ToString();
+            dataItem.SampleType = "Eth"; //row["Sample Type"]?.ToString();
+            dataItem.Ethanol = 0;// row["Ethanol"] is int ethanol ? (int?)ethanol : null;
+            dataItem.Denaturant = 0;//row["Denaturant"] is int denaturant ? (int?)denaturant : null;
+            dataItem.Methanol = 1; //row["Methanol"] is int methanol ? (int?)methanol : null;
+            dataItem.Water = 2;// row["Water"] is int water ? (int?)water : null;
+            dataItem.Batch = 2;// row["Batch"] is int batch ? (int?)batch : null;
+
+            allItems.Add(dataItem);
+
+
+            return allItems;
+            //return null;
+        }
+
         public bool StartMeasurement(int avraragecount, int dataSet)
         {
             MeasuremantBtnContent = "Cancel Measurement";
@@ -739,7 +1076,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 MeasurementCompletedat = "Measuring...";
 
 
-               //  MeasureSpectram = new Thread(PAT_Sensor_Read);
+                //  MeasureSpectram = new Thread(PAT_Sensor_Read);
                 // MeasureSpectram.Start();
 
                 var t = new Thread(() => PAT_Sensor_Read(false));
@@ -755,7 +1092,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
         public void CancelMeasurement()
         {
-            
+
             if (!isReading)
             {
                 AnalysisSelectionEnable = true;
@@ -772,7 +1109,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
 
-        
+
         void PAT_Sensor_Read(bool isBackgroundRead)
         {
             // List<Pixelresult_data1> Collected_result = new List<Pixelresult_data1>();
@@ -833,7 +1170,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
                 }
                 DateTime cycleCompletedAt = DateTime.Now;
-               // AnalysisSelectionEnable = true;
+                // AnalysisSelectionEnable = true;
                 if (i == measurementCount)
                 {
                     IsDataSavedDB = false;
@@ -842,6 +1179,8 @@ namespace PaeoniaTechSpectroMeter.Model
                     MeasuremantBtnContent = "New Measurement";
                     MeasurementCompletedat = $"Ready to measure";
                     MeasurementCompletedat = $"Measurement Completed At {cycleCompletedAt.ToString("HH:mm:ss")}";
+                    IsMeasurementCompleted = true;
+                    InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
                 }
 
 
@@ -854,7 +1193,7 @@ namespace PaeoniaTechSpectroMeter.Model
             IsReading = false;
             //AnalysisSelectionEnable = true;
             //MeasuremantBtnContent = "Start Measurement";
-           // MeasuremantBtnContent = "New Measurement"; 
+            // MeasuremantBtnContent = "New Measurement"; 
 
 
 
@@ -894,7 +1233,7 @@ namespace PaeoniaTechSpectroMeter.Model
             string backgroundPath = "C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
             string baselinePath = "C:\\FuelAnalyzer\\Baseline" + ".csv";
             string logtime = DateTime.Now.ToString("HH-mm-ss");
-            string rawDataPath = SystemPath.GetLogPath + "\\" + DateTime.Now.ToString("yyyy-MMM") + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "-Raw_Absorbance" + filecnt.ToString()+"_"+ logtime + ".csv";
+            string rawDataPath = SystemPath.GetLogPath + "\\" + DateTime.Now.ToString("yyyy-MMM") + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "-Raw_Absorbance" + filecnt.ToString() + "_" + logtime + ".csv";
             //string rawDataPath = "C:\\FuelAnalyzer Logs\\Log\\2023-Nov\\2023-10-26-Raw_AbsorbanceSample2931" + ".csv";
             string prototypeName = "P6";
             string pLSModelPath = @"C:\FuelAnalyzer\P6_PLS_model.pkl";
@@ -927,9 +1266,9 @@ namespace PaeoniaTechSpectroMeter.Model
             int cfg_col_size1 = 0;
 
 
-            RawAbsorbanceDataLogger.InitLogFile(SystemPath.GetLogPath, "Raw_Absorbance" + filecnt.ToString()+"_"+logtime + ".csv"); //mmgr.DetectorConfigurationData
+            RawAbsorbanceDataLogger.InitLogFile(SystemPath.GetLogPath, "Raw_Absorbance" + filecnt.ToString() + "_" + logtime + ".csv"); //mmgr.DetectorConfigurationData
             RawAbsorbanceDataLogger.IsAppendFileCount = false;  //file count number after file name   
-           // LisaDataLogger.SetLogFileName("LisaData");
+                                                                // LisaDataLogger.SetLogFileName("LisaData");
             RawAbsorbanceDataLogger.HeaderString = "Time Stamp(ms),Pixel No,Wavenumber(Cm^-1), Output(v),RawAbsorbance,Temperature";//Temperature 
 
 
@@ -1117,10 +1456,10 @@ namespace PaeoniaTechSpectroMeter.Model
 
                             concentrationDoubleArray[i] = double.Parse(concentrationStringArray[i]);
                         }
-                        EthanolConcentration = concentrationDoubleArray[0].ToString("F3");
-                        MethanolConcentration = concentrationDoubleArray[1].ToString("F3");
-                        WaterConcentration = concentrationDoubleArray[2].ToString("F3");
-                        DenaturantConcentration = concentrationDoubleArray[3].ToString("F3");
+                        EthanolConcentration = Math.Round(concentrationDoubleArray[0], 2);
+                        MethanolConcentration = Math.Round(concentrationDoubleArray[1], 2);
+                        WaterConcentration = Math.Round(concentrationDoubleArray[2], 2);
+                        DenaturantConcentration = Math.Round(concentrationDoubleArray[3], 2);
                     }
                     else
                     {

@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
-    public class ValueToColorConverter : IValueConverter
+    public class WaterValueToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,7 +27,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 return "Green";
             }
 
-            return "Orange"; 
+            return "Orange";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

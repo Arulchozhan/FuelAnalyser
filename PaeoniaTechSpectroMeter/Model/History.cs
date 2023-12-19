@@ -56,6 +56,8 @@ namespace PaeoniaTechSpectroMeter.Model
         private DataAccess _dataAccess;
         private DataTable _dataTable;
         private DataView _dataView;
+        MainManager mmgr;
+        
 
         private ObservableCollection<DataItem> _dataItems = new ObservableCollection<DataItem>();
         public ObservableCollection<DataItem> DataItems
@@ -103,12 +105,13 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public History()
+        public History(MainManager mmgr)
         {
             //connectionstrin=
            // _connectionString=
             Initialize();
             PageButtonClickCommand = new RelayCommand<int>(PageButton_Click);
+            this.mmgr = mmgr;
         }
 
         private void Initialize()
@@ -152,10 +155,10 @@ namespace PaeoniaTechSpectroMeter.Model
                         Operator = row["Operator"].ToString(),
                         AnalysisType = row["Analysis Type"].ToString(),
                         SampleType = row["Sample Type"].ToString(),
-                        Ethanol = row["Ethanol"] is int ethanol ? (int?)ethanol : null,
-                        Denaturant = row["Denaturant"] is int denaturant ? (int?)denaturant : null,
-                        Methanol = row["Methanol"] is int methanol ? (int?)methanol : null,
-                        Water = row["Water"] is int water ? (int?)water : null,
+                        Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null,
+                        Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null,
+                        Methanol = row["Methanol"] is double methanol ? (double?)methanol : null,
+                        Water = row["Water"] is double water ? (double?)water : null,
                         Batch = row["Batch"] is int batch ? (int?)batch : null,
                     };
 
@@ -205,13 +208,13 @@ namespace PaeoniaTechSpectroMeter.Model
             var info = new Dictionary<string, string>
             {
                 { "Company", "XYZ Lab" },
-                { "Operator", "Ahmad" },
+                { "Operator", mmgr.ReadDetector.OpearatorName },
                 { "Instrument Model", "Waukesha Instrument Model E" },
                 { "Instrument Serial Number", "ABC1234K" },
                 { "Instrument Firmware version", "V1.0.01" },
                 { "Fuel Analyzer Software Application Version", "V1.0.5" },
                 { "Report Date and Time", DateTime.Now.ToString() },
-                { "Report Path", @"C:\Users\Public\Documents\" }
+                { "Report Path", mmgr.ReadDetector.UserChooseDir }
             };
 
             foreach (var kvp in info)
@@ -230,8 +233,8 @@ namespace PaeoniaTechSpectroMeter.Model
 
             var info = new Dictionary<string, string>
             {
-                { "Last Performance Test Result", "PASSED" },
-                { "Last Performance Test Datae and Time", "YYYY-MM-DD, HH:MM:SS (AM) (GMT+8)" },
+                { "Last Performance Test Result", mmgr.AppConfig.Perfchk },
+                { "Last Performance Test Date and Time", mmgr.AppConfig.PerfchkTime.ToString() },
                 { "Calibration Module 1 Name and Version", "Fuel Ethanol V1.0.01" },
                 { "Calibration Module 1 Installation Date", "YYYY-MM-DD" },
                 { "Calibration Module 2 Name and Version", "Fuel Methanol V1.0.01 " },
@@ -317,6 +320,71 @@ namespace PaeoniaTechSpectroMeter.Model
             return table;
         }
 
+        public Table CreateMeasurementReportTable()
+        {
+            Table infoTable = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
+            string analysisType;
+            string sampleType;
+            if (mmgr.ReadDetector.SelectedAnalysistype == 0)
+            {
+                analysisType = "Methanol";
+                sampleType = "Fuel Methanol";
+            }
+            else
+            {
+                analysisType = "Ethanol";
+                sampleType = "Fuel Ethanol";
+            }
+
+            var info = new Dictionary<string, string>
+                {
+                    { "Measurement Date", DateTime.Now.ToString() },
+                    { "Operator Name", mmgr.ReadDetector.OpearatorName},
+                    { "Analysis Type (or Method)", analysisType },
+                    { "Sample Name", mmgr.ReadDetector.SampleFileName },
+                    { "Sample Type", sampleType},
+                    { "Pass No", mmgr.ReadDetector.PassNo.ToString("D3") },
+                };
+            foreach (var kvp in info)
+            {
+                infoTable.AddCell(new Cell().Add(new Paragraph(kvp.Key)));
+                infoTable.AddCell(new Cell().Add(new Paragraph(kvp.Value)));
+            }
+            return infoTable;
+        }
+
+        public Table PassResultTable()
+        {
+            Table table = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
+
+            table.AddCell(new Cell().Add(new Paragraph("Pass No.")).SetTextAlignment(TextAlignment.CENTER));
+            table.AddCell(new Cell().Add(new Paragraph("Time Stamp")).SetTextAlignment(TextAlignment.CENTER));
+            table.AddCell(new Cell().Add(new Paragraph("Ethanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            table.AddCell(new Cell().Add(new Paragraph("Denaturant (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            table.AddCell(new Cell().Add(new Paragraph("Methanol (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+            table.AddCell(new Cell().Add(new Paragraph("Water (Vol%)")).SetTextAlignment(TextAlignment.CENTER));
+
+            table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.PassNo.ToString("D3"))));
+            table.AddCell(new Cell().Add(new Paragraph(DateTime.Now.ToString())));
+
+            if (mmgr.ReadDetector.SelectedAnalysistype == 0)
+            {
+                table.AddCell(new Cell().Add(new Paragraph("-")));
+                table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.MethanolConcentration.ToString() != null ? mmgr.ReadDetector.MethanolConcentration.ToString() : "-")));
+                table.AddCell(new Cell().Add(new Paragraph("-")));
+                table.AddCell(new Cell().Add(new Paragraph("-")));
+            }
+            else
+            {
+                table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.EthanolConcentration.ToString() != null ? mmgr.ReadDetector.EthanolConcentration.ToString() : "-")));
+                table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.DenaturantConcentration.ToString() != null ? mmgr.ReadDetector.DenaturantConcentration.ToString() : "-")));
+                table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.MethanolConcentration.ToString() != null ? mmgr.ReadDetector.MethanolConcentration.ToString() : "-")));
+                table.AddCell(new Cell().Add(new Paragraph(mmgr.ReadDetector.WaterConcentration.ToString() != null ? mmgr.ReadDetector.WaterConcentration.ToString() : "-")));
+            }
+
+            return table;
+        }
+
         public Table CreateAverageResultItemsTable(DataItem item)
         {
             Table table = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
@@ -326,10 +394,10 @@ namespace PaeoniaTechSpectroMeter.Model
             table.AddCell(new Cell().Add(new Paragraph("Methanol (0-15) Vol%")).SetTextAlignment(TextAlignment.CENTER));
             table.AddCell(new Cell().Add(new Paragraph("Water (0-2) Vol%")).SetTextAlignment(TextAlignment.CENTER));
 
-            int totalEthanolValue = item.Ethanol ?? 0;
-            int totalDenaturantValue = item.Denaturant ?? 0;
-            int totalMethanolValue = item.Methanol ?? 0;
-            int totalWaterValue = item.Water ?? 0;
+            double totalEthanolValue = item.Ethanol ?? 0;
+            double totalDenaturantValue = item.Denaturant ?? 0;
+            double totalMethanolValue = item.Methanol ?? 0;
+            double totalWaterValue = item.Water ?? 0;
 
             double avgEthanolValue = (double)totalEthanolValue;
             double avgDenaturantValue = (double)totalDenaturantValue;

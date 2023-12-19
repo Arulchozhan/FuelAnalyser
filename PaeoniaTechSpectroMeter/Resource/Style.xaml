@@ -1,6 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:model="clr-namespace:PaeoniaTechSpectroMeter.Model">
+ 
+    <model:ValueToColorConverter x:Key="ValueToColorConverter"/>
+    <model:MethanolValueToColorConverter x:Key="MethanolValueToColorConverter"/>
+    <model:EthanolValueToColorConverter x:Key="EthanolValueToColorConverter"/>
+    <model:DenaturantValueToColorConverter x:Key="DenaturantValueToColorConverter"/>
+    <model:WaterValueToColorConverter x:Key="WaterValueToColorConverter"/>
+
     <Style  TargetType="{x:Type TabControl}"
           x:Key="StationTabControlStyle">
         <Setter Property="OverridesDefaultStyle"
@@ -360,7 +366,19 @@
         <Setter Property="BorderBrush" Value="#005fb8"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="3"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMeasurementCompleted}" Value="True">
+                <Setter Property="BorderBrush" Value="#0f7b0f"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsMeasurementNotInRange}" Value="True">
+                <Setter Property="BorderBrush" Value="#dc2a2a"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
+
+    
+
     <Style x:Key="ButtonBorderStyle" TargetType="Border">
         <Setter Property="BorderBrush" Value="#005fb8"/>
         <Setter Property="BorderThickness" Value="0.4"/>
@@ -372,7 +390,54 @@
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="Foreground" Value="#005fb8"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMeasurementCompleted}" Value="True">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsMeasurementNotInRange}" Value="True">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
+
+    <Style x:Key="TextBoxMeasurementStyle" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border BorderBrush="Black" Background="#FFF" BorderThickness="1" CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding AnalysisSelectionEnable}" Value="False">
+                <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="400"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="#9f9f9f"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border BorderBrush="#9f9f9f" Background="#FFF" BorderThickness="0.4" CornerRadius="4">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ProductInfoTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="20"/>
@@ -385,13 +450,194 @@
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="Foreground" Value="#1a1a1a"/>
     </Style>
-    <Style x:Key="ProductVolTextBlockStyle" TargetType="TextBlock">
+    <Style x:Key="ProductVolMethanolTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="24"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="Foreground" Value="#1a1a1a"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Red">
+                <Setter Property="Foreground" Value="#e6a6a6"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Yellow">
+                <Setter Property="Foreground" Value="#cc9432"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Green">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
+        
     </Style>
+
+    <Style x:Key="ProductVolEthanolTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Red">
+                <Setter Property="Foreground" Value="#e6a6a6"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Yellow">
+                <Setter Property="Foreground" Value="#cc9432"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Green">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductVolDenaturantTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Red">
+                <Setter Property="Foreground" Value="#e6a6a6"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Yellow">
+                <Setter Property="Foreground" Value="#cc9432"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Green">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductVolWaterTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Red">
+                <Setter Property="Foreground" Value="#e6a6a6"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Yellow">
+                <Setter Property="Foreground" Value="#cc9432"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Green">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductMethanolValueBorderSyle" TargetType="Border">
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Red" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#f3eaea"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Yellow" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#eee8d5"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding MethanolConcentration, Converter={StaticResource MethanolValueToColorConverter}}" Value="Green" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#dff6dd"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductEthanolValueBorderSyle" TargetType="Border">
+        <Style.Triggers>
+            <!-- Ethanol Concentration Triggers -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Red" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#f3eaea"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Yellow" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#eee8d5"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding EthanolConcentration, Converter={StaticResource EthanolValueToColorConverter}}" Value="Green" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#dff6dd"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductDenaturantValueBorderSyle" TargetType="Border">
+        <Style.Triggers>
+            <!-- Denaturan Concentration Triggers -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Red" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#f3eaea"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Yellow" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#eee8d5"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding DenaturantConcentration, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Green" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#dff6dd"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ProductWaterValueBorderSyle" TargetType="Border">
+        <Style.Triggers>
+            <!-- Water Concentration Triggers -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Red" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#f3eaea"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Yellow" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#eee8d5"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsMeasurementCompleted}" Value="True" />
+                    <Condition Binding="{Binding WaterConcentration, Converter={StaticResource WaterValueToColorConverter}}" Value="Green" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Background" Value="#dff6dd"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ComboBoxItemContainerStyle" TargetType="ComboBoxItem">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="20"/>

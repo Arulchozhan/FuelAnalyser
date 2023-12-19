@@ -34,6 +34,14 @@ namespace PaeoniaTechSpectroMeter
         List<UserControl> customControls = new List<UserControl>();
         List<StandardWindow> imageViewWindowList = new List<StandardWindow>();
 
+
+        CtrlMeasurement measurementPage;
+        CtrlSelfDiagnostics selfDiagnosticsPage;
+        CtrlHistory historyPage;
+        CtrlFactorySetting factoryPage;
+        CtrlMeasurementSetting measurementSettingPage;
+        CtrlAppConfig advancedConfigPage;
+
         public MainWindow(MainManager mmgr)
         {
             InitializeComponent();
@@ -88,9 +96,9 @@ namespace PaeoniaTechSpectroMeter
             {
                 SetupPannels();
 
-
+                //TabControl_SelectionChanged(TabCtrlSetup, null);
              //   LblAppName.Content = mmgr.AppConfig.AppName;
-              //  LblVersion.Content = mmgr.AppConfig.AppVersion + " Built < " + mmgr.AppConfig.BuiltDate + " >";
+             //  LblVersion.Content = mmgr.AppConfig.AppVersion + " Built < " + mmgr.AppConfig.BuiltDate + " >";
 
                 reMgr.PropertyChanged -= ReMgr_PropertyChanged;
                 reMgr.PropertyChanged += ReMgr_PropertyChanged;
@@ -158,24 +166,20 @@ namespace PaeoniaTechSpectroMeter
         {
             CurrentDateandTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
         }
-        CtrlMeasurement measurementPage;
-        CtrlSelfDiagnostics selfDiagnosticsPage;
-        CtrlHistory historyPage;
-        CtrlFactorySetting factoryPage;
-        CtrlMeasurementSetting measurementSettingPage;
-        CtrlAppConfig advancedConfigPage;
+     
         void SetupPannels()
         {
             /// <Factoryseeting>
             /// in this pannel we set the detctor/emitter pulse setting 
             /// </Factoryseeting>
 
-             measurementPage = new CtrlMeasurement(mmgr);
-             selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr);
-             historyPage = new CtrlHistory(mmgr);
-             factoryPage = new CtrlFactorySetting();
-             measurementSettingPage = new CtrlMeasurementSetting();
-             advancedConfigPage = new CtrlAppConfig();
+            measurementPage = new CtrlMeasurement(mmgr);
+            selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr);
+            historyPage = new CtrlHistory(mmgr);
+            factoryPage = new CtrlFactorySetting();
+            measurementSettingPage = new CtrlMeasurementSetting();
+            advancedConfigPage = new CtrlAppConfig();
+
             //ctrlMeasurement = new CtrlMeasurement(mmgr);
             //MakeControlStrech(ctrlMeasurement);
             //GrdMeasurement.Children.Add(ctrlMeasurement);

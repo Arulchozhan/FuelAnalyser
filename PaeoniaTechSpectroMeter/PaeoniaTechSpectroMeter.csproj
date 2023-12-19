@@ -49,10 +49,14 @@
     <Compile Include="Model\ButtonBackgroundConverter.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataItemMap.cs" />
+    <Compile Include="Model\DenaturantValueToColorConverter.cs" />
+    <Compile Include="Model\EthanolValueToColorConverter.cs" />
     <Compile Include="Model\History.cs" />
+    <Compile Include="Model\MethanolValueToColorConverter.cs" />
     <Compile Include="Model\ReadDetector.cs" />
     <Compile Include="Model\SelfDiagnostics.cs" />
     <Compile Include="Model\ValueToColorConverter.cs" />
+    <Compile Include="Model\WaterValueToColorConverter.cs" />
     <Compile Include="Station\MachineEvents.cs" />
     <Compile Include="Views\CtrlAppConfig.xaml.cs">
       <DependentUpon>CtrlAppConfig.xaml</DependentUpon>
@@ -323,11 +327,13 @@
     <Reference Include="itext.svg">
       <HintPath>..\..\Ref_dll\itext.svg.dll</HintPath>
     </Reference>
-    <Reference Include="LiveCharts">
-      <HintPath>..\..\Ref_dll\LiveCharts.dll</HintPath>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\LiveCharts.dll</HintPath>
     </Reference>
-    <Reference Include="LiveCharts.Wpf">
-      <HintPath>..\..\Ref_dll\LiveCharts.Wpf.dll</HintPath>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\fuel_10_12_2023\fuel_\PaeoniaTechSpectroMeter\bin\Debug\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="LogWritter">
       <HintPath>..\..\Ref_dll\LogWritter.dll</HintPath>
