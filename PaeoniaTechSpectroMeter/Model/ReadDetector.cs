@@ -157,7 +157,7 @@ namespace PaeoniaTechSpectroMeter.Model
             set
             {
                 opearatorName = value;
-                OnPropertyChanged("PassNo");
+                OnPropertyChanged("OpearatorName");
             }
         }
         public int SelectedSampleType
@@ -1059,7 +1059,8 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             MeasuremantBtnContent = "Cancel Measurement";
             AnalysisSelectionEnable = false;
-            MeasurementEnable=true;
+            IsReadytoSave = false;
+            MeasurementEnable =true;
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
             Starttime = DateTime.Now;

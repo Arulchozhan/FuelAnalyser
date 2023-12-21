@@ -210,6 +210,10 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void BtnResetToFactoryBackground_Click(object sender, RoutedEventArgs e)
         {
+            BtnResetToFactoryBackground.IsEnabled = false;
+            BtnTestInstrument.IsEnabled = false;
+            BtnScanNewBackground.IsEnabled = false;
+            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
             string currentairPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";
             string firstairPath = "C:\\FuelAnalyzer\\Firstair" + ".csv";
             factoryBackgroundData = GetFactoryBackgroundData();
@@ -237,6 +241,11 @@ namespace PaeoniaTechSpectroMeter.Views
             InfoMessageTextBlock.Text = "Background reset to factory stored background.";
             InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
             SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
+
+            BtnResetToFactoryBackground.IsEnabled = true;
+            BtnTestInstrument.IsEnabled = true;
+            BtnScanNewBackground.IsEnabled = true;
+            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
         }
 
         private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)
@@ -244,6 +253,17 @@ namespace PaeoniaTechSpectroMeter.Views
 
             //Task<bool> checkInstrument = IsInstrumentUpToStandard();
             //bool  IsInstrumentUpToStandard1 = await checkInstrument;
+
+            BtnResetToFactoryBackground.IsEnabled = false;
+            BtnTestInstrument.IsEnabled = false;
+            BtnScanNewBackground.IsEnabled = false;
+            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+
+            BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+            BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
+
+            BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
+            BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
             mmgr.ReadDetector.AnalysisSelectionEnable = false;
             mmgr.ReadDetector.MeasurementEnable=false;
             var perfmChk = new Thread(() => GetNewBackground(true));
@@ -509,13 +529,24 @@ namespace PaeoniaTechSpectroMeter.Views
                         InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
                         InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                     }
+                    BtnResetToFactoryBackground.IsEnabled = true;
+                    BtnTestInstrument.IsEnabled = true;
+                    BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
+
+                    BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
+
+                    BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
 
                     // InfoMessageTextBlock.Text = "New background scan completed.";
                     // LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
                     //mmgr.AppConfig.BgchkTime= currentTime.ToString("dd/MM/yyyy hh:mm");
                 });
 
-
+                mmgr.ReadDetector.AnalysisSelectionEnable = true;
+                mmgr.ReadDetector.MeasurementEnable = true;
 
 
             }
@@ -571,13 +602,28 @@ namespace PaeoniaTechSpectroMeter.Views
 
                 return true;
                 */
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BtnResetToFactoryBackground.IsEnabled = true;
+                    BtnScanNewBackground.IsEnabled = true;
+                    BtnTestInstrument.IsEnabled = true;
 
+                    BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
 
+                    BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
+
+                    BtnTestInstrument.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
+                    BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
+                });
+
+                mmgr.ReadDetector.AnalysisSelectionEnable = true;
+                mmgr.ReadDetector.MeasurementEnable = true;
 
             }
 
-            mmgr.ReadDetector.AnalysisSelectionEnable = true;
-            mmgr.ReadDetector.MeasurementEnable = true;
+            
         }
 
         private bool Checking(ref List<double> currentOff, ref double[] spectrum, ref double[] ftydiff)
@@ -727,9 +773,9 @@ namespace PaeoniaTechSpectroMeter.Views
 
             //SaveDataToCsv(currentBackgroundData, "CurrentBackgroundData");
             mmgr.SelfDiagnostics.WriteCsv(currentairPath, newBackgroundSpectrumData, false);
-            MessageBox.Show($"Data saved to CSV file", "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+           // MessageBox.Show($"Data saved to CSV file", "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // SaveDataToCsv(factoryBackgroundData, "FactoryBackgroundData");
+            //SaveDataToCsv(factoryBackgroundData, "FactoryBackgroundData");
         }
 
         private void SaveDataToCsv(double[] data, string fileNamePrefix)
