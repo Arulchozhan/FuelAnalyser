@@ -16,7 +16,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public string AppExeName = Assembly.GetExecutingAssembly().GetName().Name;
 
         [XmlIgnore]
-        public string AppVersion = "0.0.0.1";// Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
+        public string AppVersion = "1.0.0.0";// Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
 
         [XmlIgnore]
         public string BuiltDate = File.GetCreationTime(Assembly.GetExecutingAssembly().Location).ToString("dd-MMM-yy [HH:mm]"); //  DateTime.Now.ToString("dd-MMM-yy [HH:mm]")  Assembly.GetExecutingAssembly().GetLinkerTime().ToString("dd-MMM-yy [HH:mm]");
@@ -90,6 +90,109 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("PerformanceCheckedOn");
             }
         }
+
+        string calib1Name = "Fuel Ethanol V1.0.01";
+        [Category("EQUIPMENT INFORMATION")]
+        [Description(" Calibration Module 1 Name and Version")]
+        public string Calib1Name
+        {
+            get => calib1Name;
+            set
+            {
+                calib1Name = value;
+                OnPropertyChanged("Calib1Name");
+            }
+        }
+        string calib1Instdate = "21-12-2023";
+        [Category("EQUIPMENT INFORMATION")]
+        [Description(" Calibration Module 1 Installation Date")]
+        public string Calib1Instdate
+        {
+            get => calib1Instdate;
+            set
+            {
+                calib1Instdate = value;
+                OnPropertyChanged("Calib1Instdate");
+            }
+        }
+        string calib2Name = "Fuel Methanol V1.0.01";
+        [Category("EQUIPMENT INFORMATION")]
+        [Description(" Calibration Module 2 Name and Version")]
+        public string Calib2Name
+        {
+            get => calib2Name;
+            set
+            {
+                calib2Name = value;
+                OnPropertyChanged("Calib2Name");
+            }
+        }
+
+        string calib2Instdate = "21-12-2023";
+        [Category("EQUIPMENT INFORMATION")]
+        [Description(" Calibration Module 2 Installation Date")]
+        public string Calib2Instdate
+        {
+            get => calib2Instdate;
+            set
+            {
+                calib2Instdate = value;
+                OnPropertyChanged("Calib2Instdate");
+            }
+        }
+        string instrumentinstdate = "21-12-2023";
+        [Category("EQUIPMENT INFORMATION")]
+        [Description(" Instrument Installation Date")]
+        public string Instrumentinstdate
+        {
+            get => instrumentinstdate;
+            set
+            {
+                instrumentinstdate = value;
+                OnPropertyChanged("Instrumentinstdate");
+            }
+        }
+
+
+        string customerInd = "XYZ Lab";
+        [Category("COMPANY INFORMATION")]
+        [Description("Company")]
+        public string CustomerInd
+        {
+            get => customerInd;
+            set
+            {
+                customerInd = value;
+                OnPropertyChanged("CustomerInd");
+            }
+        }
+        string instrumentSN = "ABC1234K";
+        [Category("COMPANY INFORMATION")]
+        [Description("Instrument Serial Number")]
+        public string InstrumentSN
+        {
+            get => instrumentSN;
+            set
+            {
+                instrumentSN = value;
+                OnPropertyChanged("InstrumentSN");
+            }
+        }
+
+        string instrumentFwv = "V1.0.01";
+        [Category("COMPANY INFORMATION")]
+        [Description("Instrument Firmware version")]
+        public string InstrumentFwv
+        {
+            get => instrumentFwv;
+            set
+            {
+                instrumentFwv = value;
+                OnPropertyChanged("InstrumentFwv");
+            }
+        }
+
+
 
         string appLogDirectory = "";
         [Category("Application")]

@@ -36,9 +36,9 @@ namespace PaeoniaTechSpectroMeter.Views
             this.mmgr = mmgr;
             InitializeComponent();
             DispatcherTimer LiveTime = new DispatcherTimer();
-          //  LiveTime.Interval = TimeSpan.FromSeconds(1);
-          //  LiveTime.Tick += timer_Tick;
-           // LiveTime.Start();
+            //  LiveTime.Interval = TimeSpan.FromSeconds(1);
+            //  LiveTime.Tick += timer_Tick;
+            // LiveTime.Start();
             this.DataContext = mmgr.ReadDetector;
 
         }
@@ -46,7 +46,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
         void timer_Tick(object sender, EventArgs e)
         {
-        //   DateandTime.Content = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
+            //   DateandTime.Content = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
         }
 
         private void BtnMeasurement_Click(object sender, RoutedEventArgs e)
@@ -55,14 +55,14 @@ namespace PaeoniaTechSpectroMeter.Views
 
             if ((string)BtnMeasurement.Content == "Start Measurement")
             {
-                
+
                 if (mmgr.ReadDetector.checkfeildentry())
                 {
                     if (!mmgr.ReadDetector.checkfeildentryexist())
                     {
                         mmgr.ReadDetector.PyExceptionCount = 0;
                         mmgr.ReadDetector.StartMeasurement(32, 16);
-                        
+
                     }
 
                     else
@@ -81,27 +81,32 @@ namespace PaeoniaTechSpectroMeter.Views
                 //  serr = mmgr.ReadDetector.ReadPixelWavelength("testpath");
                 //  serr = mmgr.ReadDetector.ReadBackground("testpath");
                 // serr = mmgr.ReadDetector.LisaConnect();
-         //       mmgr.ReadDetector.PyExceptionCount = 0;
-           //     mmgr.ReadDetector.StartMeasurement(32, 16);
-              //  mmgr.ReadDetector.ImportPythonTest();
-               // if (serr != "")team
-                   // MessageBox.Show(serr, "Measurements read feild ");
+                //       mmgr.ReadDetector.PyExceptionCount = 0;
+                //     mmgr.ReadDetector.StartMeasurement(32, 16);
+                //  mmgr.ReadDetector.ImportPythonTest();
+                // if (serr != "")team
+                // MessageBox.Show(serr, "Measurements read feild ");
 
             }
-            else if((string)BtnMeasurement.Content == "Cancel Measurement")
+            else if ((string)BtnMeasurement.Content == "Cancel Measurement")
             {
                 MessageBoxResult r = MessageBox.Show("Do You want to Cancel Measurement??", "Attention", MessageBoxButton.YesNo);
                 if (r == MessageBoxResult.Yes)
                 {
                     mmgr.ReadDetector.MeasurementStatusCont = 0;
                     mmgr.ReadDetector.CancelMeasurement();
+                    //if (mmgr.ReadDetector.IsRepeatmeasure)
+                    //{
+                    //    mmgr.ReadDetector.PassNo = mmgr.ReadDetector.PassNo - 1;
+                    //}
+                    mmgr.ReadDetector.PassNo = 1;
                     mmgr.ReadDetector.MeasurementCompletedat = $"Measurement Was Cancelled";
                 }
 
             }
             else if ((string)BtnMeasurement.Content == "New Measurement")
             {
-               mmgr.ReadDetector.ResetforStartmeasurement();
+                mmgr.ReadDetector.ResetforStartmeasurement();
 
             }
 
@@ -110,26 +115,26 @@ namespace PaeoniaTechSpectroMeter.Views
             //serr = mmgr.ReadDetector.ReadPixelWavelength("testpath");
             //serr = mmgr.ReadDetector.ReadBackground("testpath");
 
-                // serr = mmgr.ReadDetector.LisaConnect();
-                // serr = "";
-                //bool status = false;
-                // mmgr.ReadDetector.StartMeasurement(32, 16);
+            // serr = mmgr.ReadDetector.LisaConnect();
+            // serr = "";
+            //bool status = false;
+            // mmgr.ReadDetector.StartMeasurement(32, 16);
 
 
-                //  if (status != true)
-                //  MessageBox.Show(serr, "Measurements read feild ");
+            //  if (status != true)
+            //  MessageBox.Show(serr, "Measurements read feild ");
 
 
 
         }
 
-       
+
 
         private void BtnChangeLocation_Click(object sender, RoutedEventArgs e)
         {
-            string serr = ""; //Testing from Arul 
-            serr= mmgr.ReadDetector.BrowseLocation();
-            if(serr!="")
+            string serr = "";
+            serr = mmgr.ReadDetector.BrowseLocation();
+            if (serr != "")
                 MessageBox.Show(serr, "Change Location");
 
         }
@@ -141,9 +146,9 @@ namespace PaeoniaTechSpectroMeter.Views
                 if (!mmgr.ReadDetector.IsDataSavedDB)
                 {
                     mmgr.ReadDetector.SaveMeasurementData();
-                    if(mmgr.ReadDetector.UserChooseDir == "")
+                    if (mmgr.ReadDetector.UserChooseDir == "")
                     {
-                        string serr = ""; //Testing from Arul 
+                        string serr = "";
                         serr = mmgr.ReadDetector.BrowseLocation();
                         mmgr.ReadDetector.SaveFilePDF();
                     }
@@ -151,7 +156,7 @@ namespace PaeoniaTechSpectroMeter.Views
                     {
                         mmgr.ReadDetector.SaveFilePDF();
                     }
-                       
+
                 }
                 else
                 {
@@ -610,7 +615,7 @@ namespace PaeoniaTechSpectroMeter.Views
             //    MessageBox.Show("No items selected for export.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             //}
 
-            //BtnMeasurement.Click(sender);
+            // BtnMeasurement.Click(sender);
             mmgr.ReadDetector.PassNo++;
             mmgr.ReadDetector.MeasuremantBtnContent = "Start Measurement";
             mmgr.ReadDetector.PyExceptionCount = 0;
