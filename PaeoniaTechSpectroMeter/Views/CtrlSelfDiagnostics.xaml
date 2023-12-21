@@ -108,8 +108,8 @@
                     <Border Width="280" Height="60" Style="{StaticResource ButtonBorderStyle}" Margin="50,14,33.884,13" Grid.Column="1">
                         <Button x:Name="BtnResetToFactoryBackground" Content="Reset to Factory Background" Style="{StaticResource ButtonStyle}" IsEnabled="{Binding AnalysisSelectionEnable}" Click="BtnResetToFactoryBackground_Click"/>
                     </Border>
-                    <Border x:Name="SaveNewBorder" Width="221" Height="60" Style="{StaticResource ButtonBorderStyle}" HorizontalAlignment="Right" Margin="0,14,10,13" Visibility="Collapsed" Grid.Column="2" Grid.ColumnSpan="2" >
-                        <Button x:Name="BtnSaveNewBackground" Content="Save New Background" Style="{StaticResource SaveButtonStyle}" Visibility="Collapsed" Click="BtnSaveNewBackground_Click"/>
+                    <Border x:Name="SaveNewBorder" Width="221" Height="60" Style="{StaticResource ButtonBorderStyle}" HorizontalAlignment="Right" Margin="0,14,10,13" Visibility="{Binding SaveBckVisibility, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" Grid.Column="2" Grid.ColumnSpan="2" >
+                        <Button x:Name="BtnSaveNewBackground" Content="Save New Background" Style="{StaticResource SaveButtonStyle}"  Visibility="{Binding SaveBckVisibility, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" Click="BtnSaveNewBackground_Click"/>
                     </Border>
                 </Grid>
             </Grid>

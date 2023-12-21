@@ -60,6 +60,7 @@ namespace PaeoniaTechSpectroMeter.Model
         private int selectedAnalysistype;
         bool analysisSelection;
         bool analysisSelectionEnable;
+        bool saveBckVisibility;
         bool measurementEnable;
         private string sampleFileName = "";
         private int selectedSampleType;
@@ -356,6 +357,17 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("AnalysisSelectionEnable");
             }
         }
+
+        public bool SaveBckVisibility
+        {
+            get => saveBckVisibility;
+            set
+            {
+                saveBckVisibility = value;
+                OnPropertyChanged("SaveBckVisibility");
+            }
+        }
+
         public bool MeasurementEnable
         {
             get => measurementEnable;
@@ -1102,11 +1114,30 @@ namespace PaeoniaTechSpectroMeter.Model
 
             }
             Readingfinished = false; //flag changes 
-            AnalysisSelectionEnable = true;
+            IsRepeatmeasure = false;
+                AnalysisSelectionEnable = true;
             MeasurementEnable = true;
             stopReq = true;
             //  MeasurementCompletedat = $"Measurement Was Cancelled";
             MeasuremantBtnContent = "Start Measurement";
+        }
+        public void CancelRepeatMeasurement()
+        {
+
+            if (!isReading)
+            {
+                AnalysisSelectionEnable = false;
+                MeasuremantBtnContent = "New Measurement";
+                return;
+
+            }
+            Readingfinished = false; //flag changes 
+            AnalysisSelectionEnable = false;
+            IsRepeatmeasure = true;
+            MeasurementEnable = true;
+            stopReq = true;
+            //  MeasurementCompletedat = $"Measurement Was Cancelled";
+            MeasuremantBtnContent = "New Measurement";
         }
 
 

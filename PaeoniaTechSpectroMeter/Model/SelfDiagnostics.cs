@@ -27,6 +27,21 @@ namespace PaeoniaTechSpectroMeter.Model
         List<double> ftyOff = new List<double>();
         List<double> currentOff = new List<double>();
         List<double> ftyDiff = new List<double>();
+        //private is
+
+
+
+        //public bool AnalysisSelectionEnable
+        //{
+        //    get => analysisSelectionEnable;
+        //    set
+        //    {
+        //        analysisSelectionEnable = value;
+        //        OnPropertyChanged("AnalysisSelectionEnable");
+        //    }
+        //}
+
+
         object obj = new object();
         private double[] currentBackgroundData;
 

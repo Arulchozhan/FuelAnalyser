@@ -81,7 +81,9 @@ namespace PaeoniaTechSpectroMeter.Views
             this.mmgr = mmgr;
             InitializeComponent();
             this.DataContext = mmgr.ReadDetector;
-            
+            mmgr.ReadDetector.SaveBckVisibility = false;
+
+
             GetCurrentBackground();
             if (mmgr.AppConfig.Perfchk == "PASS")
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
@@ -210,10 +212,12 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void BtnResetToFactoryBackground_Click(object sender, RoutedEventArgs e)
         {
-            BtnResetToFactoryBackground.IsEnabled = false;
-            BtnTestInstrument.IsEnabled = false;
-            BtnScanNewBackground.IsEnabled = false;
-            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            //BtnResetToFactoryBackground.IsEnabled = false;
+            //  BtnTestInstrument.IsEnabled = false;
+            // BtnScanNewBackground.IsEnabled = false;
+            mmgr.ReadDetector.SaveBckVisibility = false;
+            mmgr.ReadDetector.AnalysisSelection = false;
+     //       BtnSaveNewBackground.Visibility = Visibility.Collapsed;
             string currentairPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";
             string firstairPath = "C:\\FuelAnalyzer\\Firstair" + ".csv";
             factoryBackgroundData = GetFactoryBackgroundData();
@@ -228,6 +232,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
             currentBackgroundData = factoryBackgroundData;
             mmgr.SelfDiagnostics.WriteCsv(currentairPath, firstAir.ToArray(), false);
+
             backgroundProperty = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
             currentLineSeries.SetBinding(LineSeries.StrokeProperty, new Binding("backgroundProperty") { Source = this });
             factoryBackgroundLineSeries.Visibility = Visibility.Collapsed;
@@ -242,23 +247,24 @@ namespace PaeoniaTechSpectroMeter.Views
             InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
             SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
 
-            BtnResetToFactoryBackground.IsEnabled = true;
-            BtnTestInstrument.IsEnabled = true;
-            BtnScanNewBackground.IsEnabled = true;
-            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            //mmgr.ReadDetector.SaveBckVisibility = true;
+            mmgr.ReadDetector.AnalysisSelection = true;
+            //BtnResetToFactoryBackground.IsEnabled = true;
+            // BtnTestInstrument.IsEnabled = true;
+            //BtnScanNewBackground.IsEnabled = true;
+            // BtnSaveNewBackground.Visibility = Visibility.Collapsed;
         }
 
         private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)
         {
 
-            //Task<bool> checkInstrument = IsInstrumentUpToStandard();
-            //bool  IsInstrumentUpToStandard1 = await checkInstrument;
 
-            BtnResetToFactoryBackground.IsEnabled = false;
-            BtnTestInstrument.IsEnabled = false;
-            BtnScanNewBackground.IsEnabled = false;
-            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
 
+            //BtnResetToFactoryBackground.IsEnabled = false;
+            //BtnTestInstrument.IsEnabled = false;
+            //BtnScanNewBackground.IsEnabled = false;
+            //BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            mmgr.ReadDetector.SaveBckVisibility = false;
             BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
             BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
 
@@ -269,46 +275,6 @@ namespace PaeoniaTechSpectroMeter.Views
             var perfmChk = new Thread(() => GetNewBackground(true));
             perfmChk.Start();
 
-            /*
-
-            if (IsInstrumentUpToStandard())
-            {
-                currentTime = DateTime.Now;
-                LastTestedOn.Text = "Last tested on";
-                LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
-                mmgr.AppConfig.Perfchk = "PASS";
-                mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
-                PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
-
-                ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
-                InfoMessageTextBlock.Text = "Ensure no fuel inside before testing instrument or scanning new background.";
-                InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0f7b0f"));
-
-            }
-            else
-            {
-                mmgr.AppConfig.Perfchk = "Failed";
-                mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
-                ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Icon/InfoWarning_Icon.png", UriKind.Relative)); //"C:\\FuelAnalyzer\\bin\\Icon\\Performance-WarningSign_Icon.png"
-                InfoMessageTextBlock.Text = "Instrument is not up to standard. Perform cleaning and run “test instrument”. If this message remains, please contact WI.";
-                InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
-
-                PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-WarningSign_Icon.png", UriKind.Relative));
-                SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
-
-                BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-                BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
-
-                BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
-                BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
-
-                LastTestedOn.Text = "Last tested on";
-                LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
-
-
-            }
-            mmgr.ReadDetector.AnalysisSelectionEnable = true;
-            */
         }
 
         private bool IsInstrumentUpToStandard()
@@ -358,10 +324,10 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnScanNewBackground_Click(object sender, RoutedEventArgs e)
         {
 
-            BtnResetToFactoryBackground.IsEnabled = false;
-            BtnTestInstrument.IsEnabled = false;
-            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
-
+            //BtnResetToFactoryBackground.IsEnabled = false;
+            //BtnTestInstrument.IsEnabled = false;
+            // BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            mmgr.ReadDetector.SaveBckVisibility=false;
             BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
             BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
 
@@ -501,8 +467,9 @@ namespace PaeoniaTechSpectroMeter.Views
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    BtnSaveNewBackground.Visibility = Visibility.Visible;
-                    SaveNewBorder.Visibility = Visibility.Visible;
+                    // BtnSaveNewBackground.Visibility = Visibility.Visible;
+                    //SaveNewBorder.Visibility = Visibility.Visible;
+                    mmgr.ReadDetector.SaveBckVisibility = true;
 
                     BtnScanNewBackground.Content = "Scan new Background";
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
@@ -529,8 +496,8 @@ namespace PaeoniaTechSpectroMeter.Views
                         InfoMessageTextBlock.Text = "Instrument is not up to standard. New background scan completed.";
                         InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                     }
-                    BtnResetToFactoryBackground.IsEnabled = true;
-                    BtnTestInstrument.IsEnabled = true;
+                    //BtnResetToFactoryBackground.IsEnabled = true;
+                    //BtnTestInstrument.IsEnabled = true;
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
 
@@ -561,7 +528,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 string ftyoffPath = "C:\\FuelAnalyzer\\Ftyoff" + ".csv";
 
                 string curroffPath = "C:\\FuelAnalyzer\\Currentoff" + ".csv";
-
+                mmgr.ReadDetector.SaveBckVisibility = false;
                 ReadCsv(ftytairPath, out ftyAir);
                 ReadCsv(ftyoffPath, out ftyOff);
                 ReadCsv(curroffPath, out currentOff);
@@ -604,9 +571,9 @@ namespace PaeoniaTechSpectroMeter.Views
                 */
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    BtnResetToFactoryBackground.IsEnabled = true;
-                    BtnScanNewBackground.IsEnabled = true;
-                    BtnTestInstrument.IsEnabled = true;
+                    //BtnResetToFactoryBackground.IsEnabled = true;
+                    //BtnScanNewBackground.IsEnabled = true;
+                    //BtnTestInstrument.IsEnabled = true;
 
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005FB8"));
