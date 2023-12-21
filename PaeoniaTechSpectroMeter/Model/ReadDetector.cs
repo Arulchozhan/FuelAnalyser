@@ -83,6 +83,7 @@ namespace PaeoniaTechSpectroMeter.Model
         private DateTime starttime;
         private string measurementCompletedat = "";
         private bool isMeasurementCompleted;
+        private bool isMeasurementNotInRange;
         private string userChooseDir = "";
         private bool isRepeatmeasure = false;
         private bool isReadytoSave = false;
@@ -335,6 +336,16 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged(nameof(IsMeasurementCompleted));
             }
         }
+
+        public bool IsMeasurementNotInRange
+        {
+            get => isMeasurementNotInRange;
+            set
+            {
+                isMeasurementNotInRange = value;
+                OnPropertyChanged(nameof(IsMeasurementNotInRange));
+            }
+        }
         public bool AnalysisSelection
         {
             get => analysisSelection;
@@ -366,7 +377,7 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
-      
+
 
 
         public string UserChooseDir
@@ -914,10 +925,6 @@ namespace PaeoniaTechSpectroMeter.Model
 
         public void SaveFilePDF()
         {
-            //string test = mmgr.AppConfig.Perfchk;
-            //List<DataItem> allDataItems = GetAllDataItems();
-            //if (allDataItems.Count > 0)
-            //{
             string analysisType;
             if (SelectedAnalysistype == 0)
             {
@@ -928,138 +935,98 @@ namespace PaeoniaTechSpectroMeter.Model
                 analysisType = "Ethanol";
             }
             string filePath = $"{SampleFileName}_{PassNo.ToString("D3")}_{DateTime.Now:yyyyMMdd}_{analysisType}.pdf";
-                //Path.Combine(UserChooseDir, SampleFileName + "_" + PassNo + "_" + DateTime.Now.ToString() + "_" + analysisType);
 
-            //SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (var writer = new PdfWriter(Path.Combine(UserChooseDir, filePath)))
+            using (var pdf = new PdfDocument(writer))
+            {
+                FooterEventHandler pageEvent = new FooterEventHandler();
+                pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
 
-            //{
-            //    Filter = "PDF files (*.pdf)|*.pdf",
-            //    Title = "Save PDF file"
-            //};
-            //saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-                //using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
-                using (var writer = new PdfWriter(Path.Combine(UserChooseDir, filePath)))
-                using (var pdf = new PdfDocument(writer))
+                using (var document = new Document(pdf))
                 {
-                    CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
-                    //pageEvent.SetTotalPages(totalPages);
-                    pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
-
-                    using (var document = new Document(pdf))
-                    {
-                        //int totalPages = allDataItems.Count;
-                        Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
-                            .SetFontColor(ColorConstants.WHITE)
-                            .SetFontSize(16)
-                            .SetBold();
-                        string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
-                        ImageData imageData = ImageDataFactory.Create(logoPath);
-                        Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
+                    //int totalPages = allDataItems.Count;
+                    Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
+                        .SetFontColor(ColorConstants.WHITE)
+                        .SetFontSize(16)
+                        .SetBold();
+                    string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
+                    ImageData imageData = ImageDataFactory.Create(logoPath);
+                    Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
 
 
-                        Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
-                        headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                        headerTable.SetBackgroundColor(ColorConstants.BLUE);
+                    Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+                    headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    headerTable.SetBackgroundColor(ColorConstants.BLUE);
 
 
-                        Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
-                        headerTable.AddCell(titleCell);
+                    Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
+                    headerTable.AddCell(titleCell);
 
 
-                        Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                        headerTable.AddCell(logoCell);
+                    Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    headerTable.AddCell(logoCell);
 
 
-                        document.Add(headerTable);
+                    document.Add(headerTable);
 
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
 
-                        Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(reportTitle);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(reportTitle);
+                    document.Add(new Paragraph("\n"));
 
-                        Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
-                        document.Add(additionalInfoTable);
+                    Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
+                    document.Add(additionalInfoTable);
 
-                        document.Add(new Paragraph("\n"));
-                        Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(equipmentInfo);
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
+                    Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(equipmentInfo);
+                    document.Add(new Paragraph("\n"));
 
-                        Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
-                        document.Add(equipmentInfoTable);
+                    Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+                    document.Add(equipmentInfoTable);
 
-                        int pageNumber = 1;
+                    int pageNumber = 1;
 
-                        document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                        Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
-                        document.Add(sampleReport);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
+                    document.Add(sampleReport);
+                    document.Add(new Paragraph("\n"));
 
-                        Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
-                        document.Add(summarySelectedItemsTable);
+                    Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
+                    document.Add(summarySelectedItemsTable);
 
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
 
-                        Paragraph passesResultInfo = new Paragraph("PASS RESULTS").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(passesResultInfo);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph passesResultInfo = new Paragraph("PASS RESULTS").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(passesResultInfo);
+                    document.Add(new Paragraph("\n"));
 
-                        Table selectedItemsTable = history.PassResultTable();
-                        document.Add(selectedItemsTable);
-
-
-                    }
+                    Table selectedItemsTable = history.PassResultTable();
+                    document.Add(selectedItemsTable);
 
 
-                    //MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            //}
 
-        }
+                IsMeasurementCompleted = true;
+                InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
+                MeasurementCompletedat = $"File Saved Successfully At {DateTime.Now.ToString("HH:mm:ss")}";
+            }
 
-        private List<DataItem> GetAllDataItems()
-        {
-
-            List<DataItem> allItems = new List<DataItem>();
-            allItems.Clear();
-
-            DataItem dataItem = new DataItem();
-
-            dataItem.Timestamp = System.DateTime.Now;
-            dataItem.Name = mmgr.ReadDetector.SampleFileName; // "test";//.ToString();
-            dataItem.PassNo = mmgr.ReadDetector.PassNo.ToString("D3"); //"001"; //["Pass No."]?.ToString();
-            dataItem.Operator = mmgr.ReadDetector.OpearatorName; //"Arul";//row["Operator"]?.ToString();
-            dataItem.AnalysisType = "eth";//row["Analysis Type"]?.ToString();
-            dataItem.SampleType = "Eth"; //row["Sample Type"]?.ToString();
-            dataItem.Ethanol = 0;// row["Ethanol"] is int ethanol ? (int?)ethanol : null;
-            dataItem.Denaturant = 0;//row["Denaturant"] is int denaturant ? (int?)denaturant : null;
-            dataItem.Methanol = 1; //row["Methanol"] is int methanol ? (int?)methanol : null;
-            dataItem.Water = 2;// row["Water"] is int water ? (int?)water : null;
-            dataItem.Batch = 2;// row["Batch"] is int batch ? (int?)batch : null;
-
-            allItems.Add(dataItem);
-
-
-            return allItems;
-            //return null;
         }
 
         public bool StartMeasurement(int avraragecount, int dataSet)
         {
             MeasuremantBtnContent = "Cancel Measurement";
             AnalysisSelectionEnable = false;
-            MeasurementEnable=true;
+            MeasurementEnable = true;
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
             Starttime = DateTime.Now;
@@ -1176,11 +1143,13 @@ namespace PaeoniaTechSpectroMeter.Model
                     IsDataSavedDB = false;
                     IsRepeatmeasure = true;
                     IsReadytoSave = true;
+                    IsMeasurementCompleted = true;
+                    InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
+
                     MeasuremantBtnContent = "New Measurement";
                     MeasurementCompletedat = $"Ready to measure";
                     MeasurementCompletedat = $"Measurement Completed At {cycleCompletedAt.ToString("HH:mm:ss")}";
-                    IsMeasurementCompleted = true;
-                    InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
+
                 }
 
 
@@ -1207,6 +1176,8 @@ namespace PaeoniaTechSpectroMeter.Model
             AnalysisSelectionEnable = true;
             IsRepeatmeasure = false;
             IsReadytoSave = false;
+            IsMeasurementCompleted = false;
+            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             MeasuremantBtnContent = "Start Measurement";
             MeasurementCompletedat = $"Ready to measure";
 
@@ -1469,6 +1440,8 @@ namespace PaeoniaTechSpectroMeter.Model
                         {
                             IsReadytoSave = false;
                             MeasurementCompletedat = $"Measurement Was not Successful exceeds the cont {PyExceptionCount}";
+                            IsMeasurementNotInRange = true;
+                            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_RedSign_Icon.png";
                             this.CancelMeasurement();
                         }
                     }

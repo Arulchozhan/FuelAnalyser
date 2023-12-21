@@ -81,7 +81,9 @@ namespace PaeoniaTechSpectroMeter.Views
             this.mmgr = mmgr;
             InitializeComponent();
             this.DataContext = mmgr.ReadDetector;
-            
+
+            this.DataContext = mmgr.SelfDiagnostics;
+
             GetCurrentBackground();
             if (mmgr.AppConfig.Perfchk == "PASS")
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon

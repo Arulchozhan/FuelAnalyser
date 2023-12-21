@@ -33,6 +33,45 @@ namespace PaeoniaTechSpectroMeter.Model
         private double[] factoryBackgroundData;
 
         private double[] newBackgroundData;
+
+        private string softwareVersion;
+
+        private string productSerialNumber;
+
+        private string firmwareVersion;
+        public string SoftwareVersion
+        {
+            get { return softwareVersion; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                softwareVersion = value;
+                OnPropertyChanged("SoftwareVersion");
+
+            }
+        }
+
+        public string ProductSerialNumber
+        {
+            get { return productSerialNumber; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                productSerialNumber = value;
+                OnPropertyChanged("ProductSerialNumber");
+
+            }
+        }
+
+        public string FirmwareVersion
+        {
+            get { return firmwareVersion; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                firmwareVersion = value;
+                OnPropertyChanged("FirmwareVersion");
+
+            }
+        }
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(String info)
@@ -46,6 +85,10 @@ namespace PaeoniaTechSpectroMeter.Model
 
         CtrlSelfDiagnostics ctrlSelfDiagnostics;
         MainManager mmgr;
+        public string softwareversion = "v1.001";
+        public string productSerialNo = "ABC1234";
+        public string firmwareversion = "v1.05";
+
 
         public SelfDiagnostics(MainManager mmgr)
         {
@@ -53,7 +96,11 @@ namespace PaeoniaTechSpectroMeter.Model
             this.mmgr = mmgr;
             ctrlSelfDiagnostics = new CtrlSelfDiagnostics(mmgr);
 
+            
 
+            SoftwareVersion = $"Software: {softwareversion}";
+            ProductSerialNumber = $"Product Serial: {productSerialNo}";
+            FirmwareVersion = $"Firmware: {firmwareversion}";
         }
 
         public double[] GetCurrentBackgroundData()

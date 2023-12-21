@@ -395,7 +395,7 @@
                 <Setter Property="Foreground" Value="#0f7b0f"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsMeasurementNotInRange}" Value="True">
-                <Setter Property="Foreground" Value="#0f7b0f"/>
+                <Setter Property="Foreground" Value="#dc2a2a"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

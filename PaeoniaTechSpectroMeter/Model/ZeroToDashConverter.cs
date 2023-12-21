@@ -8,26 +8,16 @@ using System.Windows.Data;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
-    public class MethanolValueToColorConverter : IValueConverter
+    public class ZeroToDashConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double? doubleValue = (double?)value;
-
-            if (doubleValue > 100 && doubleValue < 0)
+            if (value is double doubleValue)
             {
-                return "Red";
-            }
-            else if (doubleValue == 0 && doubleValue == 100)
-            {
-                return "Yellow";
-            }
-            else if (doubleValue > 0 && doubleValue < 100)
-            {
-                return "Green";
+                return Math.Abs(doubleValue) < double.Epsilon ? "-" : doubleValue.ToString("N1");
             }
 
-            return "Orange";
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

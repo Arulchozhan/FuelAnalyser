@@ -83,8 +83,9 @@ namespace PaeoniaTechSpectroMeter.Views
             InitializeComponent();
 
             LoadData();
-            //DataContext = new History(mmgr);
-            history = new History(mmgr);
+            //DataContext = new History();
+            //history = new History(mmgr); //changes 19-12-23
+            DataContext = new History(mmgr);
         }
 
 
@@ -93,7 +94,7 @@ namespace PaeoniaTechSpectroMeter.Views
         {
             try
             {
-                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] OFFSET {(currentPage - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(currentPage - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
                 dataAccess = new DataAccess(connectionString);
                 dataTable = dataAccess.GetData(listOfMeasurements);

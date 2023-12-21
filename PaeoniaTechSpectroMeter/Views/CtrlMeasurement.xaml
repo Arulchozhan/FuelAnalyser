@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PaeoniaTechSpectroMeter.Views"
-             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" xmlns:model="clr-namespace:PaeoniaTechSpectroMeter.Model"
              mc:Ignorable="d"  d:DesignHeight="760" MinWidth="1280"  d:DesignWidth="{x:Static SystemParameters.PrimaryScreenWidth}">
     <UserControl.Resources>
+        <model:ZeroToDashConverter x:Key="ZeroToDashConverter"/>
         <BooleanToVisibilityConverter x:Key="bvc"></BooleanToVisibilityConverter>
         <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
             <Setter Property="Template">
@@ -14,11 +15,27 @@
                     <ControlTemplate TargetType="ProgressBar">
                         <Grid>
                             <Border x:Name="PART_Track" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="8"/>
-                            <Border x:Name="PART_Indicator" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Foreground}" CornerRadius="8"  HorizontalAlignment="Left"/>
+                            <Border x:Name="PART_Indicator" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  CornerRadius="8"  HorizontalAlignment="Left">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#005fb8"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}}" Value="9">
+                                                <Setter Property="Background" Value="#0f7b0f"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ErrorOccurred}" Value="True">
+                                                <Setter Property="Background" Value="#dc2a2a"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
                         </Grid>
+
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
         </Style>
     </UserControl.Resources>
     <Grid Width="1280" Background="White" ShowGridLines="False" >
@@ -48,14 +65,14 @@
         <Border x:Name="border" Width="1180" Height="64" Margin="10,95,5,0" VerticalAlignment="Top" Style="{StaticResource BorderStyle}">
             <Grid Width="1150" Height="54" HorizontalAlignment="Left" Margin="10,0,10,0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1.4*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Image Source="{Binding InfoIconSource}" Width="20" Height="20" Margin="0,0,5,0"/>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="520" Text="{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ÏnfoTextBlockStyle}"/>
+                    <Image Source="{Binding InfoIconSource}" Width="20" Height="20" Margin="0,0,5,0" RenderTransformOrigin="1,1"/>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="600" Text="{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ÏnfoTextBlockStyle}"/>
                 </StackPanel>
-                <ProgressBar x:Name ="MeasurementProgressupdate" Grid.Column="1" Width="645" Height="14"  HorizontalAlignment="Left" Style="{StaticResource ProgressBarStyle}" Value = "{Binding  Path=MeasurementStatusCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum = "{Binding  Path=MeasurementMaxCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,20,0,20" />
+                <ProgressBar x:Name ="MeasurementProgressupdate" Grid.Column="1" Width="500" Height="14"  HorizontalAlignment="Left" Style="{StaticResource ProgressBarStyle}" Value = "{Binding  Path=MeasurementStatusCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum = "{Binding  Path=MeasurementMaxCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,20,0,20" />
 
             </Grid>
         </Border>
@@ -128,7 +145,7 @@
                      <Run Text="Ethanol" FontWeight="600" FontSize="20" />
                      <Run Text=" (0-100) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding EthanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolEthanolTextBlockStyle}"/>
+                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding EthanolConcentration,Converter={StaticResource ZeroToDashConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolEthanolTextBlockStyle}"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -139,7 +156,7 @@
                        <Run Text="Methanol" FontWeight="600" FontSize="20" />
                        <Run Text=" (0-100) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolMethanolTextBlockStyle}"/>
+                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration, Converter={StaticResource ZeroToDashConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolMethanolTextBlockStyle}"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -148,9 +165,9 @@
                     <Grid>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10">
                      <Run Text="Denaturant" FontWeight="600" FontSize="20" />
-                     <Run Text=" (0-75) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
+                     <Run Text=" (0-100) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DenaturantConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolDenaturantTextBlockStyle}"/>
+                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DenaturantConcentration, Converter={StaticResource ZeroToDashConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolDenaturantTextBlockStyle}"/>
                     </Grid>
                 </Border>
             </Grid>
@@ -161,7 +178,7 @@
                      <Run Text="Methanol" FontWeight="600" FontSize="20" />
                      <Run Text=" (0-15) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolMethanolTextBlockStyle}" />
+                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding MethanolConcentration, Converter={StaticResource ZeroToDashConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolMethanolTextBlockStyle}" />
                     </Grid>
                 </Border>
             </Grid>
@@ -172,7 +189,7 @@
                      <Run Text="Water" FontWeight="600" FontSize="20" />
                      <Run Text=" (0-2) Vol %" FontWeight="400" FontSize="20" Foreground="Black"/>
                         </TextBlock>
-                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding WaterConcentration,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolWaterTextBlockStyle}"/>
+                        <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding WaterConcentration, Converter={StaticResource ZeroToDashConverter},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProductVolWaterTextBlockStyle}"/>
                     </Grid>
                 </Border>
             </Grid>
