@@ -241,6 +241,7 @@ namespace PaeoniaTechSpectroMeter.Views
             currentTime = DateTime.Now;
             LastScannedTextAndTime.Text = "Last scanned / reset on " + currentTime.ToString("dd/MM/yyyy hh:mm");
             mmgr.AppConfig.BgchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
+            AppConfig.SaveConfig(mmgr.AppConfig);
 
             ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
             InfoMessageTextBlock.Text = "Background reset to factory stored background.";
@@ -662,7 +663,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 LastTestedTime.Text = currentTime.ToString("dd/MM/yyyy hh:mm");
                 mmgr.AppConfig.Perfchk = "PASS";
                 mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
-
+                AppConfig.SaveConfig(mmgr.AppConfig);
                 PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
 
                 ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
