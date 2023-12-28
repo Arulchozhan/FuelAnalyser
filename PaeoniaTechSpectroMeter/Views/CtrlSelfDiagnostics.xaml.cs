@@ -265,6 +265,7 @@ namespace PaeoniaTechSpectroMeter.Views
             //BtnTestInstrument.IsEnabled = false;
             //BtnScanNewBackground.IsEnabled = false;
             //BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            mmgr.ReadDetector.stopReq = false;
             mmgr.ReadDetector.SaveBckVisibility = false;
             BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
             BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
@@ -273,6 +274,7 @@ namespace PaeoniaTechSpectroMeter.Views
             BtnTestInstrument.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
             mmgr.ReadDetector.AnalysisSelectionEnable = false;
             mmgr.ReadDetector.MeasurementEnable=false;
+            mmgr.ReadDetector.NewBckScanEnable = false;
             var perfmChk = new Thread(() => GetNewBackground(true));
             perfmChk.Start();
 
@@ -324,11 +326,16 @@ namespace PaeoniaTechSpectroMeter.Views
         Thread readBackground = null;
         private void BtnScanNewBackground_Click(object sender, RoutedEventArgs e)
         {
+            mmgr.ReadDetector.NewBckScanEnable = true;
+            if ((string)BtnScanNewBackground.Content == "Scan New Background")
+            {
 
-            //BtnResetToFactoryBackground.IsEnabled = false;
-            //BtnTestInstrument.IsEnabled = false;
-            // BtnSaveNewBackground.Visibility = Visibility.Collapsed;
-            mmgr.ReadDetector.SaveBckVisibility=false;
+
+                //BtnResetToFactoryBackground.IsEnabled = false;
+                //BtnTestInstrument.IsEnabled = false;
+                // BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+                mmgr.ReadDetector.stopReq = false;
+                mmgr.ReadDetector.SaveBckVisibility=false;
             BtnResetToFactoryBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
             BtnResetToFactoryBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9f9f9f"));
 
@@ -401,6 +408,18 @@ namespace PaeoniaTechSpectroMeter.Views
 
 
             }
+        }
+         else if ((string)BtnScanNewBackground.Content == "Cancel Scan")
+            {
+                
+                mmgr.ReadDetector.SaveBckVisibility = false;
+                BtnScanNewBackground.Content = "Scan New Background";
+                mmgr.ReadDetector.CancelMeasurement();
+                Thread.Sleep(1000);
+                //BtnScanNewBackground.Content ="Scan New Background";
+                mmgr.ReadDetector.SaveBckVisibility = false;
+
+            }
 
             /*  if (IsInstrumentUpToStandard())
               {
@@ -465,14 +484,14 @@ namespace PaeoniaTechSpectroMeter.Views
                 });
                 GetCurrentBackground();
                 GetFactoryBackground();
+              //  mmgr.ReadDetector.SaveBckVisibility = true;
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     // BtnSaveNewBackground.Visibility = Visibility.Visible;
                     //SaveNewBorder.Visibility = Visibility.Visible;
-                    mmgr.ReadDetector.SaveBckVisibility = true;
-
-                    BtnScanNewBackground.Content = "Scan new Background";
+                  
+                    BtnScanNewBackground.Content = "Scan New Background";
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF"));
 
@@ -515,7 +534,9 @@ namespace PaeoniaTechSpectroMeter.Views
 
                 mmgr.ReadDetector.AnalysisSelectionEnable = true;
                 mmgr.ReadDetector.MeasurementEnable = true;
-
+                mmgr.ReadDetector.NewBckScanEnable = true;
+               if(mmgr.ReadDetector.stopReq ==false)
+                mmgr.ReadDetector.SaveBckVisibility = true;
 
             }
             else
@@ -530,6 +551,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
                 string curroffPath = "C:\\FuelAnalyzer\\Currentoff" + ".csv";
                 mmgr.ReadDetector.SaveBckVisibility = false;
+                mmgr.ReadDetector.NewBckScanEnable = false;
                 ReadCsv(ftytairPath, out ftyAir);
                 ReadCsv(ftyoffPath, out ftyOff);
                 ReadCsv(curroffPath, out currentOff);
@@ -588,6 +610,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
                 mmgr.ReadDetector.AnalysisSelectionEnable = true;
                 mmgr.ReadDetector.MeasurementEnable = true;
+                mmgr.ReadDetector.NewBckScanEnable = true;
 
             }
 
@@ -683,9 +706,9 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnSaveNewBackground_Click(object sender, RoutedEventArgs e)
         {
             string currentairPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";
-            BtnSaveNewBackground.Visibility = Visibility.Collapsed;
-            SaveNewBorder.Visibility = Visibility.Collapsed;
-
+            //  BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+            // SaveNewBorder.Visibility = Visibility.Collapsed;
+            mmgr.ReadDetector.SaveBckVisibility = false;
             BtnResetToFactoryBackground.IsEnabled = true;
             BtnTestInstrument.IsEnabled = true;
 

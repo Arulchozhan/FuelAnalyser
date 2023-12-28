@@ -62,6 +62,7 @@ namespace PaeoniaTechSpectroMeter.Model
         bool analysisSelectionEnable;
         bool saveBckVisibility;
         bool measurementEnable;
+        bool newBckScanEnable;
         private string sampleFileName = "";
         private int selectedSampleType;
         private int filecnt = 0;
@@ -80,7 +81,7 @@ namespace PaeoniaTechSpectroMeter.Model
         object obj = new object();
         private string measurementContent;
         private bool isReading = false;
-        volatile bool stopReq = false;
+        public bool stopReq = false;
         private DateTime starttime;
         private string measurementCompletedat = "";
         private bool isMeasurementCompleted;
@@ -378,7 +379,17 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
-      
+        //newBckScanEnable
+
+        public bool NewBckScanEnable
+        {
+            get => newBckScanEnable;
+            set
+            {
+                newBckScanEnable = value;
+                OnPropertyChanged("NewBckScanEnable");
+            }
+        }
 
 
         public string UserChooseDir
@@ -445,6 +456,7 @@ namespace PaeoniaTechSpectroMeter.Model
             _dataAccess = new DataAccess(_connectionString);
             history = new History(mmgr);
             MeasurementEnable = true;
+            NewBckScanEnable=true;  
         }
 
 
@@ -1072,6 +1084,7 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasuremantBtnContent = "Cancel Measurement";
             AnalysisSelectionEnable = false;
             IsReadytoSave = false;
+            NewBckScanEnable = false;
             MeasurementEnable =true;
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
@@ -1104,7 +1117,8 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
         public void CancelMeasurement()
-        {
+        { 
+            
 
             if (!isReading)
             {
@@ -1115,8 +1129,10 @@ namespace PaeoniaTechSpectroMeter.Model
             }
             Readingfinished = false; //flag changes 
             IsRepeatmeasure = false;
-                AnalysisSelectionEnable = true;
+            AnalysisSelectionEnable = true;
             MeasurementEnable = true;
+            NewBckScanEnable = true;
+            saveBckVisibility = false;
             stopReq = true;
             //  MeasurementCompletedat = $"Measurement Was Cancelled";
             MeasuremantBtnContent = "Start Measurement";
@@ -1133,6 +1149,7 @@ namespace PaeoniaTechSpectroMeter.Model
             }
             Readingfinished = false; //flag changes 
             AnalysisSelectionEnable = false;
+            NewBckScanEnable = false;
             IsRepeatmeasure = true;
             MeasurementEnable = true;
             stopReq = true;
