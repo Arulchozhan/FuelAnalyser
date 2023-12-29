@@ -83,6 +83,7 @@ namespace PaeoniaTechSpectroMeter.Views
             this.DataContext = mmgr.ReadDetector;
 
             //this.DataContext = mmgr.SelfDiagnostics;
+
             mmgr.ReadDetector.SaveBckVisibility = false;
 
             GetCurrentBackground();
