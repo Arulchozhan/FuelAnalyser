@@ -51,14 +51,12 @@
     <Compile Include="Model\DataItemMap.cs" />
     <Compile Include="Model\DenaturantValueToColorConverter.cs" />
     <Compile Include="Model\EthanolValueToColorConverter.cs" />
-    <Compile Include="Model\FolderItem.cs" />
     <Compile Include="Model\History.cs" />
     <Compile Include="Model\MethanolValueToColorConverter.cs" />
     <Compile Include="Model\ReadDetector.cs" />
     <Compile Include="Model\SelfDiagnostics.cs" />
     <Compile Include="Model\ValueToColorConverter.cs" />
     <Compile Include="Model\WaterValueToColorConverter.cs" />
-    <Compile Include="Model\ZeroToDashConverter.cs" />
     <Compile Include="Station\MachineEvents.cs" />
     <Compile Include="Views\CtrlAppConfig.xaml.cs">
       <DependentUpon>CtrlAppConfig.xaml</DependentUpon>
@@ -77,15 +75,6 @@
     </Compile>
     <Compile Include="Views\CtrlSelfDiagnostics.xaml.cs">
       <DependentUpon>CtrlSelfDiagnostics.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CustomFolderDialog.xaml.cs">
-      <DependentUpon>CustomFolderDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CustomMessageBox.xaml.cs">
-      <DependentUpon>CustomMessageBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CustomUserControl.xaml.cs">
-      <DependentUpon>CustomUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WinWelcomeScreen.xaml.cs">
       <DependentUpon>WinWelcomeScreen.xaml</DependentUpon>
@@ -139,18 +128,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CtrlSelfDiagnostics.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CustomFolderDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CustomMessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CustomUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

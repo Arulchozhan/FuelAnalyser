@@ -135,19 +135,19 @@
 
                 <Grid Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding SoftwareVersion, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SystemInformationTextBlockStyle}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Software: v1.001" Style="{StaticResource SystemInformationTextBlockStyle}"/>
                     </Border>
                 </Grid>
 
                 <Grid Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductSerialNumber, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SystemInformationTextBlockStyle}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Product Serial: ABC1234" Style="{StaticResource SystemInformationTextBlockStyle}"/>
                     </Border>
                 </Grid>
 
                 <Grid Grid.Column="2" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource SystemInformationTextBlockStyle}" Text="{Binding FirmwareVersion, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource SystemInformationTextBlockStyle}" Text="Firmware: v1.05"/>
                     </Border>
                 </Grid>
             </Grid>

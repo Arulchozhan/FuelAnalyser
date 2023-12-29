@@ -140,7 +140,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             try
             {
-                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(_currentPage - 1) * _pageSize} ROWS FETCH NEXT {_pageSize} ROWS ONLY";
+                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] OFFSET {(_currentPage - 1) * _pageSize} ROWS FETCH NEXT {_pageSize} ROWS ONLY";
                 _dataTable = _dataAccess.GetData(listOfMeasurements);
                 ObservableCollection<DataItem> dataItemList = new ObservableCollection<DataItem>();
 
@@ -208,10 +208,11 @@ namespace PaeoniaTechSpectroMeter.Model
             var info = new Dictionary<string, string>
             {
                 { "Company", "XYZ Lab" },
+                { "Operator", mmgr.ReadDetector.OpearatorName },
                 { "Instrument Model", "Waukesha Instrument Model E" },
-                { "Instrument Serial Number", mmgr.SelfDiagnostics.productSerialNo },
-                { "Instrument Firmware version", mmgr.SelfDiagnostics.firmwareversion },
-                { "Fuel Analyzer Software Application Version", mmgr.SelfDiagnostics.softwareversion },
+                { "Instrument Serial Number", "ABC1234K" },
+                { "Instrument Firmware version", "V1.0.01" },
+                { "Fuel Analyzer Software Application Version", "V1.0.5" },
                 { "Report Date and Time", DateTime.Now.ToString() },
                 { "Report Path", mmgr.ReadDetector.UserChooseDir }
             };
