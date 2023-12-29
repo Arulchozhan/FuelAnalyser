@@ -395,7 +395,7 @@
                 <Setter Property="Foreground" Value="#0f7b0f"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsMeasurementNotInRange}" Value="True">
-                <Setter Property="Foreground" Value="#0f7b0f"/>
+                <Setter Property="Foreground" Value="#dc2a2a"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -742,6 +742,32 @@
         <Setter Property="Width" Value="270"/>
         <Setter Property="Height" Value="60"/>
         <Setter Property="Background" Value="#f3f3f3"/>
+    </Style>
+    <Style x:Key="CustomMessageBoxButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="Background" Value="#FFF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="1" BorderBrush="#9f9f9f" Background="#FFF" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CustomDialogTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
     </Style>
 
 </ResourceDictionary>

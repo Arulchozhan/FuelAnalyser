@@ -48,6 +48,45 @@ namespace PaeoniaTechSpectroMeter.Model
         private double[] factoryBackgroundData;
 
         private double[] newBackgroundData;
+
+        private string softwareVersion;
+
+        private string productSerialNumber;
+
+        private string firmwareVersion;
+        public string SoftwareVersion
+        {
+            get { return softwareVersion; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                softwareVersion = value;
+                OnPropertyChanged("SoftwareVersion");
+
+            }
+        }
+
+        public string ProductSerialNumber
+        {
+            get { return productSerialNumber; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                productSerialNumber = value;
+                OnPropertyChanged("ProductSerialNumber");
+
+            }
+        }
+
+        public string FirmwareVersion
+        {
+            get { return firmwareVersion; } //?? (measurementContent = "Start Measurement");
+            set
+            {
+                firmwareVersion = value;
+                OnPropertyChanged("FirmwareVersion");
+
+            }
+        }
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(String info)
@@ -61,14 +100,25 @@ namespace PaeoniaTechSpectroMeter.Model
 
         CtrlSelfDiagnostics ctrlSelfDiagnostics;
         MainManager mmgr;
+        public string softwareversion;
+        public string productSerialNo;
+        public string firmwareversion;
+
 
         public SelfDiagnostics(MainManager mmgr)
         {
 
             this.mmgr = mmgr;
             ctrlSelfDiagnostics = new CtrlSelfDiagnostics(mmgr);
+            this.DataContext = mmgr.AppConfig;
 
+            softwareversion = mmgr.AppConfig.AppVersion;
+            productSerialNo = mmgr.AppConfig.InstrumentSN;
+            firmwareversion = mmgr.AppConfig.InstrumentFwv;
 
+            SoftwareVersion = $"Software: {softwareversion}";
+            ProductSerialNumber = $"Product Serial: {productSerialNo}";
+            FirmwareVersion = $"Firmware: {firmwareversion}";
         }
 
         public double[] GetCurrentBackgroundData()

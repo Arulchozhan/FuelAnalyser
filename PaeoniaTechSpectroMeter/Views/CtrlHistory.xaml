@@ -102,17 +102,17 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource EthanolValueToColorConverter}}" Value="Red">
                                         <Setter Property="Background" Value="#f3eaea"/>
                                         <Setter Property="Foreground" Value="#e6a6a6"/>
 
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource EthanolValueToColorConverter}}" Value="Yellow">
                                         <Setter Property="Background" Value="#eee8d5"/>
                                         <Setter Property="Foreground" Value="#cc9432"/>
 
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                    <DataTrigger Binding="{Binding Ethanol, Converter={StaticResource EthanolValueToColorConverter}}" Value="Green">
                                         <Setter Property="Background" Value="#dff6dd"/>
                                         <Setter Property="Foreground" Value="#0f7b0f"/>
 
@@ -130,15 +130,15 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Red">
                                         <Setter Property="Background" Value="#f3eaea"/>
                                         <Setter Property="Foreground" Value="#e6a6a6"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Yellow">
                                         <Setter Property="Background" Value="#eee8d5"/>
                                         <Setter Property="Foreground" Value="#cc9432"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                    <DataTrigger Binding="{Binding Denaturant, Converter={StaticResource DenaturantValueToColorConverter}}" Value="Green">
                                         <Setter Property="Background" Value="#dff6dd"/>
                                         <Setter Property="Foreground" Value="#0f7b0f"/>
                                     </DataTrigger>
@@ -155,15 +155,15 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Red">
                                         <Setter Property="Background" Value="#f3eaea"/>
                                         <Setter Property="Foreground" Value="#e6a6a6"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Yellow">
                                         <Setter Property="Background" Value="#eee8d5"/>
                                         <Setter Property="Foreground" Value="#cc9432"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Green">
                                         <Setter Property="Background" Value="#dff6dd"/>
                                         <Setter Property="Foreground" Value="#0f7b0f"/>
                                     </DataTrigger>
@@ -180,15 +180,15 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Red">
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource WaterValueToColorConverter}}" Value="Red">
                                         <Setter Property="Background" Value="#f3eaea"/>
                                         <Setter Property="Foreground" Value="#e6a6a6"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Yellow">
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource WaterValueToColorConverter}}" Value="Yellow">
                                         <Setter Property="Background" Value="#eee8d5"/>
                                         <Setter Property="Foreground" Value="#cc9432"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource ValueToColorConverter}}" Value="Green">
+                                    <DataTrigger Binding="{Binding Water, Converter={StaticResource WaterValueToColorConverter}}" Value="Green">
                                         <Setter Property="Background" Value="#dff6dd"/>
                                         <Setter Property="Foreground" Value="#0f7b0f"/>
                                     </DataTrigger>
