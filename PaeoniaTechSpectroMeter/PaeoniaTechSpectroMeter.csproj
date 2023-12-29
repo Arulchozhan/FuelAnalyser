@@ -81,6 +81,12 @@
     <Compile Include="Views\CustomFolderDialog.xaml.cs">
       <DependentUpon>CustomFolderDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomMessageBox.xaml.cs">
+      <DependentUpon>CustomMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomUserControl.xaml.cs">
+      <DependentUpon>CustomUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WinWelcomeScreen.xaml.cs">
       <DependentUpon>WinWelcomeScreen.xaml</DependentUpon>
     </Compile>
@@ -137,6 +143,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CustomFolderDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

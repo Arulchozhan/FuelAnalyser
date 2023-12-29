@@ -85,9 +85,9 @@ namespace PaeoniaTechSpectroMeter.Model
 
         CtrlSelfDiagnostics ctrlSelfDiagnostics;
         MainManager mmgr;
-        public string softwareversion = "v1.001";
-        public string productSerialNo = "ABC1234";
-        public string firmwareversion = "v1.05";
+        public string softwareversion;
+        public string productSerialNo;
+        public string firmwareversion;
 
 
         public SelfDiagnostics(MainManager mmgr)
@@ -95,8 +95,11 @@ namespace PaeoniaTechSpectroMeter.Model
 
             this.mmgr = mmgr;
             ctrlSelfDiagnostics = new CtrlSelfDiagnostics(mmgr);
+            this.DataContext = mmgr.AppConfig;
 
-            
+            softwareversion = mmgr.AppConfig.AppVersion;
+            productSerialNo = mmgr.AppConfig.InstrumentSN;
+            firmwareversion = mmgr.AppConfig.InstrumentFwv;
 
             SoftwareVersion = $"Software: {softwareversion}";
             ProductSerialNumber = $"Product Serial: {productSerialNo}";

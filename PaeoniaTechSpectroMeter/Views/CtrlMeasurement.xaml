@@ -56,7 +56,7 @@
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Center"  >
 
-                <Button x:Name="BtnRepeatMeasurement" Content="Save and Repeat Measurement" Visibility="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" IsEnabled="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged }"  Style="{StaticResource ButtonStyle}" Click="BtnRepeatMeasurement_Click" Margin="0,0,50,0"  Width="346"/>
+                <Button x:Name="BtnRepeatMeasurement" Content="Save and Repeat Measurement" Visibility="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" IsEnabled="{Binding IsRepeatmeasure, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged }"  Style="{StaticResource ButtonStyle}" Click="BtnRepeatMeasurement_Click" Margin="0,0,10,0"  Width="346"/>
 
                 <Button x:Name="BtnMeasurement" IsEnabled="{Binding MeasurementEnable}" Content="{Binding MeasuremantBtnContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ButtonStyle}" Click="BtnMeasurement_Click"/>
 
@@ -70,7 +70,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Image Source="{Binding InfoIconSource}" Width="20" Height="20" Margin="0,0,5,0" RenderTransformOrigin="1,1"/>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="600" Text="{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ÏnfoTextBlockStyle}"/>
+                    <TextBlock Grid.Column="0" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="600" Text="{Binding MeasurementCompletedat, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource ÏnfoTextBlockStyle}"/>
                 </StackPanel>
                 <ProgressBar x:Name ="MeasurementProgressupdate" Grid.Column="1" Width="500" Height="14"  HorizontalAlignment="Left" Style="{StaticResource ProgressBarStyle}" Value = "{Binding  Path=MeasurementStatusCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum = "{Binding  Path=MeasurementMaxCont, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,20,0,20" />
 
@@ -133,7 +133,7 @@
 
                 <Button x:Name="BtnChangeLoc" Content="Change Save Location" Margin="5" Style="{StaticResource WhiteButtonSyle}" Click="BtnChangeLocation_Click" />
 
-                <Button x:Name="BtnSave"  Content="Save" Margin="5,5,0,5" IsEnabled="{Binding IsReadytoSave, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ButtonStyle}" Click="BtnSave_Click" />
+                <Button x:Name="BtnSave"  Content="Save" Margin="5,5,0,5" IsEnabled="{Binding IsReadytoSave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ButtonStyle}" Click="BtnSave_Click" />
 
 
             </StackPanel>
@@ -172,7 +172,7 @@
                 </Border>
             </Grid>
             <Grid Grid.Row="1" Grid.Column="2" Margin="5,20,5,10" Visibility="{Binding AnalysisSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityCvtr}}">
-                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107" Style="{StaticResource ProductMethanolValueBorderSyle}"> 
+                <Border BorderBrush="Black" BorderThickness="0.2" CornerRadius="4" Height="107" Style="{StaticResource ProductMethanolValueBorderSyle}">
                     <Grid>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource ProductTextBlockStyle}" Margin="0,10" >
                      <Run Text="Methanol" FontWeight="600" FontSize="20" />

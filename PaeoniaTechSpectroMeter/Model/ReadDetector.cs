@@ -1428,7 +1428,8 @@ namespace PaeoniaTechSpectroMeter.Model
 
                             concentrationDoubleArray[i] = double.Parse(concentrationStringArray[i]);
                         }
-                        EthanolConcentration = Math.Round(concentrationDoubleArray[0], 2);
+
+                        EthanolConcentration = Math.Round(concentrationDoubleArray[0], 2); 
                         MethanolConcentration = Math.Round(concentrationDoubleArray[1], 2);
                         WaterConcentration = Math.Round(concentrationDoubleArray[2], 2);
                         DenaturantConcentration = Math.Round(concentrationDoubleArray[3], 2);

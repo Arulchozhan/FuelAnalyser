@@ -14,11 +14,11 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             double? doubleValue = (double?)value;
 
-            if (doubleValue > 100 && doubleValue < 0)
+            if (doubleValue > 100 || doubleValue < 0)
             {
                 return "Red";
             }
-            else if (doubleValue == 0 && doubleValue == 100)
+            else if (doubleValue == 0 || doubleValue == 100)
             {
                 return "Yellow";
             }

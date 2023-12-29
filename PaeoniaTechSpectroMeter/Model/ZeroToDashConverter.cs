@@ -14,7 +14,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             if (value is double doubleValue)
             {
-                return Math.Abs(doubleValue) < double.Epsilon ? "-" : doubleValue.ToString("N1");
+                return Math.Abs(doubleValue) < double.Epsilon ? "-" : doubleValue.ToString("N2");
             }
 
             return value;
