@@ -415,7 +415,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 mmgr.ReadDetector.SaveBckVisibility = false;
                 BtnScanNewBackground.Content = "Scan New Background";
                 mmgr.ReadDetector.CancelMeasurement();
-                Thread.Sleep(1000);
+               // Thread.Sleep(1000);
                 //BtnScanNewBackground.Content ="Scan New Background";
                 mmgr.ReadDetector.SaveBckVisibility = false;
 

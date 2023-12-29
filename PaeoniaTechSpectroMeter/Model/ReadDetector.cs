@@ -1258,7 +1258,7 @@ namespace PaeoniaTechSpectroMeter.Model
             IsReadytoSave = false;
             MeasuremantBtnContent = "Start Measurement";
             MeasurementCompletedat = $"Ready to measure";
-
+           NewBckScanEnable = true;
 
         }
         public string PLSCalibration()
