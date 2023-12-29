@@ -244,7 +244,7 @@ namespace PaeoniaTechSpectroMeter
             }
             else if (selectedTabItem.Header.ToString() == "History")
             {
-                //if (historyPage == null) //changes 20/12/23
+                if (historyPage == null)
                      historyPage = new CtrlHistory(mmgr);
                 page_Content.Content = historyPage;
             }
