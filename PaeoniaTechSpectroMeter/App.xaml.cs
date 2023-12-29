@@ -78,8 +78,8 @@ namespace PaeoniaTechSpectroMeter
             MainWinInts = new PaeoniaTechSpectroMeter.MainWindow(MainMngr);
             MainMngr.AssignMainWinInts(MainWinInts);
 
-            WelcomeScreen = new WinWelcomeScreen();
-            Splasher.Splash = WelcomeScreen;
+          //  WelcomeScreen = new WinWelcomeScreen();
+           // Splasher.Splash = WelcomeScreen;
             MainMngr.LoadingStatus = "Loading...";
 
             Splasher.ShowSplash();

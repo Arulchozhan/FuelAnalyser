@@ -27,6 +27,21 @@ namespace PaeoniaTechSpectroMeter.Model
         List<double> ftyOff = new List<double>();
         List<double> currentOff = new List<double>();
         List<double> ftyDiff = new List<double>();
+        //private is
+
+
+
+        //public bool AnalysisSelectionEnable
+        //{
+        //    get => analysisSelectionEnable;
+        //    set
+        //    {
+        //        analysisSelectionEnable = value;
+        //        OnPropertyChanged("AnalysisSelectionEnable");
+        //    }
+        //}
+
+
         object obj = new object();
         private double[] currentBackgroundData;
 
@@ -205,6 +220,7 @@ namespace PaeoniaTechSpectroMeter.Model
             List<List<double>> backgrounflstoflst = new List<List<double>>();
             backgrounflstoflst.Clear();
             int i = 0;
+            mmgr.ReadDetector.IsReading = true;
             int measurementCount = mmgr.MeasurementConfigurationData.RepeatMeasurement.HoldValue;
 
             while (i < measurementCount)
@@ -232,13 +248,14 @@ namespace PaeoniaTechSpectroMeter.Model
                 }
 
 
-                //if (mmgr.ReadDetector.stopReq) break;
+                if (mmgr.ReadDetector.stopReq) break;
 
 
 
                 //Random random = new Random();
                 //return Enumerable.Range(0, 128).Select(_ => (random.NextDouble() * 0.2) + 2.6 - 2.5).ToArray();
             }
+            mmgr.ReadDetector.IsReading = false;
             List<double> averages = backgrounflstoflst
             .FirstOrDefault() // Take the first list to determine the count
             .Select((_, index) => backgrounflstoflst.Select(list => list[index]).Average())

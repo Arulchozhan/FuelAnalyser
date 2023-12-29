@@ -52,7 +52,7 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnMeasurement_Click(object sender, RoutedEventArgs e)
         {
             string serr = "";
-
+            mmgr.ReadDetector.SaveBckVisibility = false;
             if ((string)BtnMeasurement.Content == "Start Measurement")
             {
 
@@ -96,9 +96,15 @@ namespace PaeoniaTechSpectroMeter.Views
                 if (result.HasValue && result.Value)
                 {
                     mmgr.ReadDetector.MeasurementStatusCont = 0;
+                    if (mmgr.ReadDetector.PassNo>1)
+                    {
+                        mmgr.ReadDetector.PassNo = mmgr.ReadDetector.PassNo - 1;
+                        mmgr.ReadDetector.CancelRepeatMeasurement();    
+                    }
+                    else
                     mmgr.ReadDetector.CancelMeasurement();
                     mmgr.ReadDetector.PassNo = 1;
-                    mmgr.ReadDetector.MeasurementCompletedat = $"Measurement was cancelled";
+                    mmgr.ReadDetector.MeasurementCompletedat = $"Measurement was cancelled";              
                 }
 
             }

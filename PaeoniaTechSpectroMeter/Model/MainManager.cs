@@ -583,6 +583,31 @@ namespace PaeoniaTechSpectroMeter.Model
 
             return "";
         }
+        public string InitialTryLogIn1()
+        {
+
+            if (Debugger.IsAttached)
+            {
+                userLogin.SetDefaultUser();
+                if (userLogin.CurrentUser != null) return "";
+            }
+            else
+            {
+                userLogin.SetDefaultUser();
+                if (userLogin.CurrentUser != null) return "";
+            }
+           
+            WinUserLogin login = new WinUserLogin(userLogin);
+            login.ShowDialog();
+            if (userLogin.CurrentUser == null)
+            {
+                isLoginFailed = true;
+                return "Log in Required!";
+            }
+
+            return "";
+        }
+
 
         private string InitMotorModule()
         {
@@ -908,7 +933,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 //
                 LoadingStatus = "Loading User Access Configurations";
                 InitUserAccess();
-                serr = InitialTryLogIn();
+                serr = InitialTryLogIn1();
                 if (serr != "")
                     break;
 

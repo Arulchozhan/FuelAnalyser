@@ -11,7 +11,7 @@ namespace PaeoniaTechSpectroMeter.Model
             get
             {
                 if (Debugger.IsAttached) return RootInfoDirection;
-                return exeDirectory;
+                return RootInfoDirection; //exeDirectory 
             }
 
         }
