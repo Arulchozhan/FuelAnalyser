@@ -60,6 +60,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 {
                     if (!mmgr.ReadDetector.checkfeildentryexist())
                     {
+                        mmgr.ReadDetector.AnalysisSelectionEnable = false;
                         mmgr.ReadDetector.PyExceptionCount = 0;
                         mmgr.ReadDetector.StartMeasurement(32, 16);
 

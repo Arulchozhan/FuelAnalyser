@@ -17,7 +17,7 @@
         BorderThickness="1"
         Loaded="Window_Loaded"
         MinWidth="1280"
-        WindowState="Minimized"
+        WindowState="Maximized"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen" 
         Closing="Window_Closing" ResizeMode="NoResize" >

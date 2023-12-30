@@ -710,8 +710,8 @@ namespace PaeoniaTechSpectroMeter.Views
             //  BtnSaveNewBackground.Visibility = Visibility.Collapsed;
             // SaveNewBorder.Visibility = Visibility.Collapsed;
             mmgr.ReadDetector.SaveBckVisibility = false;
-            BtnResetToFactoryBackground.IsEnabled = true;
-            BtnTestInstrument.IsEnabled = true;
+          //  BtnResetToFactoryBackground.IsEnabled = true;
+          //  BtnTestInstrument.IsEnabled = true;
 
 
 
