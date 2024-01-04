@@ -17,7 +17,7 @@
         BorderThickness="1"
         Loaded="Window_Loaded"
         MinWidth="1280"
-        WindowState="Minimized"
+        WindowState="Maximized"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen" 
         Closing="Window_Closing" ResizeMode="NoResize" >
@@ -58,7 +58,7 @@
                     <!--<Grid x:Name="GrdSelfDiagnostics" ShowGridLines="False" Background="White" Width="{x:Static SystemParameters.PrimaryScreenWidth}"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="auto" Margin="0,1,0,0"/>-->
                 </TabItem>
                 <TabItem x:Name="TabHistory" 
-			            Header="History" Width="226"  FontSize="12"   >
+			            Header="History" Width="226" Height="64"    >
 
 
                     <TabItem.HeaderTemplate>

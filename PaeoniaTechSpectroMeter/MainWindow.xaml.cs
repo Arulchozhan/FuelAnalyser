@@ -164,7 +164,7 @@ namespace PaeoniaTechSpectroMeter
         /// 
         void timer_Tick(object sender, EventArgs e)
         {
-            CurrentDateandTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm tt");
+            CurrentDateandTime.Text = DateTime.Now.ToString("dd MMM yyyy HH:mm");
         }
      
         void SetupPannels()
@@ -244,7 +244,7 @@ namespace PaeoniaTechSpectroMeter
             }
             else if (selectedTabItem.Header.ToString() == "History")
             {
-                if (historyPage == null)
+                //if (historyPage == null)
                      historyPage = new CtrlHistory(mmgr);
                 page_Content.Content = historyPage;
             }

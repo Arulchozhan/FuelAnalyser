@@ -4,7 +4,7 @@
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             mc:Ignorable="d" Background="White"  d:DesignHeight="760" d:DesignWidth="1280">
+             mc:Ignorable="d" Background="White"   Width="1280" Height="680">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="bvc"></BooleanToVisibilityConverter>
 
@@ -14,11 +14,12 @@
             <Image Source="C:\FuelAnalyzer\bin\Icon\Self-diagnosticsB_Icon.png" Width="36" Height="36" Margin="0,0,5,0"/>
             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Self-diagnostics" Style="{StaticResource TextBlockStyle}"/>
         </StackPanel>
-        <Border x:Name="SDborder" Width="1180" Height="61" Margin="0,75,5,0" VerticalAlignment="Top" Style="{StaticResource BorderStyle}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Image x:Name="ÏnfoMessageImage" Source="C:\FuelAnalyzer\bin\Icon\Info_Icon.png" Width="20" Height="20" VerticalAlignment="Center" Margin="10" />
-                <TextBlock x:Name="InfoMessageTextBlock" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Ensure no fuel inside before testing instrument or scanning new background."  Style="{StaticResource ÏnfoTextBlockStyle}"/>
+        <Border x:Name="SDborder" Width="1180" Height="61" Margin="0,75,5,0" VerticalAlignment="Top" Style="{StaticResource SDBorderStyle}">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
+                <Image Source="{Binding SDInfoIconSource}" Width="20" Height="20" Margin="0,0,5,0"/>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding MessageCompleted, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource SDÏnfoTextBlockStyle}"/>
             </StackPanel>
+
         </Border>
 
 
@@ -42,7 +43,7 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Text="Performance" Style="{StaticResource PerformanceTextBlockStyle}"/>
                     </Grid>
                     <Grid Grid.Row="1" Margin="0,10,10,5" >
-                        <Image x:Name="PerformanceWarningImage" Source="C:\FuelAnalyzer\bin\Icon\Performance-GreenSign_Icon.png" Width="70" Height="70" VerticalAlignment="Center" />
+                        <Image Source="{Binding SDPerformanceIconSource}" Width="70" Height="70" VerticalAlignment="Center" />
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,10,0,0" >
                         <Grid.RowDefinitions>
@@ -103,10 +104,10 @@
                         <ColumnDefinition Width="223*"/>
                     </Grid.ColumnDefinitions>
                     <Border Width="280" Height="60" HorizontalAlignment="Left" Style="{StaticResource ButtonBorderStyle}" Margin="10,14,0,13" Grid.ColumnSpan="2">
-                        <Button x:Name="BtnScanNewBackground"   Content="Scan New Background" Style="{StaticResource ButtonStyle}"  IsEnabled="{Binding NewBckScanEnable}" Click="BtnScanNewBackground_Click" Margin="1,2,1,0" Height="60" VerticalAlignment="Top"/>
+                        <Button x:Name="BtnScanNewBackground"   Content="Scan New Background" Style="{StaticResource ButtonStyle}"  IsEnabled="{Binding NewBckScanEnable}" Click="BtnScanNewBackground_Click"  Height="60" VerticalAlignment="Top"/>
                     </Border>
                     <Border Width="280" Height="60" Style="{StaticResource ButtonBorderStyle}" Margin="50,14,33.884,13" Grid.Column="1">
-                        <Button x:Name="BtnResetToFactoryBackground" Content="Reset to Factory Background" Style="{StaticResource ButtonStyle}" IsEnabled="{Binding AnalysisSelectionEnable}" Click="BtnResetToFactoryBackground_Click"/>
+                        <Button x:Name="BtnResetToFactoryBackground" Content="Reset to Factory Background" Style="{StaticResource ButtonStyle}" IsEnabled="{Binding AnalysisSelectionEnable}" Click="BtnResetToFactoryBackground_Click"  Height="60"/>
                     </Border>
                     <Border x:Name="SaveNewBorder" Width="221" Height="60" Style="{StaticResource ButtonBorderStyle}" HorizontalAlignment="Right" Margin="0,14,10,13" Visibility="{Binding SaveBckVisibility, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" Grid.Column="2" Grid.ColumnSpan="2" >
                         <Button x:Name="BtnSaveNewBackground" Content="Save New Background" Style="{StaticResource SaveButtonStyle}"  Visibility="{Binding SaveBckVisibility, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged ,Converter={StaticResource BoolToVisibilityCvtr}}" Click="BtnSaveNewBackground_Click"/>
@@ -114,7 +115,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid  Height="140" Margin="50,550,50,0" VerticalAlignment="Top">
+        <Grid  Height="140" Margin="50,530,50,0" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1.5*"/>
@@ -127,25 +128,26 @@
             </Grid>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="295*"/>
+                    <ColumnDefinition Width="92*"/>
+                    <ColumnDefinition Width="203*"/>
+                    <ColumnDefinition Width="295*"/>
+                    <ColumnDefinition Width="294*"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
+                <Grid Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}" Margin="0,12">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Software: v1.001" Style="{StaticResource SystemInformationTextBlockStyle}"/>
                     </Border>
                 </Grid>
 
-                <Grid Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
+                <Grid HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}" Grid.ColumnSpan="3" Margin="295,12,0,12">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Product Serial: ABC1234" Style="{StaticResource SystemInformationTextBlockStyle}"/>
                     </Border>
                 </Grid>
 
-                <Grid Grid.Column="2" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}">
+                <Grid Grid.Column="2" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}" Grid.ColumnSpan="2" Margin="202.4,12,0,12">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource SystemInformationTextBlockStyle}" Text="Firmware: v1.05"/>
                     </Border>

@@ -264,6 +264,50 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ExportPDFWhiteButtonSyle" TargetType="Button">
+        <Setter Property="Width" Value="278"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="FontWeight" Value="400"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            
+                            <Border BorderBrush="#9f9f9f" Background="#f3f3f3" BorderThickness="1" CornerRadius="4">
+                                <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="Gray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border BorderThickness="1" BorderBrush="#9f9f9f" Background="#FFF" CornerRadius="4">
+                                <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="Gray" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <Style x:Key="SaveButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="219"/>
         <Setter Property="Height" Value="60"/>
@@ -279,49 +323,49 @@
         <Setter Property="FontSize" Value="36"/>
         <Setter Property="FontWeight" Value="600"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="PerformanceTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="32"/>
         <Setter Property="FontWeight" Value="600"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="WelcomeTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="32"/>
         <Setter Property="FontWeight" Value="600"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="SystemInfoTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="600"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="SystemInformationTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="600"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="LoginTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="LastTestedTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="LegendTextBlockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
@@ -330,14 +374,19 @@
         <Setter Property="FontStyle" Value="Normal"/>
     </Style>
     <Style x:Key="DataGridHeaderStyle" TargetType="DataGridColumnHeader">
-        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontWeight" Value="600"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="DataGridStyle" TargetType="DataGrid">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <SolidColorBrush Color="#1A1A1A" Opacity="0.8"/>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -347,6 +396,15 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style x:Key="PaginationNumberStyle" TargetType="Button">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontWeight" Value="600"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="TextBlockTabItemStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
@@ -360,7 +418,7 @@
         <Setter Property="FontSize" Value="24"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="BorderStyle" TargetType="Border">
         <Setter Property="BorderBrush" Value="#005fb8"/>
@@ -376,8 +434,36 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="SDBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#005fb8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="3"/>
 
-    
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsInstrumentCompleted}" Value="True">
+                <Setter Property="BorderBrush" Value="#0f7b0f"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsInstrumentNotStandard}" Value="True">
+                <Setter Property="BorderBrush" Value="#c6891e"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsInstrumentScanning}" Value="True">
+                <Setter Property="BorderBrush" Value="#005fb8"/>
+            </DataTrigger>
+
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ExportBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#0f7b0f"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HistoryMessageText}" Value="True">
+                <Setter Property="BorderBrush" Value="#005fb8"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
 
     <Style x:Key="ButtonBorderStyle" TargetType="Border">
         <Setter Property="BorderBrush" Value="#005fb8"/>
@@ -396,6 +482,37 @@
             </DataTrigger>
             <DataTrigger Binding="{Binding IsMeasurementNotInRange}" Value="True">
                 <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="SDÏnfoTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#005fb8"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsInstrumentCompleted}" Value="True">
+                <Setter Property="Foreground" Value="#0f7b0f"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsInstrumentNotStandard}" Value="True">
+                <Setter Property="Foreground" Value="#c6891e"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsInstrumentScanning}" Value="True">
+                <Setter Property="Foreground" Value="#005fb8"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ExportMessageTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#0f7b0f"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HistoryMessageText}" Value="True">
+                <Setter Property="Foreground" Value="#005fb8"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -677,7 +794,7 @@
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="PasswordBox">
@@ -706,7 +823,7 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding SelectedItem.Content, ElementName=Role}" Value="Operator">
                 <Setter Property="Foreground" Value="#9f9f9f"/>
@@ -719,7 +836,7 @@
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
     </Style>
     <Style x:Key="DisabledTextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Segoe UI Variable"/>
@@ -742,6 +859,112 @@
         <Setter Property="Width" Value="270"/>
         <Setter Property="Height" Value="60"/>
         <Setter Property="Background" Value="#f3f3f3"/>
+    </Style>
+    <Style x:Key="CustomMessageBoxButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="Background" Value="#FFF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="1" BorderBrush="#9f9f9f" Background="#FFF" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CustomDialogTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+    </Style>
+
+
+    <Style x:Key="TreeViewFolderTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontWeight" Value="400"/>
+    </Style>
+    <Style x:Key="NewFolderTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="400"/>
+    </Style>
+    <Style x:Key="TextBoxNewFolderStyle" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border BorderBrush="Black" Background="#FFF" BorderThickness="1" CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="OkCancelButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Foreground" Value="#1A1A1A"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="Background" Value="#FFF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="1" BorderBrush="#9f9f9f" Background="#FFF" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="NewFolderButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="278"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Foreground" Value="#FFF"/>
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="Background" Value="#005FB8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="1" BorderBrush="#9f9f9f" Background="#005FB8" CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+  
+    <Style x:Key="MessageBoxInfoTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="400"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <Setter Property="Foreground" Value="#1a1a1a"/>
     </Style>
 
 </ResourceDictionary>

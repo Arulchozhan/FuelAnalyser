@@ -199,6 +199,7 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return selfDiagnostics; }
         }
 
+       
 
 
         LogWritter.LogWriter referencedata = new LogWritter.LogWriter();
