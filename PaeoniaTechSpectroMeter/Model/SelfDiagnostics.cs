@@ -226,6 +226,8 @@ namespace PaeoniaTechSpectroMeter.Model
             int i = 0;
             mmgr.ReadDetector.IsReading = true;
             int measurementCount = mmgr.MeasurementConfigurationData.RepeatMeasurement.HoldValue;
+            mmgr.ReadDetector.ReadBaselineInfo("");
+            mmgr.ReadDetector.ReadBackground("");
 
             while (i < measurementCount)
             {

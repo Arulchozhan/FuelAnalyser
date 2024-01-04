@@ -631,7 +631,7 @@ namespace PaeoniaTechSpectroMeter.Model
             int cfg_row_index = 0;
             int cfg_col_index = 0;
             int cfg_col_size = 0;
-            string testfilepath = "C:\\FuelAnalyzer\\Baseline" + ".csv";
+            string testfilepath = "C:\\FuelAnalyzer\\Currentoff" + ".csv"; //"C:\\FuelAnalyzer\\Baseline" + ".csv";
             string serr = "";
             /*   List<List<string>> baselinePixelDataLst = new List<List<string>>();
                try
@@ -685,7 +685,8 @@ namespace PaeoniaTechSpectroMeter.Model
             StreamReader ControlPageReader = new StreamReader(testfilepath);
             string sDataLine = "";
             string[] sControlData = { "" };
-            backgroundData.Clear();
+            //  backgroundData.Clear();
+            currentBaselineInfo.Clear();    
             while (true)
             {
                 sDataLine = ControlPageReader.ReadLine();
@@ -770,7 +771,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public string ReadBackground(string path)
         {
             string serr = "";
-            string filename = "C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
+            string filename = "C:\\FuelAnalyzer\\Currentair" + ".csv";    //"C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
             StreamReader ControlPageReader = new StreamReader(filename);
             string sDataLine = "";
             string[] sControlData = { "" };
@@ -1238,6 +1239,8 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasurementMaxCont = measurementCount - 1;
             int delay = (Sec * 1000) + ms;
             IsReading = true;
+            ReadBaselineInfo("");
+            ReadBackground("");
 
             int i = 0;
             try
@@ -1344,8 +1347,8 @@ namespace PaeoniaTechSpectroMeter.Model
 
         public double[] ReadPixelVolt(bool isBackgroundRead)
         {
-            string backgroundPath = "C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
-            string baselinePath = "C:\\FuelAnalyzer\\Baseline" + ".csv";
+            string backgroundPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";  // "C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
+            string baselinePath = "C:\\FuelAnalyzer\\Currentoff" + ".csv";//"C:\\FuelAnalyzer\\Baseline" + ".csv";
             string logtime = DateTime.Now.ToString("HH-mm-ss");
             string rawDataPath = SystemPath.GetLogPath + "\\" + DateTime.Now.ToString("yyyy-MMM") + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "-Raw_Absorbance" + filecnt.ToString() + "_" + logtime + ".csv";
             //string rawDataPath = "C:\\FuelAnalyzer Logs\\Log\\2023-Nov\\2023-10-26-Raw_AbsorbanceSample2931" + ".csv";

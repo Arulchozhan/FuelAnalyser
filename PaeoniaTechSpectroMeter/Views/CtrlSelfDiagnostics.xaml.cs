@@ -229,8 +229,10 @@ namespace PaeoniaTechSpectroMeter.Views
             //  BtnTestInstrument.IsEnabled = false;
             // BtnScanNewBackground.IsEnabled = false;
             mmgr.ReadDetector.SaveBckVisibility = false;
-            //mmgr.ReadDetector.AnalysisSelection = false;
-            //       BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+
+           // mmgr.ReadDetector.AnalysisSelection = false;
+          //BtnSaveNewBackground.Visibility = Visibility.Collapsed;
+
             string currentairPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";
             string firstairPath = "C:\\FuelAnalyzer\\Firstair" + ".csv";
             factoryBackgroundData = GetFactoryBackgroundData();
@@ -267,6 +269,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
             //mmgr.ReadDetector.SaveBckVisibility = true;
             //mmgr.ReadDetector.AnalysisSelection = true;
+
             //BtnResetToFactoryBackground.IsEnabled = true;
             // BtnTestInstrument.IsEnabled = true;
             //BtnScanNewBackground.IsEnabled = true;
@@ -780,8 +783,9 @@ namespace PaeoniaTechSpectroMeter.Views
             //  BtnSaveNewBackground.Visibility = Visibility.Collapsed;
             // SaveNewBorder.Visibility = Visibility.Collapsed;
             mmgr.ReadDetector.SaveBckVisibility = false;
-            //BtnResetToFactoryBackground.IsEnabled = true;
-            //BtnTestInstrument.IsEnabled = true;
+
+          //  BtnResetToFactoryBackground.IsEnabled = true;
+          //  BtnTestInstrument.IsEnabled = true;
 
 
 
