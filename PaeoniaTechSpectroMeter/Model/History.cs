@@ -41,7 +41,7 @@ using Table = iText.Layout.Element.Table;
 using iText.Kernel.Events;
 using static PaeoniaTechSpectroMeter.Model.History;
 using PaeoniaTechSpectroMeter.Views;
-
+using Path = System.IO.Path;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
@@ -51,13 +51,21 @@ namespace PaeoniaTechSpectroMeter.Model
         private int _pageSize = 10;
         private int _totalRecords;
         private int _totalPages;
-         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
-       // private readonly string _connectionString = //ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
+        // private readonly string _connectionString = //ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
         private DataAccess _dataAccess;
         private DataTable _dataTable;
         private DataView _dataView;
         MainManager mmgr;
-        
+
+        private string historyInfoIconSource;
+        private string exportMessageCompleted;
+        private bool historyMessageText;
+        private DataAccess dataAccess;
+        private DataTable dataTable;
+
+        private BrowseLocationDialog browseLocationDialogInstance;
+
 
         private ObservableCollection<DataItem> _dataItems = new ObservableCollection<DataItem>();
         public ObservableCollection<DataItem> DataItems
@@ -69,6 +77,8 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged(nameof(DataItems));
             }
         }
+
+
 
         public DataView DataView
         {
@@ -99,6 +109,44 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
+        public string HistoryInfoIconSource
+        {
+            get { return historyInfoIconSource; }
+            set
+            {
+                if (historyInfoIconSource != value)
+                {
+                    historyInfoIconSource = value;
+                    OnPropertyChanged(nameof(HistoryInfoIconSource));
+                }
+            }
+        }
+
+        public string ExportMessageCompleted
+        {
+            get { return exportMessageCompleted; }
+            set
+            {
+                if (exportMessageCompleted != value)
+                {
+                    exportMessageCompleted = value;
+                    OnPropertyChanged(nameof(ExportMessageCompleted));
+                }
+            }
+        }
+
+        public bool HistoryMessageText
+        {
+            get => historyMessageText;
+            set
+            {
+                historyMessageText = value;
+                OnPropertyChanged(nameof(HistoryMessageText));
+            }
+        }
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -108,10 +156,14 @@ namespace PaeoniaTechSpectroMeter.Model
         public History(MainManager mmgr)
         {
             //connectionstrin=
-           // _connectionString=
+            // _connectionString=
             Initialize();
             PageButtonClickCommand = new RelayCommand<int>(PageButton_Click);
             this.mmgr = mmgr;
+
+            HistoryInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+            ExportMessageCompleted = $"The button for exporting to PDF will be accessible when the checkbox is checked.";
+            HistoryMessageText = true;
         }
 
         private void Initialize()
@@ -140,7 +192,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             try
             {
-                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] OFFSET {(_currentPage - 1) * _pageSize} ROWS FETCH NEXT {_pageSize} ROWS ONLY";
+                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(_currentPage - 1) * _pageSize} ROWS FETCH NEXT {_pageSize} ROWS ONLY";
                 _dataTable = _dataAccess.GetData(listOfMeasurements);
                 ObservableCollection<DataItem> dataItemList = new ObservableCollection<DataItem>();
 
@@ -201,20 +253,19 @@ namespace PaeoniaTechSpectroMeter.Model
             LoadData();
         }
 
-        public Table CreateAdditionalInfoTable()
+        public Table CreateAdditionalInfoTable(string UserChooseDir)
         {
             Table infoTable = new Table(UnitValue.CreatePercentArray(2)).UseAllAvailableWidth();
 
             var info = new Dictionary<string, string>
             {
                 { "Company", "XYZ Lab" },
-                { "Operator", mmgr.ReadDetector.OpearatorName },
                 { "Instrument Model", "Waukesha Instrument Model E" },
-                { "Instrument Serial Number", "ABC1234K" },
-                { "Instrument Firmware version", "V1.0.01" },
-                { "Fuel Analyzer Software Application Version", "V1.0.5" },
+                { "Instrument Serial Number", mmgr.SelfDiagnostics.productSerialNo },
+                { "Instrument Firmware version", mmgr.SelfDiagnostics.firmwareversion },
+                { "Fuel Analyzer Software Application Version", mmgr.SelfDiagnostics.softwareversion },
                 { "Report Date and Time", DateTime.Now.ToString() },
-                { "Report Path", mmgr.ReadDetector.UserChooseDir }
+                { "Report Path", UserChooseDir }
             };
 
             foreach (var kvp in info)
@@ -455,13 +506,26 @@ namespace PaeoniaTechSpectroMeter.Model
                 var canvas = new PdfCanvas(page.NewContentStreamAfter(), page.GetResources(), pdfDoc);
                 var pageSize = page.GetPageSize();
 
+                var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA); // Set the font for the footer
+                canvas.SetFontAndSize(font, 10);
+
                 // Add your footer content
+                //canvas.BeginText()
+                //    .SetFontAndSize(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 8)
+                //    .MoveText(36, 20)
+                //    .ShowText("Page Signature : ______________________")
+                //    .MoveText(pageSize.GetWidth() - 100, 20)
+                //    .ShowText($"Page {pdfDoc.GetPageNumber(page)}")
+                //    .EndText();
                 canvas.BeginText()
-                    .SetFontAndSize(PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA), 8)
-                    .MoveText(36, 20)
-                    .ShowText("Page Signature : ______________________")
+                   .MoveText(36, 20)
+                   .ShowText("Page Signature : ______________________")
+                   .EndText();
+
+                // Add "Page X of Y"
+                canvas.BeginText()
                     .MoveText(pageSize.GetWidth() - 100, 20)
-                    .ShowText($"Page {pdfDoc.GetPageNumber(page)} of {totalPages}")
+                    .ShowText($"Page {pdfDoc.GetPageNumber(page)}")
                     .EndText();
             }
 
@@ -470,5 +534,56 @@ namespace PaeoniaTechSpectroMeter.Model
                 this.totalPages = totalPages;
             }
         }
+
+        public string BrowseLocation()
+        {
+            string selectedDir = "";
+            if (browseLocationDialogInstance == null)
+            {
+                browseLocationDialogInstance = new BrowseLocationDialog() { brosweLocationViewModel = CtrlHistory.brosweLocationViewModel };
+                browseLocationDialogInstance.Closed += (s, args) =>
+                {
+                    // Check if the user made a selection
+                    if (browseLocationDialogInstance.DialogResult == true)
+                    {
+                        // User made a selection, get the selected directory
+                        selectedDir = CtrlHistory.brosweLocationViewModel.UserChooseDir;
+                    }
+
+                    // Reset the dialog instance
+                    browseLocationDialogInstance = null;
+                };
+                browseLocationDialogInstance.Topmost = true;
+                //browseLocationDialogInstance.Show();
+                // Show the dialog modally
+                bool? dialogResult = browseLocationDialogInstance.ShowDialog();
+
+                // Check the dialog result
+                if (dialogResult == false)
+                {
+                    // User clicked OK, get the selected directory
+                    selectedDir = CtrlHistory.brosweLocationViewModel.UserChooseDir;
+                }
+
+                // Reset the dialog instance
+                browseLocationDialogInstance = null;
+            }
+            else
+            {
+                browseLocationDialogInstance.Focus();
+            }
+
+            //var dialog = new System.Windows.Forms.FolderBrowserDialog();
+
+            //BrowseLocationDialog browseLocationDialog = new BrowseLocationDialog();
+            //browseLocationDialog.Owner = Window.GetWindow(this);
+            //browseLocationDialog.Topmost = true;
+            //browseLocationDialog.Show();
+
+            return selectedDir;
+        }
+
+
+       
     }
 }

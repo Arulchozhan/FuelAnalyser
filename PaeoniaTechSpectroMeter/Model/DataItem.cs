@@ -22,5 +22,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public bool IsSelected { get; set; }
 
         public int? Batch { get; set; }
+
+        public string FormattedTimestamp => Timestamp.ToString("dd/MM/yyyy HH:mm:ss");
     }
 }

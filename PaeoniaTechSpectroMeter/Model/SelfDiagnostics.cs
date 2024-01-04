@@ -27,8 +27,51 @@ namespace PaeoniaTechSpectroMeter.Model
         List<double> ftyOff = new List<double>();
         List<double> currentOff = new List<double>();
         List<double> ftyDiff = new List<double>();
-        //private is
 
+      
+
+        //private is
+        private string softwareVersion;
+
+        private string productSerialNumber;
+
+        private string firmwareVersion;
+
+       
+        public string SoftwareVersion
+        {
+            get { return softwareVersion; }
+            set
+            {
+                softwareVersion = value;
+                OnPropertyChanged("SoftwareVersion");
+
+            }
+        }
+
+        public string ProductSerialNumber
+        {
+            get { return productSerialNumber; } 
+            set
+            {
+                productSerialNumber = value;
+                OnPropertyChanged("ProductSerialNumber");
+
+            }
+        }
+
+        public string FirmwareVersion
+        {
+            get { return firmwareVersion; } 
+            set
+            {
+                firmwareVersion = value;
+                OnPropertyChanged("FirmwareVersion");
+
+            }
+        }
+
+        
 
 
         //public bool AnalysisSelectionEnable
@@ -61,6 +104,9 @@ namespace PaeoniaTechSpectroMeter.Model
 
         CtrlSelfDiagnostics ctrlSelfDiagnostics;
         MainManager mmgr;
+        public string softwareversion;
+        public string productSerialNo;
+        public string firmwareversion;
 
         public SelfDiagnostics(MainManager mmgr)
         {
@@ -68,7 +114,15 @@ namespace PaeoniaTechSpectroMeter.Model
             this.mmgr = mmgr;
             ctrlSelfDiagnostics = new CtrlSelfDiagnostics(mmgr);
 
+            this.DataContext = mmgr.AppConfig;
 
+            softwareversion = mmgr.AppConfig.AppVersion;
+            productSerialNo = mmgr.AppConfig.InstrumentSN;
+            firmwareversion = mmgr.AppConfig.InstrumentFwv;
+
+            SoftwareVersion = $"Software: {softwareversion}";
+            ProductSerialNumber = $"Product Serial: {productSerialNo}";
+            FirmwareVersion = $"Firmware: {firmwareversion}";
         }
 
         public double[] GetCurrentBackgroundData()

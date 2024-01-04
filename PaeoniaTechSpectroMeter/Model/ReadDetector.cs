@@ -85,11 +85,14 @@ namespace PaeoniaTechSpectroMeter.Model
         private DateTime starttime;
         private string measurementCompletedat = "";
         private bool isMeasurementCompleted;
+        private bool isMeasurementNotInRange;
         private string userChooseDir = "";
         private bool isRepeatmeasure = false;
         private bool isReadytoSave = false;
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
         private DataAccess _dataAccess;
+        private BrowseLocationDialog browseLocationDialogInstance;
+
 
         Thread MeasureSpectram = null;
         //private Lisa.LISA_Status ls;
@@ -98,7 +101,73 @@ namespace PaeoniaTechSpectroMeter.Model
 
         private History history;
 
+        private string sdInfoIconSource;
+        private string sdPerformanceIconSource;
+        private string messageCompleted = "";
+        private bool isInstrumentCompleted;
+        private bool isInstrumentNotStandard;
+        private bool isInstrumentScanning;
 
+       
+        public string SDInfoIconSource
+        {
+            get => sdInfoIconSource;
+            set
+            {
+                sdInfoIconSource = value;
+                OnPropertyChanged(nameof(SDInfoIconSource));
+            }
+        }
+
+        public string SDPerformanceIconSource
+        {
+            get => sdPerformanceIconSource;
+            set
+            {
+                sdPerformanceIconSource = value;
+                OnPropertyChanged(nameof(SDPerformanceIconSource));
+            }
+        }
+
+        public string MessageCompleted
+        {
+            get => messageCompleted;
+            set
+            {
+                messageCompleted = value;
+                OnPropertyChanged("MessageCompleted");
+            }
+        }
+
+        public bool IsInstrumentCompleted
+        {
+            get => isInstrumentCompleted;
+            set
+            {
+                isInstrumentCompleted = value;
+                OnPropertyChanged(nameof(IsInstrumentCompleted));
+            }
+        }
+
+        public bool IsInstrumentNotStandard
+        {
+            get => isInstrumentNotStandard;
+            set
+            {
+                isInstrumentNotStandard = value;
+                OnPropertyChanged(nameof(IsInstrumentNotStandard));
+            }
+        }
+
+        public bool IsInstrumentScanning
+        {
+            get => isInstrumentScanning;
+            set
+            {
+                isInstrumentScanning = value;
+                OnPropertyChanged(nameof(IsInstrumentScanning));
+            }
+        }
         public string InfoIconSource
         {
             get => infoIconSource;
@@ -337,6 +406,16 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged(nameof(IsMeasurementCompleted));
             }
         }
+
+        public bool IsMeasurementNotInRange
+        {
+            get => isMeasurementNotInRange;
+            set
+            {
+                isMeasurementNotInRange = value;
+                OnPropertyChanged(nameof(IsMeasurementNotInRange));
+            }
+        }
         public bool AnalysisSelection
         {
             get => analysisSelection;
@@ -462,31 +541,50 @@ namespace PaeoniaTechSpectroMeter.Model
 
         public string BrowseLocation()
         {
-            string serr = "";
-
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (UserChooseDir != "" && Directory.Exists(UserChooseDir))
-                dialog.SelectedPath = UserChooseDir;
-            var result = dialog.ShowDialog();
-            // string path= dialog.SelectedPath;
-            if (result.ToString() != string.Empty)
+            string selectedDir = "";
+            if(browseLocationDialogInstance == null)
             {
-                UserChooseDir = dialog.SelectedPath;
-
-                if (UserChooseDir != "" && Directory.Exists(UserChooseDir))
+                browseLocationDialogInstance = new BrowseLocationDialog() { brosweLocationViewModel = CtrlMeasurement.brosweLocationViewModel };
+                browseLocationDialogInstance.Closed += (s, args) => 
                 {
-                    Directory.CreateDirectory(UserChooseDir);
-                    //SystemPath.RootLogDirectory = mmgr.AppConfig.AppLogDirectory;
-                    // mmgr.ErrorEventMngr.Init("", SystemPath.GetLogPath);
-                    // if (!Directory.Exists(SystemPath.GetLogPath))
-                    // Directory.CreateDirectory(SystemPath.GetLogPath);
+                    // Check if the user made a selection
+                    if (browseLocationDialogInstance.DialogResult == true)
+                    {
+                        // User made a selection, get the selected directory
+                        selectedDir = CtrlMeasurement.brosweLocationViewModel.UserChooseDir;
+                    }
 
+                    // Reset the dialog instance
+                    browseLocationDialogInstance = null;
+                };
+                browseLocationDialogInstance.Topmost = true;
+                //browseLocationDialogInstance.Show();
+                // Show the dialog modally
+                bool? dialogResult = browseLocationDialogInstance.ShowDialog();
+
+                // Check the dialog result
+                if (dialogResult == false)
+                {
+                    // User clicked OK, get the selected directory
+                    selectedDir = CtrlMeasurement.brosweLocationViewModel.UserChooseDir;
                 }
 
-
+                // Reset the dialog instance
+                browseLocationDialogInstance = null;
+            }
+            else
+            {
+                browseLocationDialogInstance.Focus();
             }
 
-            return serr;
+            //var dialog = new System.Windows.Forms.FolderBrowserDialog();
+
+            //BrowseLocationDialog browseLocationDialog = new BrowseLocationDialog();
+            //browseLocationDialog.Owner = Window.GetWindow(this);
+            //browseLocationDialog.Topmost = true;
+            //browseLocationDialog.Show();
+            
+            return selectedDir;
         }
         public string LogData()
         {
@@ -937,12 +1035,8 @@ namespace PaeoniaTechSpectroMeter.Model
             return false;
         }
 
-        public void SaveFilePDF()
+        public void SaveFilePDF(string Dir)
         {
-            //string test = mmgr.AppConfig.Perfchk;
-            //List<DataItem> allDataItems = GetAllDataItems();
-            //if (allDataItems.Count > 0)
-            //{
             string analysisType;
             if (SelectedAnalysistype == 0)
             {
@@ -953,131 +1047,91 @@ namespace PaeoniaTechSpectroMeter.Model
                 analysisType = "Ethanol";
             }
             string filePath = $"{SampleFileName}_{PassNo.ToString("D3")}_{DateTime.Now:yyyyMMdd}_{analysisType}.pdf";
-                //Path.Combine(UserChooseDir, SampleFileName + "_" + PassNo + "_" + DateTime.Now.ToString() + "_" + analysisType);
 
-            //SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (var writer = new PdfWriter(Path.Combine(Dir, filePath)))
+            using (var pdf = new PdfDocument(writer))
+            {
+                FooterEventHandler pageEvent = new FooterEventHandler();
+                pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
 
-            //{
-            //    Filter = "PDF files (*.pdf)|*.pdf",
-            //    Title = "Save PDF file"
-            //};
-            //saveFileDialog.InitialDirectory = mmgr.ReadDetector.UserChooseDir;
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-                //using (var writer = new PdfWriter(Path.Combine(saveFileDialog.FileName)))
-                using (var writer = new PdfWriter(Path.Combine(UserChooseDir, filePath)))
-                using (var pdf = new PdfDocument(writer))
+                using (var document = new Document(pdf))
                 {
-                    CustomPdfPageEvent pageEvent = new CustomPdfPageEvent();
-                    //pageEvent.SetTotalPages(totalPages);
-                    pdf.AddEventHandler(iText.Kernel.Events.PdfDocumentEvent.END_PAGE, pageEvent);
-
-                    using (var document = new Document(pdf))
-                    {
-                        //int totalPages = allDataItems.Count;
-                        Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
-                            .SetFontColor(ColorConstants.WHITE)
-                            .SetFontSize(16)
-                            .SetBold();
-                        string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
-                        ImageData imageData = ImageDataFactory.Create(logoPath);
-                        Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
+                    //int totalPages = allDataItems.Count;
+                    Paragraph title = new Paragraph("FUEL ANALYZER MEASUREMENT REPORT")
+                        .SetFontColor(ColorConstants.WHITE)
+                        .SetFontSize(16)
+                        .SetBold();
+                    string logoPath = @"C:\FuelAnalyzer\bin\Icon\Company_Logo.png"; // Replace with the actual path to your logo
+                    ImageData imageData = ImageDataFactory.Create(logoPath);
+                    Image logoImage = new Image(imageData).ScaleAbsolute(30, 30).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.RIGHT);
 
 
-                        Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
-                        headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                        headerTable.SetBackgroundColor(ColorConstants.BLUE);
+                    Table headerTable = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+                    headerTable.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    headerTable.SetBackgroundColor(ColorConstants.BLUE);
 
 
-                        Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
-                        headerTable.AddCell(titleCell);
+                    Cell titleCell = new Cell(1, 2).Add(title).SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT);
+                    headerTable.AddCell(titleCell);
 
 
-                        Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-                        headerTable.AddCell(logoCell);
+                    Cell logoCell = new Cell().Add(logoImage).SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    headerTable.AddCell(logoCell);
 
 
-                        document.Add(headerTable);
+                    document.Add(headerTable);
 
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
 
-                        Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(reportTitle);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph reportTitle = new Paragraph("REPORT").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(reportTitle);
+                    document.Add(new Paragraph("\n"));
 
-                        Table additionalInfoTable = history.CreateAdditionalInfoTable();// Add iTextSharp table with additional information
-                        document.Add(additionalInfoTable);
+                    Table additionalInfoTable = history.CreateAdditionalInfoTable(Dir);// Add iTextSharp table with additional information
+                    document.Add(additionalInfoTable);
 
-                        document.Add(new Paragraph("\n"));
-                        Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(equipmentInfo);
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
+                    Paragraph equipmentInfo = new Paragraph("EQUIPMENT INFORMATION").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(equipmentInfo);
+                    document.Add(new Paragraph("\n"));
 
-                        Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
-                        document.Add(equipmentInfoTable);
+                    Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+                    document.Add(equipmentInfoTable);
 
-                        int pageNumber = 1;
+                    int pageNumber = 1;
 
-                        document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                        Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
-                        document.Add(sampleReport);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph sampleReport = new Paragraph($"SAMPLE MEASUREMENT REPORT {pageNumber}").SetFontColor(ColorConstants.WHITE).SetFontSize(16).SetBold().SetBackgroundColor(ColorConstants.BLUE);
+                    document.Add(sampleReport);
+                    document.Add(new Paragraph("\n"));
 
-                        Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
-                        document.Add(summarySelectedItemsTable);
+                    Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
+                    document.Add(summarySelectedItemsTable);
 
-                        document.Add(new Paragraph("\n"));
+                    document.Add(new Paragraph("\n"));
 
-                        Paragraph passesResultInfo = new Paragraph("PASS RESULTS").SetFontColor(ColorConstants.BLACK)
-                            .SetFontSize(16)
-                            .SetBold();
-                        document.Add(passesResultInfo);
-                        document.Add(new Paragraph("\n"));
+                    Paragraph passesResultInfo = new Paragraph("PASS RESULTS").SetFontColor(ColorConstants.BLACK)
+                        .SetFontSize(16)
+                        .SetBold();
+                    document.Add(passesResultInfo);
+                    document.Add(new Paragraph("\n"));
 
-                        Table selectedItemsTable = history.PassResultTable();
-                        document.Add(selectedItemsTable);
-
-
-                    }
+                    Table selectedItemsTable = history.PassResultTable();
+                    document.Add(selectedItemsTable);
 
 
-                    //MessageBox.Show("PDF file exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            //}
 
-        }
+                IsMeasurementCompleted = true;
+                InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
+                MeasurementCompletedat = $"File Saved Successfully At {DateTime.Now.ToString("HH:mm:ss")}";
+            }
 
-        private List<DataItem> GetAllDataItems()
-        {
-
-            List<DataItem> allItems = new List<DataItem>();
-            allItems.Clear();
-
-            DataItem dataItem = new DataItem();
-
-            dataItem.Timestamp = System.DateTime.Now;
-            dataItem.Name = mmgr.ReadDetector.SampleFileName; // "test";//.ToString();
-            dataItem.PassNo = mmgr.ReadDetector.PassNo.ToString("D3"); //"001"; //["Pass No."]?.ToString();
-            dataItem.Operator = mmgr.ReadDetector.OpearatorName; //"Arul";//row["Operator"]?.ToString();
-            dataItem.AnalysisType = "eth";//row["Analysis Type"]?.ToString();
-            dataItem.SampleType = "Eth"; //row["Sample Type"]?.ToString();
-            dataItem.Ethanol = 0;// row["Ethanol"] is int ethanol ? (int?)ethanol : null;
-            dataItem.Denaturant = 0;//row["Denaturant"] is int denaturant ? (int?)denaturant : null;
-            dataItem.Methanol = 1; //row["Methanol"] is int methanol ? (int?)methanol : null;
-            dataItem.Water = 2;// row["Water"] is int water ? (int?)water : null;
-            dataItem.Batch = 2;// row["Batch"] is int batch ? (int?)batch : null;
-
-            allItems.Add(dataItem);
-
-
-            return allItems;
-            //return null;
         }
 
         public bool StartMeasurement(int avraragecount, int dataSet)
@@ -1087,6 +1141,12 @@ namespace PaeoniaTechSpectroMeter.Model
             IsReadytoSave = false;
             NewBckScanEnable = false;
             MeasurementEnable =true;
+
+            MessageCompleted = "To enable functions in Self-Diagnostics, please click on 'New Measurement' under the 'Measurement' tab.";
+            IsInstrumentCompleted = false;
+            IsInstrumentNotStandard = false;
+            IsInstrumentScanning = true;
+
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
             Starttime = DateTime.Now;
@@ -1233,6 +1293,8 @@ namespace PaeoniaTechSpectroMeter.Model
                     MeasurementCompletedat = $"Measurement Completed At {cycleCompletedAt.ToString("HH:mm:ss")}";
                     IsMeasurementCompleted = true;
                     InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
+
+                    
                 }
 
 
@@ -1259,9 +1321,12 @@ namespace PaeoniaTechSpectroMeter.Model
             AnalysisSelectionEnable = true;
             IsRepeatmeasure = false;
             IsReadytoSave = false;
+            IsMeasurementCompleted = false;
+            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             MeasuremantBtnContent = "Start Measurement";
             MeasurementCompletedat = $"Ready to measure";
            NewBckScanEnable = true;
+            MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
 
         }
         public string PLSCalibration()
@@ -1521,6 +1586,8 @@ namespace PaeoniaTechSpectroMeter.Model
                         {
                             IsReadytoSave = false;
                             MeasurementCompletedat = $"Measurement Was not Successful exceeds the cont {PyExceptionCount}";
+                            IsMeasurementNotInRange = true;
+                            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_RedSign_Icon.png";
                             this.CancelMeasurement();
                         }
                     }
