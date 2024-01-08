@@ -1239,7 +1239,7 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasurementMaxCont = measurementCount - 1;
             int delay = (Sec * 1000) + ms;
             IsReading = true;
-            ReadBaselineInfo("");
+            ReadBaselineInfo(""); 
             ReadBackground("");
 
             int i = 0;
