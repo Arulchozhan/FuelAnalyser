@@ -39,7 +39,7 @@
             </StackPanel>
         </Border>
         <Grid Width="1182" Margin="0,145,0,0">
-            <DataGrid x:Name="history_dataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"  Style="{StaticResource DataGridStyle}" RowHeight="43" Margin="0,5,0,20" ItemsSource="{Binding DataItems, Mode=OneWayToSource}"  >
+            <DataGrid x:Name="history_dataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"  Style="{StaticResource DataGridStyle}" RowHeight="43" Margin="0,5,0,20" ItemsSource="{Binding DataItems, Mode=OneWayToSource}" >
                 <!--<i:Interaction.Behaviors>
                     <local1:
                 </i:Interaction.Behaviors>-->
@@ -55,7 +55,14 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}" VerticalAlignment="Center"/>
+                                <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <CheckBox.Style>
+                                        <Style TargetType="CheckBox">
+                                            <Setter Property="Width" Value="30" />
+                                            <Setter Property="Height" Value="25" />
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -163,18 +170,57 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Red">
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Methanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Red"/>
+                                        </MultiDataTrigger.Conditions>
                                         <Setter Property="Background" Value="#f3eaea"/>
                                         <Setter Property="Foreground" Value="#e6a6a6"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Yellow">
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Methanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Yellow"/>
+                                        </MultiDataTrigger.Conditions>
                                         <Setter Property="Background" Value="#eee8d5"/>
                                         <Setter Property="Foreground" Value="#cc9432"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Green">
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Methanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource MethanolValueToColorConverter}}" Value="Green"/>
+                                        </MultiDataTrigger.Conditions>
                                         <Setter Property="Background" Value="#dff6dd"/>
                                         <Setter Property="Foreground" Value="#0f7b0f"/>
-                                    </DataTrigger>
+                                    </MultiDataTrigger>
+
+
+
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Ethanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource EthanolModuleMethanolValueToColorConverter}}" Value="Red"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#f3eaea"/>
+                                        <Setter Property="Foreground" Value="#e6a6a6"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Ethanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource EthanolModuleMethanolValueToColorConverter}}" Value="Yellow"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#eee8d5"/>
+                                        <Setter Property="Foreground" Value="#cc9432"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding AnalysisType}" Value="Ethanol"/>
+                                            <Condition Binding="{Binding Methanol, Converter={StaticResource EthanolModuleMethanolValueToColorConverter}}" Value="Green"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#dff6dd"/>
+                                        <Setter Property="Foreground" Value="#0f7b0f"/>
+                                    </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.CellStyle>

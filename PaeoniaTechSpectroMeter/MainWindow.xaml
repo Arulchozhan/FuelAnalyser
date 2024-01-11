@@ -37,8 +37,8 @@
                     <TabItem.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                <Image Source="C:\FuelAnalyzer\bin\Icon\Measurement_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
-                                <TextBlock Text="Measurement" Style="{StaticResource TextBlockTabItemStyle}" />
+                                <Image  x:Name="MeasurementIconImage" Source="C:\FuelAnalyzer\bin\Icon\Measurement_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="MeasurementTextBlockTabItem" Text="Measurement" Style="{StaticResource TextBlockTabItemStyle}" />
                             </StackPanel>
                         </DataTemplate>
                     </TabItem.HeaderTemplate>
@@ -50,22 +50,21 @@
                     <TabItem.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                <Image Source="C:\FuelAnalyzer\bin\Icon\Self-diagnostics_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
-                                <TextBlock Text="Self-diagnostics" Style="{StaticResource TextBlockTabItemStyle}" />
+                                <Image x:Name="SelfDiagnosticsIconImage" Source="C:\FuelAnalyzer\bin\Icon\Self-diagnosticsB_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
+                                <TextBlock  x:Name="SelfDiagnosticsTextBlockTabItem" Text="Self-diagnostics" Style="{StaticResource TextBlockTabItemStyle}"  Foreground="#1A1A1A" />
                             </StackPanel>
                         </DataTemplate>
                     </TabItem.HeaderTemplate>
                     <!--<Grid x:Name="GrdSelfDiagnostics" ShowGridLines="False" Background="White" Width="{x:Static SystemParameters.PrimaryScreenWidth}"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="auto" Margin="0,1,0,0"/>-->
                 </TabItem>
-                <TabItem x:Name="TabHistory" 
-			            Header="History" Width="226" Height="64"    >
+                <TabItem x:Name="TabHistory"  Header="History" Width="226" Height="64"    >
 
 
                     <TabItem.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                <Image Source="C:\FuelAnalyzer\bin\Icon\History_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
-                                <TextBlock Text="History" Style="{StaticResource TextBlockTabItemStyle}" />
+                                <Image x:Name="HistoryIconImage" Source="C:\FuelAnalyzer\bin\Icon\HistoryB_Icon.png" Width="24" Height="24" Margin="0,0,5,0"/>
+                                <TextBlock  x:Name="HistoryTextBlockTabItem"  Text="History" Style="{StaticResource TextBlockTabItemStyle}"   Foreground="#1A1A1A"/>
                             </StackPanel>
                         </DataTemplate>
                     </TabItem.HeaderTemplate>

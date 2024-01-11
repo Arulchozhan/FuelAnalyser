@@ -206,14 +206,16 @@ namespace PaeoniaTechSpectroMeter.Views
         {
             if (_selectedFolder != null)
             {
+                CreateFolder();
                 NewFolderNameTextBox.Focus();
                 NewFolderNameTextBox.ToolTip = "New Folder";
             }
             else
             {
                 MessageBoxInfoDialog customDialog = new MessageBoxInfoDialog("Please select a folder before creating a new folder.");
-                customDialog.Owner = Window.GetWindow(this);
+                customDialog.Topmost = true;
                 customDialog.ShowDialog();
+                NewFolderNameTextBox.Focus();
             }
         }
 
@@ -283,24 +285,24 @@ namespace PaeoniaTechSpectroMeter.Views
             return null;
         }
 
-        private void NewFolderNameTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (_selectedFolder != null)
-            {
+        //private void NewFolderNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (_selectedFolder != null)
+        //    {
 
-                if (e.Key == Key.Enter)
-                {
-                    CreateFolder();
-                }
-            }
-            else
-            {
+        //        if (e.Key == Key.Enter)
+        //        {
+        //            CreateFolder();
+        //        }
+        //    }
+        //    else
+        //    {
 
-                MessageBoxInfoDialog customDialog = new MessageBoxInfoDialog("Please select a folder before creating a new folder.");
-                customDialog.ShowDialog();
-                NewFolderNameTextBox.Text = "";
-            }
-        }
+        //        MessageBoxInfoDialog customDialog = new MessageBoxInfoDialog("Please select a folder before creating a new folder.");
+        //        customDialog.ShowDialog();
+        //        NewFolderNameTextBox.Text = "";
+        //    }
+        //}
 
         private void CreateFolder()
         {
