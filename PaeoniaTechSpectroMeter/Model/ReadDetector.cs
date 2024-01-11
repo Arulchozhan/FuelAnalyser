@@ -106,9 +106,10 @@ namespace PaeoniaTechSpectroMeter.Model
         private string messageCompleted = "";
         private bool isInstrumentCompleted;
         private bool isInstrumentNotStandard;
+        private bool isInstrumentFail;
         private bool isInstrumentScanning;
+        private bool isInstrumentPass;
 
-       
         public string SDInfoIconSource
         {
             get => sdInfoIconSource;
@@ -159,6 +160,16 @@ namespace PaeoniaTechSpectroMeter.Model
             }
         }
 
+        public bool IsInstrumentFail
+        {
+            get => isInstrumentFail;
+            set
+            {
+                isInstrumentFail = value;
+                OnPropertyChanged(nameof(IsInstrumentFail));
+            }
+        }
+
         public bool IsInstrumentScanning
         {
             get => isInstrumentScanning;
@@ -168,6 +179,17 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged(nameof(IsInstrumentScanning));
             }
         }
+
+        public bool IsInstrumentPass
+        {
+            get => isInstrumentPass;
+            set
+            {
+                isInstrumentPass = value;
+                OnPropertyChanged(nameof(IsInstrumentPass));
+            }
+        }
+
         public string InfoIconSource
         {
             get => infoIconSource;
@@ -502,6 +524,7 @@ namespace PaeoniaTechSpectroMeter.Model
         /// </summary>
 
         CtrlMeasurement ctrlMeasurement;
+
         MainManager mmgr;
         SPC sPCcreation;
 
@@ -529,23 +552,36 @@ namespace PaeoniaTechSpectroMeter.Model
             ctrlMeasurement = new CtrlMeasurement(mmgr);
             sPCcreation = mmgr.Spc_convertion;
             MeasuremantBtnContent = "Start Measurement";
-            MeasurementCompletedat = $"Ready to measure";
+
+
+            //if (mmgr.AppConfig.Perfchk == "Failed")
+            //{
+            //    MeasurementCompletedat = $"Ready to measure";
+            //    IsInstrumentNotStandard = true;
+            //}
+            //else
+            //{
+            //    MeasurementCompletedat = $"Ready to measure";
+            //    IsInstrumentNotStandard = false;
+            //    IsInstrumentPass = true;
+            //}
+
             AnalysisSelectionEnable = true;
             InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             _dataAccess = new DataAccess(_connectionString);
             history = new History(mmgr);
             MeasurementEnable = true;
-            NewBckScanEnable=true;  
+            NewBckScanEnable = true;
         }
 
 
         public string BrowseLocation()
         {
             string selectedDir = "";
-            if(browseLocationDialogInstance == null)
+            if (browseLocationDialogInstance == null)
             {
                 browseLocationDialogInstance = new BrowseLocationDialog() { brosweLocationViewModel = CtrlMeasurement.brosweLocationViewModel };
-                browseLocationDialogInstance.Closed += (s, args) => 
+                browseLocationDialogInstance.Closed += (s, args) =>
                 {
                     // Check if the user made a selection
                     if (browseLocationDialogInstance.DialogResult == true)
@@ -583,7 +619,7 @@ namespace PaeoniaTechSpectroMeter.Model
             //browseLocationDialog.Owner = Window.GetWindow(this);
             //browseLocationDialog.Topmost = true;
             //browseLocationDialog.Show();
-            
+
             return selectedDir;
         }
         public string LogData()
@@ -686,7 +722,7 @@ namespace PaeoniaTechSpectroMeter.Model
             string sDataLine = "";
             string[] sControlData = { "" };
             //  backgroundData.Clear();
-            currentBaselineInfo.Clear();    
+            currentBaselineInfo.Clear();
             while (true)
             {
                 sDataLine = ControlPageReader.ReadLine();
@@ -1140,12 +1176,29 @@ namespace PaeoniaTechSpectroMeter.Model
             AnalysisSelectionEnable = false;
             IsReadytoSave = false;
             NewBckScanEnable = false;
-            MeasurementEnable =true;
+            MeasurementEnable = true;
 
-            MessageCompleted = "To enable functions in Self-Diagnostics, please click on 'New Measurement' under the 'Measurement' tab.";
-            IsInstrumentCompleted = false;
-            IsInstrumentNotStandard = false;
-            IsInstrumentScanning = true;
+
+            if (mmgr.AppConfig.Perfchk == "Failed")
+            {
+                MessageCompleted = "To enable functions in Self-Diagnostics, please click on 'New Measurement' under the 'Measurement' tab.";
+                SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                IsInstrumentCompleted = false;
+                IsInstrumentScanning = false;
+                IsInstrumentNotStandard = true;
+            }
+            else
+            {
+                MessageCompleted = "To enable functions in Self-Diagnostics, please click on 'New Measurement' under the 'Measurement' tab.";
+                SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                IsInstrumentNotStandard = false;
+                IsInstrumentCompleted = false;
+                IsInstrumentScanning = true;
+            }
+            //MessageCompleted = "To enable functions in Self-Diagnostics, please click on 'New Measurement' under the 'Measurement' tab.";
+            //IsInstrumentCompleted = false;
+            //IsInstrumentNotStandard = false;
+            //IsInstrumentScanning = true;
 
             //  if (PropertyChanged != null)
             // PropertyChanged(this, new PropertyChangedEventArgs("MeasuremantBtnContent"));
@@ -1161,7 +1214,11 @@ namespace PaeoniaTechSpectroMeter.Model
                 stopReq = false;
                 filecnt = 0;
                 MeasurementCompletedat = "Measuring...";
-
+                InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                IsMeasurementCompleted = false;
+                IsInstrumentFail = false;
+                IsMeasurementNotInRange = false;
+                IsInstrumentPass = true;
 
                 //  MeasureSpectram = new Thread(PAT_Sensor_Read);
                 // MeasureSpectram.Start();
@@ -1178,8 +1235,8 @@ namespace PaeoniaTechSpectroMeter.Model
         }
 
         public void CancelMeasurement()
-        { 
-            
+        {
+
 
             if (!isReading)
             {
@@ -1239,7 +1296,7 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasurementMaxCont = measurementCount - 1;
             int delay = (Sec * 1000) + ms;
             IsReading = true;
-            ReadBaselineInfo(""); 
+            ReadBaselineInfo("");
             ReadBackground("");
 
             int i = 0;
@@ -1291,10 +1348,15 @@ namespace PaeoniaTechSpectroMeter.Model
                     MeasuremantBtnContent = "New Measurement";
                     MeasurementCompletedat = $"Ready to measure";
                     MeasurementCompletedat = $"Measurement Completed At {cycleCompletedAt.ToString("HH:mm:ss")}";
+                    IsInstrumentFail = false;
+                    IsMeasurementNotInRange = false;
+                    IsInstrumentPass = false;
                     IsMeasurementCompleted = true;
                     InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info-GreenSign_Icon.png";
 
-                    
+
+
+
                 }
 
 
@@ -1322,11 +1384,43 @@ namespace PaeoniaTechSpectroMeter.Model
             IsRepeatmeasure = false;
             IsReadytoSave = false;
             IsMeasurementCompleted = false;
-            InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+            //InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             MeasuremantBtnContent = "Start Measurement";
-            MeasurementCompletedat = $"Ready to measure";
-           NewBckScanEnable = true;
-            MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+            //MeasurementCompletedat = $"Ready to measure";
+            if (mmgr.AppConfig.Perfchk == "Failed")
+            {
+                MeasurementCompletedat = "Ready to measure";
+                MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+                InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                IsMeasurementCompleted = false;
+                IsInstrumentScanning = false;
+                IsInstrumentPass = false;
+                IsInstrumentCompleted = false;
+                IsMeasurementNotInRange = false;
+                IsInstrumentFail = true;
+                IsInstrumentNotStandard = true;
+            }
+            else
+            {
+                MeasurementCompletedat = $"Ready to measure";
+                MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+                InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                IsMeasurementCompleted = false;
+                IsInstrumentNotStandard = false;
+                IsInstrumentFail = false;
+                IsInstrumentCompleted = false;
+                IsMeasurementNotInRange = false;
+                IsInstrumentScanning = true;
+                IsInstrumentPass = true;
+            }
+            NewBckScanEnable = true;
+            //MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+            MethanolConcentration = 0;
+            EthanolConcentration = 0;
+            DenaturantConcentration = 0;
+            WaterConcentration = 0;
 
         }
         public string PLSCalibration()

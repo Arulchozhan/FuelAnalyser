@@ -87,7 +87,7 @@ namespace PaeoniaTechSpectroMeter.Views
             this.DataContext = mmgr.ReadDetector;
 
 
-            mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+            //mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             mmgr.ReadDetector.MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
 
             mmgr.ReadDetector.SaveBckVisibility = false;
@@ -110,7 +110,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
         }
 
-        private void GetCurrentBackground()
+        public void GetCurrentBackground()
         {
             currentBackgroundData = GetCurrentBackgroundData();  //git
                                                                  //currentBackgroundData = mmgr.SelfDiagnostics.GetCurrentBackgroundData();
@@ -279,9 +279,9 @@ namespace PaeoniaTechSpectroMeter.Views
         private void BtnTestInstrument_Click(object sender, RoutedEventArgs e)
         {
 
-            mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
-            mmgr.ReadDetector.MessageCompleted = $"Instrument test is in progress...";
-            mmgr.ReadDetector.IsInstrumentScanning = true;
+            //mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+            //mmgr.ReadDetector.MessageCompleted = $"Instrument test is in progress...";
+            //mmgr.ReadDetector.IsInstrumentScanning = true;
 
             //BtnResetToFactoryBackground.IsEnabled = false;
             //BtnTestInstrument.IsEnabled = false;
@@ -298,7 +298,37 @@ namespace PaeoniaTechSpectroMeter.Views
             mmgr.ReadDetector.MeasurementEnable = false;
             mmgr.ReadDetector.NewBckScanEnable = false;
 
-            mmgr.ReadDetector.MeasurementCompletedat = $"Instrument testing is still in progress. Please wait until it is finished to measure.";
+            if (mmgr.AppConfig.Perfchk == "Failed")
+            {
+                mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                mmgr.ReadDetector.MessageCompleted = $"Instrument test is in progress...";
+                mmgr.ReadDetector.MeasurementCompletedat = $"Instrument testing is still in progress. Please wait until it is finished to measure.";
+                mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                mmgr.ReadDetector.IsMeasurementCompleted = false;
+                mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                mmgr.ReadDetector.IsInstrumentPass = false;
+                mmgr.ReadDetector.IsInstrumentFail = true;
+                mmgr.ReadDetector.IsInstrumentCompleted = false;               
+                mmgr.ReadDetector.IsInstrumentScanning = false;
+                mmgr.ReadDetector.IsInstrumentNotStandard = true;
+
+            }
+            else
+            {
+                mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                mmgr.ReadDetector.MessageCompleted = $"Instrument test is in progress...";
+                mmgr.ReadDetector.MeasurementCompletedat = $"Instrument testing is still in progress. Please wait until it is finished to measure.";
+                mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                mmgr.ReadDetector.IsMeasurementCompleted = false;
+                mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                mmgr.ReadDetector.IsInstrumentFail = false;
+                mmgr.ReadDetector.IsInstrumentPass = true;
+                mmgr.ReadDetector.IsInstrumentCompleted = false;
+                mmgr.ReadDetector.IsInstrumentNotStandard = false;
+                mmgr.ReadDetector.IsInstrumentScanning = true;
+            }
+
+            //mmgr.ReadDetector.MeasurementCompletedat = $"Instrument testing is still in progress. Please wait until it is finished to measure.";
 
             var perfmChk = new Thread(() => GetNewBackground(true));
             perfmChk.Start();
@@ -384,9 +414,16 @@ namespace PaeoniaTechSpectroMeter.Views
                         //InfoMessageTextBlock.Text = "Scanning new background...";
                         mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
                         mmgr.ReadDetector.MessageCompleted = $"Scanning new background...";
+                        mmgr.ReadDetector.IsInstrumentCompleted = false;
+                        mmgr.ReadDetector.IsInstrumentNotStandard = false;
                         mmgr.ReadDetector.IsInstrumentScanning = true;
 
                         mmgr.ReadDetector.MeasurementCompletedat = $"Scanning new background in Self-Diagnostics is still in progress. Please wait until it is finished to measure.";
+                        mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                        mmgr.ReadDetector.IsMeasurementCompleted = false;
+                        mmgr.ReadDetector.IsInstrumentFail = false;
+                        mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                        mmgr.ReadDetector.IsInstrumentPass = true;
 
                         BtnScanNewBackground.Content = "Cancel Scan"; //check with arul
                        
@@ -418,10 +455,16 @@ namespace PaeoniaTechSpectroMeter.Views
                         //InfoMessageTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                         mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
                         mmgr.ReadDetector.MessageCompleted = $"Instrument is not up to standard.Scanning new background...";
+                        mmgr.ReadDetector.IsInstrumentCompleted = false;
                         mmgr.ReadDetector.IsInstrumentScanning = false;
                         mmgr.ReadDetector.IsInstrumentNotStandard = true;
 
                         mmgr.ReadDetector.MeasurementCompletedat = $"Scanning new background in Self-Diagnostics is still in progress. Please wait until it is finished to measure.";
+                        mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                        mmgr.ReadDetector.IsMeasurementCompleted = false;
+                        mmgr.ReadDetector.IsInstrumentPass = false;
+                        mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                        mmgr.ReadDetector.IsInstrumentFail = true;
 
                         BtnScanNewBackground.Content = "Cancel Scan";
                         BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
@@ -697,12 +740,18 @@ namespace PaeoniaTechSpectroMeter.Views
                         //PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-WarningSign_Icon.png", UriKind.Relative));
                         //SDborder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#c6891e"));
                         mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                        mmgr.ReadDetector.IsInstrumentCompleted = false;
                         mmgr.ReadDetector.IsInstrumentScanning = false;
                         mmgr.ReadDetector.IsInstrumentNotStandard = true;                        
                         mmgr.ReadDetector.MessageCompleted = $"Instrument is not up to standard. Perform cleaning and run “test instrument”. If this message remains, please contact WI.";
                         
 
                         mmgr.ReadDetector.MeasurementCompletedat = $"Ready to measure";
+                        mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                        mmgr.ReadDetector.IsMeasurementCompleted = false;
+                        mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                        mmgr.ReadDetector.IsInstrumentPass = false;
+                        mmgr.ReadDetector.IsInstrumentFail = true;
 
 
                         BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
@@ -734,11 +783,17 @@ namespace PaeoniaTechSpectroMeter.Views
 
                     mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
                     mmgr.ReadDetector.IsInstrumentScanning = false;
+                    mmgr.ReadDetector.IsInstrumentCompleted = false;
                     mmgr.ReadDetector.IsInstrumentNotStandard = true;
                     mmgr.ReadDetector.MessageCompleted = $"Instrument is not up to standard. Perform cleaning and run “test instrument”. If this message remains, please contact WI.";
                     
 
                     mmgr.ReadDetector.MeasurementCompletedat = $"Ready to measure";
+                    mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                    mmgr.ReadDetector.IsMeasurementCompleted = false;
+                    mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                    mmgr.ReadDetector.IsInstrumentPass = false;
+                    mmgr.ReadDetector.IsInstrumentFail = true;
 
                     BtnScanNewBackground.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
                     BtnScanNewBackground.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffffff"));
@@ -762,6 +817,21 @@ namespace PaeoniaTechSpectroMeter.Views
                 AppConfig.SaveConfig(mmgr.AppConfig);
                 //PerformanceWarningImage.Source = new BitmapImage(new Uri("../Icon/Performance-GreenSign_Icon.png", UriKind.Relative)); //Performance-GreenSign_Icon
                 mmgr.ReadDetector.SDPerformanceIconSource = @"C:\FuelAnalyzer\bin\Icon\Performance-GreenSign_Icon.png";
+
+
+                mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png"; 
+                mmgr.ReadDetector.IsInstrumentNotStandard = false;
+                mmgr.ReadDetector.IsInstrumentCompleted = false;
+                mmgr.ReadDetector.IsInstrumentScanning = true;
+                mmgr.ReadDetector.MessageCompleted = $"The instrument is up to standard.";
+
+
+                mmgr.ReadDetector.MeasurementCompletedat = $"Ready to measure";
+                mmgr.ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                mmgr.ReadDetector.IsMeasurementCompleted = false;
+                mmgr.ReadDetector.IsMeasurementNotInRange = false;
+                mmgr.ReadDetector.IsInstrumentFail = false; 
+                mmgr.ReadDetector.IsInstrumentPass = true;
 
                 //ÏnfoMessageImage.Source = new BitmapImage(new Uri("../Images/Info-GreenSign_Icon.png", UriKind.Relative));
                 //InfoMessageTextBlock.Text = "Ensure no fuel inside before testing instrument or scanning new background.";

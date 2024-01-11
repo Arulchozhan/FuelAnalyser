@@ -51,6 +51,7 @@
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataItemMap.cs" />
     <Compile Include="Model\DenaturantValueToColorConverter.cs" />
+    <Compile Include="Model\EthanolModuleMethanolValueToColorConverter.cs" />
     <Compile Include="Model\EthanolValueToColorConverter.cs" />
     <Compile Include="Model\FolderItem.cs" />
     <Compile Include="Model\FolderWatcher.cs" />
