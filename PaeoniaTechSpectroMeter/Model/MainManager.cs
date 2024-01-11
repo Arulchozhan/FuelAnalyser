@@ -1010,12 +1010,33 @@ namespace PaeoniaTechSpectroMeter.Model
                 serr = ReadDetector.ReadBackground("testpath");
                 if (serr != "")
                     break;
+
+                if (AppConfig.Perfchk == "Failed")
+                {
+                    ReadDetector.MeasurementCompletedat = "Ready to measure";
+                    ReadDetector.MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+                    ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                    ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\InfoWarning_Icon.png";
+                    ReadDetector.IsInstrumentFail = true;
+                    ReadDetector.IsInstrumentNotStandard = true;
+                }
+                else
+                {
+                    ReadDetector.MeasurementCompletedat = $"Ready to measure";
+                    ReadDetector.MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
+                    ReadDetector.InfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                    ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
+                    ReadDetector.IsInstrumentFail = false;
+                    ReadDetector.IsInstrumentNotStandard = false;
+                    ReadDetector.IsInstrumentPass = true;
+                }
+
                 LoadingStatus = "Detector Login";
                 serr = ReadDetector.LisaConnect();
                 if (serr != "")
                     break;
-
-
+               
+                
             }
             while (false);
 

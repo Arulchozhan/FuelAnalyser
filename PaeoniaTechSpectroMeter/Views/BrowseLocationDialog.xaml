@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PaeoniaTechSpectroMeter.Views"
         mc:Ignorable="d"
-        Title="Browse For Folder" Height="550" Width="970" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Browse For Folder" Height="550" Width="970" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1" Margin="20,50,20,180" >
             <Grid x:Name="folderGridView" >
@@ -31,7 +31,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel  Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,0,5,0">
                 <TextBlock  HorizontalAlignment="Left" VerticalAlignment="Center" Text="New Folder Name" Style="{StaticResource NewFolderTextBlockStyle}"/>
-                <TextBox Name="NewFolderNameTextBox" Height="56" Width="368" Margin="10,0,0,5" VerticalAlignment="Center"  Style="{StaticResource TextBoxNewFolderStyle}" KeyDown="NewFolderNameTextBox_KeyDown" ToolTip="New Folder"/>
+                <TextBox Name="NewFolderNameTextBox" Height="56" Width="368" Margin="10,0,0,5" VerticalAlignment="Center"  Style="{StaticResource TextBoxNewFolderStyle}"  ToolTip="New Folder"/>
             </StackPanel>
             <StackPanel  Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,0">
                 <Button x:Name="BtnNewFolder" Content="Make New Folder" Margin="0,0,3,0" Style="{StaticResource NewFolderButtonStyle}" Click="BtnNewFolder_Click"  />

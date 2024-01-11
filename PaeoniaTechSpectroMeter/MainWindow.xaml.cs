@@ -16,6 +16,7 @@ namespace PaeoniaTechSpectroMeter
     using StorageMonitorService.UI;
     using System.Diagnostics;
     using System.Threading;
+    using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Threading;
     using UserAccess;
@@ -219,6 +220,33 @@ namespace PaeoniaTechSpectroMeter
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            foreach (TabItem tabItem in TabCtrlSetup.Items)
+            {
+                Image measurementIconImage = FindChild<Image>(tabItem, "MeasurementIconImage");
+                TextBlock measurementTextBlock = FindChild<TextBlock>(tabItem, "MeasurementTextBlockTabItem");
+                if (measurementTextBlock != null)
+                {
+                    measurementIconImage.Source = new BitmapImage(new Uri("../Icon/MeasurementB_Icon.png", UriKind.Relative));
+                    measurementTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
+                }
+
+                Image selfDiagnosticsIconImage = FindChild<Image>(tabItem, "SelfDiagnosticsIconImage");
+                TextBlock selfDiagnosticsTextBlockTabItem = FindChild<TextBlock>(tabItem, "SelfDiagnosticsTextBlockTabItem");
+                if (selfDiagnosticsTextBlockTabItem != null)
+                {
+                    selfDiagnosticsIconImage.Source = new BitmapImage(new Uri("../Icon/Self-diagnosticsB_Icon.png", UriKind.Relative));
+                    selfDiagnosticsTextBlockTabItem.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
+                }
+
+                Image historyIconImage = FindChild<Image>(tabItem, "HistoryIconImage");
+                TextBlock historyTextBlockTabItem = FindChild<TextBlock>(tabItem, "HistoryTextBlockTabItem");
+                if (historyTextBlockTabItem != null)
+                {
+                    historyIconImage.Source = new BitmapImage(new Uri("../Icon/HistoryB_Icon.png", UriKind.Relative));
+                    historyTextBlockTabItem.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1A"));
+                }
+            }
+
             TabItem selectedTabItem = TabCtrlSetup.SelectedItem as TabItem; //Get the selected TabItem
 
             if (selectedTabItem != null)
@@ -233,19 +261,44 @@ namespace PaeoniaTechSpectroMeter
             if (selectedTabItem.Header.ToString() == "Meausrement")
             {
                 if (measurementPage ==null)
-                  measurementPage = new CtrlMeasurement(mmgr);
+                {
+                    measurementPage = new CtrlMeasurement(mmgr);
+                }
+
+                Image measurementIconImage = FindChild<Image>(selectedTabItem, "MeasurementIconImage");
+                TextBlock measurementTextBlock = FindChild<TextBlock>(selectedTabItem, "MeasurementTextBlockTabItem");
+                if (measurementTextBlock != null)
+                {
+                    measurementIconImage.Source = new BitmapImage(new Uri("../Icon/Measurement_Icon.png", UriKind.Relative));
+                    measurementTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
+                }
+
                 page_Content.Content = measurementPage;
             }
             else if (selectedTabItem.Header.ToString() == "Self-diagnostics")
             {
                 if (selfDiagnosticsPage == null)
-                 selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr); 
+                 selfDiagnosticsPage = new CtrlSelfDiagnostics(mmgr);
+                Image selfDiagnosticsIconImage = FindChild<Image>(selectedTabItem, "SelfDiagnosticsIconImage");
+                TextBlock selfDiagnosticsTextBlockTabItem = FindChild<TextBlock>(selectedTabItem, "SelfDiagnosticsTextBlockTabItem");
+                if (selfDiagnosticsTextBlockTabItem != null)
+                {
+                    selfDiagnosticsIconImage.Source = new BitmapImage(new Uri("../Icon/Self-diagnostics_Icon.png", UriKind.Relative));
+                    selfDiagnosticsTextBlockTabItem.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
+                }
                 page_Content.Content = selfDiagnosticsPage;
             }
             else if (selectedTabItem.Header.ToString() == "History")
             {
                 //if (historyPage == null)
                      historyPage = new CtrlHistory(mmgr);
+                Image historyIconImage = FindChild<Image>(selectedTabItem, "HistoryIconImage");
+                TextBlock historyTextBlockTabItem = FindChild<TextBlock>(selectedTabItem, "HistoryTextBlockTabItem");
+                if (historyTextBlockTabItem != null)
+                {
+                    historyIconImage.Source = new BitmapImage(new Uri("../Icon/History_Icon.png", UriKind.Relative));
+                    historyTextBlockTabItem.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005fb8"));
+                }
                 page_Content.Content = historyPage;
             }
             else if (selectedTabItem.Header.ToString() == "Factory Setting")
@@ -257,7 +310,7 @@ namespace PaeoniaTechSpectroMeter
             }
             else if (selectedTabItem.Header.ToString() == "MeasurementSetting")
             {
-                if (measurementPage == null)
+                if (measurementSettingPage == null)
                  measurementSettingPage = new CtrlMeasurementSetting();
                 measurementSettingPage.Setup(mmgr);
                 page_Content.Content = measurementSettingPage;
@@ -270,6 +323,38 @@ namespace PaeoniaTechSpectroMeter
                 page_Content.Content = advancedConfigPage;
             }
         }
+
+        private T FindChild<T>(DependencyObject parent, string childName) where T : FrameworkElement
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is T frameworkElement && frameworkElement.Name == childName)
+                {
+                    return frameworkElement;
+                }
+
+                T childOfChild = FindChild<T>(child, childName);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+
+            return null;
+        }
+
+        private void TabItem_Unloaded(object sender, RoutedEventArgs e)
+        {
+            TabItem tabItem = sender as TabItem;
+            TextBlock measurementTextBlock = FindChild<TextBlock>(tabItem, "MeasurementTextBlockTabItem");
+            if (measurementTextBlock != null)
+            {
+                measurementTextBlock.Foreground = Brushes.Black;
+            }
+        }
+
         void MakeControlStrech(UserControl uc)
         {
             uc.HorizontalAlignment =HorizontalAlignment.Stretch;

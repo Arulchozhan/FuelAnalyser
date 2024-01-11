@@ -30,6 +30,7 @@ using System.Security.Principal;
 using System.Windows.Threading;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
+using System.Windows.Input;
 
 namespace PaeoniaTechSpectroMeter.Views
 {
@@ -625,5 +626,7 @@ namespace PaeoniaTechSpectroMeter.Views
             string serr = "";
             serr = history.BrowseLocation();
         }
+
+        
     }
 }
