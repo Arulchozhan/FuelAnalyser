@@ -178,6 +178,18 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("InstrumentSN");
             }
         }
+        string folderPath = "C:\\\\Users\\\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\ite-packages\\";
+        [Category("COMPANY INFORMATION")]
+        [Description("Folder Path")]
+        public string FolderPath
+        {
+            get => folderPath;
+            set
+            {
+                folderPath = value;
+                OnPropertyChanged("FolderPath");
+            }
+        }
 
         string instrumentFwv = "V1.0.01";
         [Category("COMPANY INFORMATION")]

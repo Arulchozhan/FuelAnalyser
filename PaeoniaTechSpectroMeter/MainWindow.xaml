@@ -169,7 +169,7 @@
                                         Margin="136,6,0,6"
                                         Command="{Binding ControlRecipeSaveCommand}"
                                         Width="94"
-                                        Background="Green"  RenderTransformOrigin="0.494,-1.331" />
+                                        Background="Green"  RenderTransformOrigin="0.494,-1.331"  />
 
             </Grid>
             <!-- </DockPanel> -->
