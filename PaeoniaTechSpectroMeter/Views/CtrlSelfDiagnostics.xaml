@@ -137,7 +137,7 @@
 
                 <Grid Grid.Column="0" HorizontalAlignment="Left" Style="{StaticResource SystemInfoStyle}" Margin="0,12">
                     <Border BorderBrush="Black" BorderThickness="0.1" CornerRadius="4">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Software: v1.001" Style="{StaticResource SystemInformationTextBlockStyle}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Software: v1.002" Style="{StaticResource SystemInformationTextBlockStyle}"/>
                     </Border>
                 </Grid>
 
