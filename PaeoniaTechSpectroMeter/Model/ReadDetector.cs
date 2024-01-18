@@ -1444,10 +1444,11 @@ namespace PaeoniaTechSpectroMeter.Model
             string backgroundPath = "C:\\FuelAnalyzer\\Currentair" + ".csv";  // "C:\\FuelAnalyzer\\BackgroundP6_5Hz" + ".csv";
             string baselinePath = "C:\\FuelAnalyzer\\Currentoff" + ".csv";//"C:\\FuelAnalyzer\\Baseline" + ".csv";
             string logtime = DateTime.Now.ToString("HH-mm-ss");
-            string rawDataPath = SystemPath.GetLogPath + "\\" + DateTime.Now.ToString("yyyy-MMM") + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "-Raw_Absorbance" + filecnt.ToString() + "_" + logtime + ".csv";
-            //string rawDataPath = "C:\\FuelAnalyzer Logs\\Log\\2023-Nov\\2023-10-26-Raw_AbsorbanceSample2931" + ".csv";
+            string rawDataPath =SystemPath.GetLogPath + "\\" + DateTime.Now.ToString("yyyy-MMM") + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + "-Raw_Absorbance"+SampleFileName + filecnt.ToString() + "_" + logtime + ".csv";  //"C:\\FuelAnalyzer\\2023-12-11-Raw_AbsorbanceC011_Sample4563.csv";//
+           // string rawDataPath = "C:\\FuelAnalyzer\\2023-12-11-Raw_AbsorbanceC011_Sample4563.csv";
             string prototypeName = "P6";
-            string pLSModelPath = @"C:\FuelAnalyzer\P6_PLS_model.pkl";
+            //mmgr.AppConfig.InstrumentSN;
+            string plsModelPath = mmgr.AppConfig.InstrumentSN;//@"C:\FuelAnalyzer\P6_PLS_model.pkl";  @"C:\Users\MuruganArulchozhan\.conda\envs\Novel_PAT\Lib\site-packages\"
             List<List<string>> rawSPCList = new List<List<string>>();
             List<List<string>> myList = new List<List<string>>();
             // List<Pixelresult_data> Sensorpixelresult = new List<Pixelresult_data>();
@@ -1477,7 +1478,7 @@ namespace PaeoniaTechSpectroMeter.Model
             int cfg_col_size1 = 0;
 
 
-            RawAbsorbanceDataLogger.InitLogFile(SystemPath.GetLogPath, "Raw_Absorbance" + filecnt.ToString() + "_" + logtime + ".csv"); //mmgr.DetectorConfigurationData
+            RawAbsorbanceDataLogger.InitLogFile(SystemPath.GetLogPath, "Raw_Absorbance"+ SampleFileName + filecnt.ToString() + "_" + logtime + ".csv"); //mmgr.DetectorConfigurationData
             RawAbsorbanceDataLogger.IsAppendFileCount = false;  //file count number after file name   
                                                                 // LisaDataLogger.SetLogFileName("LisaData");
             RawAbsorbanceDataLogger.HeaderString = "Time Stamp(ms),Pixel No,Wavenumber(Cm^-1), Output(v),RawAbsorbance,Temperature";//Temperature 
@@ -1652,7 +1653,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 if (!isBackgroundRead)
                 {
 
-                    string concentrationResultArray = ImportPythonTest(backgroundPath, baselinePath, rawDataPath, pLSModelPath);
+                    string concentrationResultArray = ImportPythonTest(backgroundPath, baselinePath, rawDataPath, plsModelPath);
                     if (concentrationResultArray != null)
                     {
                         // Remove the brackets and split the string by space
@@ -1707,7 +1708,8 @@ namespace PaeoniaTechSpectroMeter.Model
             catch (Exception ex)
 
             {
-                System.Windows.MessageBox.Show(ex.Message, "Read Detector Error!");
+                //System.Windows.MessageBox.Show(ex.Message, "Read Detector Error!");
+                return Rawavolt;
             }
             Thread.Sleep(1);
             Readingfinished = false;
@@ -1733,7 +1735,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
 
 
-        public string ImportPythonTest(string Emitter_On_Background_Path, string Emitter_Off_Background_Path, string Raw_Data_Path, string PLS_Model_Path)
+        public string ImportPythonTest(string Emitter_On_Background_Path, string Emitter_Off_Background_Path, string Raw_Data_Path, string plsModel_Path)
         {
             List<object> myList = new List<object>();
             PythonEngine.Initialize();
@@ -1746,8 +1748,11 @@ namespace PaeoniaTechSpectroMeter.Model
                 {
 
 
-                    dynamic PaeoniaPLS = Py.Import("PaeoniaModel");
-                    dynamic result = PaeoniaPLS.Predict_Y(Emitter_On_Background_Path, Emitter_Off_Background_Path, Raw_Data_Path, PLS_Model_Path);
+                    // dynamic PaeoniaPLS = Py.Import("PaeoniaModel");
+                   
+                     dynamic PaeoniaPLS = Py.Import(plsModel_Path);
+                    string plsModelPath =mmgr.AppConfig.FolderPath + plsModel_Path;
+                    dynamic result = PaeoniaPLS.Predict_Y(Emitter_On_Background_Path, Emitter_Off_Background_Path, Raw_Data_Path, plsModelPath);// $"C:\\Users\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\site-packages\\" +plsModel_Path);//  "C:\\Users\\Admin\\anaconda3\\envs\\Paeoniaenv\\Lib\\site-packages\\"  //C:\\Users\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\site-packages\\
                     myList = ((object[])result).ToList<object>();
                     pythonConcentrationArrayString = $"{myList[0].ToString()} {myList[1].ToString()} {myList[2].ToString()} {myList[3].ToString()}";
                 }
