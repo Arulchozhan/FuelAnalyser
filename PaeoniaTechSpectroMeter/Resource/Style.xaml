@@ -228,6 +228,7 @@
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="FontWeight" Value="400"/>
         <Setter Property="Background" Value="#005FB8"/>
+        
     </Style>
     <Style x:Key="ExportButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="278"/>

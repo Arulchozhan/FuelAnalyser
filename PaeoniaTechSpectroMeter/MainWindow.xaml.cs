@@ -802,5 +802,9 @@ namespace PaeoniaTechSpectroMeter
             return (bool)win.DialogResult ? 1 : 0;
         }
 
+        private void BtnSaveControlRecipe_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

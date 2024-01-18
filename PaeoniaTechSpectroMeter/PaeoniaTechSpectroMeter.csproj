@@ -416,8 +416,9 @@
     <Reference Include="MCPNet.Motion.UI">
       <HintPath>..\..\Ref_dll\MCPNet.Motion.UI.dll</HintPath>
     </Reference>
-    <Reference Include="MCPNet.UI">
-      <HintPath>..\..\Ref_dll\MCPNet.UI.dll</HintPath>
+    <Reference Include="MCPNet.UI, Version=1.0.3.14, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dll\MCPNet.UI.dll</HintPath>
     </Reference>
     <Reference Include="MessageHandler">
       <HintPath>..\..\Ref_dll\MessageHandler.dll</HintPath>

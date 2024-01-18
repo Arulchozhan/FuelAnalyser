@@ -150,6 +150,16 @@ namespace PaeoniaTechSpectroMeter.Views
                     //DataItems.Add(item);
                 }
 
+                // Preserve the selected items on the current page
+                //var selectedItemsOnCurrentPage = new List<DataItem>(history_dataGrid.SelectedItems.Cast<DataItem>());
+                //foreach (var selectedItem in selectedItemsOnCurrentPage)
+                //{
+                //    if (DataItems.Contains(selectedItem))
+                //    {
+                //        history_dataGrid.SelectedItems.Add(selectedItem);
+                //    }
+                //}
+
                 //history_dataGrid.ItemsSource = dataItemList;
 
                 DataItems = new ObservableCollection<DataItem>(dataItemList);
@@ -178,6 +188,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
         {
+            HeaderCheckBox.IsChecked = false;
             selectedItemsPerPage[currentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
             if (currentPage < totalPages)
             {
@@ -188,6 +199,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void btnPreviousPage_Click(object sender, RoutedEventArgs e)
         {
+            HeaderCheckBox.IsChecked = false;
             selectedItemsPerPage[currentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
             if (currentPage > 1)
             {
@@ -238,6 +250,43 @@ namespace PaeoniaTechSpectroMeter.Views
             dataItem.IsSelected = false;
             UpateExportButtonVisibility();
         }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!selectedItemsPerPage.ContainsKey(currentPage))
+            {
+                selectedItemsPerPage[currentPage] = new List<DataItem>();
+            }
+
+            foreach (var item in history_dataGrid.Items)
+            {
+                if (item is DataItem dataItem)
+                {
+                    dataItem.IsSelected = true;
+
+                    // Add the item to the selected items list for the current page
+                    if (!selectedItemsPerPage[currentPage].Contains(dataItem))
+                    {
+                        selectedItemsPerPage[currentPage].Add(dataItem);
+                    }
+                }
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in history_dataGrid.Items)
+            {
+                if (item is DataItem dataItem)
+                {
+                    dataItem.IsSelected = false;
+                    selectedItemsPerPage[currentPage].Remove(dataItem);
+                }
+            }
+        }
+
+     
+
 
         private void UpateExportButtonVisibility()
         {
@@ -612,6 +661,7 @@ namespace PaeoniaTechSpectroMeter.Views
         {
             if (sender is Button button)
             {
+                HeaderCheckBox.IsChecked = false;
                 CtrlHistory vm = DataContext as CtrlHistory;
 
                 if (vm != null)
@@ -627,6 +677,6 @@ namespace PaeoniaTechSpectroMeter.Views
             serr = history.BrowseLocation();
         }
 
-        
+       
     }
 }

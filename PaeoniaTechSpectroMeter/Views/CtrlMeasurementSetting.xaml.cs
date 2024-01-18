@@ -66,5 +66,6 @@ namespace PaeoniaTechSpectroMeter.Views
         {
 
         }
+
     }
 }

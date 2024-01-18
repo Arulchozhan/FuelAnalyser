@@ -45,7 +45,7 @@ using Path = System.IO.Path;
 
 namespace PaeoniaTechSpectroMeter.Model
 {
-    public class History
+    public class History : INotifyPropertyChanged
     {
         private int _currentPage = 1;
         private int _pageSize = 10;
