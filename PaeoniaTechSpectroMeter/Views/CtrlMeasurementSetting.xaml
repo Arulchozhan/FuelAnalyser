@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PaeoniaTechSpectroMeter.Views"
              xmlns:DataUI="clr-namespace:MCPNet.Data.UI;assembly=MCPNet.Data"
-             xmlns:UI="clr-namespace:MCPNet.UI;assembly=MCPNet.UI"
+             
              xmlns:comconverters="clr-namespace:CommonConveters;assembly=CommonConveters"
-             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=Utilities"
+             xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=Utilities" xmlns:UI="clr-namespace:MCPNet.UI;assembly=MCPNet.UI"
              mc:Ignorable="d" 
              Background="#FFD4D4D4"
              Height="700" 

@@ -86,7 +86,7 @@ namespace PaeoniaTechSpectroMeter.Views
             InitializeComponent();
             this.DataContext = mmgr.ReadDetector;
 
-
+            
             //mmgr.ReadDetector.SDInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             mmgr.ReadDetector.MessageCompleted = $"Ensure no fuel inside before testing instrument or scanning new background.";
 
@@ -106,7 +106,7 @@ namespace PaeoniaTechSpectroMeter.Views
             this.LastScannedTextAndTime.Text = $"Last scanned / reset on " + mmgr.AppConfig.BgchkTime;
             GetFactoryBackground();
 
-
+            //this.DataContext = mmgr.SelfDiagnostics;
 
         }
 

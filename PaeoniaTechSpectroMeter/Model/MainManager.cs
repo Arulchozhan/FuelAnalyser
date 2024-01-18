@@ -199,7 +199,12 @@ namespace PaeoniaTechSpectroMeter.Model
             get { return selfDiagnostics; }
         }
 
-       
+        private History history = null;
+        public History History
+        {
+            get { return history; }
+        }
+
 
 
         LogWritter.LogWriter referencedata = new LogWritter.LogWriter();
@@ -696,6 +701,7 @@ namespace PaeoniaTechSpectroMeter.Model
             spc_convertion = new SPC();
             readDetector = new ReadDetector(this);
             selfDiagnostics=new SelfDiagnostics(this);
+            history = new History(this);
             referencedata = new LogWritter.LogWriter();
 
         }

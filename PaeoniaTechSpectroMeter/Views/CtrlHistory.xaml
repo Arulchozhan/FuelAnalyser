@@ -51,11 +51,22 @@
                     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridHeaderStyle}"/>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
+                    
 
                     <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <CheckBox x:Name="HeaderCheckBox" Checked="SelectAll_Checked" Unchecked="SelectAll_Unchecked" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Setter Property="Width" Value="30" />
+                                        <Setter Property="Height" Value="25" />
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                        </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected, Mode=TwoWay}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <CheckBox.Style>
                                         <Style TargetType="CheckBox">
                                             <Setter Property="Width" Value="30" />
@@ -66,6 +77,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    
                     <DataGridTextColumn Header="Time Stamp" Binding="{Binding FormattedTimestamp}" >
                         <DataGridTextColumn.ElementStyle>
                             <Style>
@@ -256,7 +268,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel x:Name="PageNumberPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,23" >
+            <StackPanel x:Name="PageNumberPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20" >
                 <Button x:Name="PreviousBtn" Content="&lt;" Click="btnPreviousPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Left" />
                 <ItemsControl ItemsSource="{Binding PageNumbers}">
                     <ItemsControl.ItemsPanel>
@@ -266,8 +278,8 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding}" Margin="5" Padding="8" Command="{Binding DataContext.PageButtonClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{StaticResource PaginationNumberStyle}"
-                        CommandParameter="{Binding}" HorizontalAlignment="Center" Width="30" Height="30" Click="PageNumbersBtn_Click" Background="{Binding SelectedButtonIndex,  Converter={StaticResource ButtonBackgroundConverter}}">
+                            <Button Content="{Binding}" Margin="3" Padding="2" Command="{Binding DataContext.PageButtonClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{StaticResource PaginationNumberStyle}"
+                        CommandParameter="{Binding}" HorizontalAlignment="Center" Width="40" Height="40" Click="PageNumbersBtn_Click" Background="{Binding SelectedButtonIndex,  Converter={StaticResource ButtonBackgroundConverter}}">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Grid>
