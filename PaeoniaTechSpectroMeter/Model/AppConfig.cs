@@ -16,7 +16,7 @@ namespace PaeoniaTechSpectroMeter.Model
         public string AppExeName = Assembly.GetExecutingAssembly().GetName().Name;
 
         [XmlIgnore]
-        public string AppVersion = "1.0.0.0";// Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
+        public string AppVersion = "V1.002";// Assembly.GetExecutingAssembly().GetName().Version.ToString(); 
 
         [XmlIgnore]
         public string BuiltDate = File.GetCreationTime(Assembly.GetExecutingAssembly().Location).ToString("dd-MMM-yy [HH:mm]"); //  DateTime.Now.ToString("dd-MMM-yy [HH:mm]")  Assembly.GetExecutingAssembly().GetLinkerTime().ToString("dd-MMM-yy [HH:mm]");
