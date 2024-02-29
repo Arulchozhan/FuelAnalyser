@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <local1:ValueToColorConverter x:Key="ValueToColorConverter"/>
         <local1:ButtonBackgroundConverter x:Key="ButtonBackgroundConverter" />
+        <local1:PageNumberToBackgroundColorConverter x:Key="PageNumberToBackgroundColorConverter" />
     </UserControl.Resources>
 
 
@@ -36,10 +37,10 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
                 <Image x:Name="HistoryInfoIcon" Grid.Column="0"  Width="20" Source="{Binding HistoryInfoIconSource}" Height="20" Margin="0,0,5,0"/>
                 <TextBlock x:Name="ExportMessage" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ExportMessageCompleted}"  Style="{StaticResource ExportMessageTextBlockStyle}"/>
-            </StackPanel>
+            </StackPanel>  
         </Border>
         <Grid Width="1182" Margin="0,145,0,0">
-            <DataGrid x:Name="history_dataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"  Style="{StaticResource DataGridStyle}" RowHeight="43" Margin="0,5,0,20" ItemsSource="{Binding DataItems, Mode=OneWayToSource}" >
+            <DataGrid x:Name="history_dataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"  Style="{StaticResource DataGridStyle}" RowHeight="47" Margin="0,5,0,20" ItemsSource="{Binding DataItems}" >
                 <!--<i:Interaction.Behaviors>
                     <local1:
                 </i:Interaction.Behaviors>-->
@@ -55,11 +56,41 @@
 
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.Header>
-                            <CheckBox x:Name="HeaderCheckBox" Checked="SelectAll_Checked" Unchecked="SelectAll_Unchecked" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <CheckBox x:Name="HeaderCheckBox" Checked="SelectAll_Checked" Unchecked="SelectAll_Unchecked" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">
-                                        <Setter Property="Width" Value="30" />
-                                        <Setter Property="Height" Value="25" />
+                                        <Setter Property="Width" Value="20" />
+                                        <Setter Property="Height" Value="20" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="CheckBox">
+                                                    <Grid Background="Transparent">
+                                                        <Border x:Name="border"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="2">
+                                                            <Grid>
+                                                                <Path x:Name="CheckMark"
+                                                  Width="15"
+                                                  Height="15"
+                                                  SnapsToDevicePixels="False"
+                                                  Stroke="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                                  StrokeThickness="2"
+                                                  Data="M 0 7 L 6 13 M 6 13 L 16 2"
+                                                  Visibility="Collapsed"
+                                                  Stretch="Fill"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
                                     </Style>
                                 </CheckBox.Style>
                             </CheckBox>
@@ -69,8 +100,38 @@
                                 <CheckBox x:Name="checkBox" IsChecked="{Binding IsSelected, Mode=TwoWay}" Checked="Chk_Checked" Unchecked="Chk_Unchecked" DataContext="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <CheckBox.Style>
                                         <Style TargetType="CheckBox">
-                                            <Setter Property="Width" Value="30" />
-                                            <Setter Property="Height" Value="25" />
+                                            <Setter Property="Width" Value="20" />
+                                            <Setter Property="Height" Value="20" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="CheckBox">
+                                                        <Grid Background="Transparent">
+                                                            <Border x:Name="border"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="2">
+                                                                <Grid>
+                                                                    <Path x:Name="CheckMark"
+                                                  Width="15"
+                                                  Height="15"
+                                                  SnapsToDevicePixels="False"
+                                                  Stroke="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+                                                  StrokeThickness="2"
+                                                  Data="M 0 7 L 6 13 M 6 13 L 16 2"
+                                                  Visibility="Collapsed"
+                                                  Stretch="Fill"/>
+                                                                </Grid>
+                                                            </Border>
+                                                        </Grid>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
                                         </Style>
                                     </CheckBox.Style>
                                 </CheckBox>
@@ -269,7 +330,7 @@
             </DataGrid>
 
             <StackPanel x:Name="PageNumberPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20" >
-                <Button x:Name="PreviousBtn" Content="&lt;" Click="btnPreviousPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Left" />
+                <Button x:Name="PreviousBtn" Content="&lt;" Click="btnPreviousPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Left" Margin="0,0,10,0"/>
                 <ItemsControl ItemsSource="{Binding PageNumbers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -279,7 +340,14 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Content="{Binding}" Margin="3" Padding="2" Command="{Binding DataContext.PageButtonClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{StaticResource PaginationNumberStyle}"
-                        CommandParameter="{Binding}" HorizontalAlignment="Center" Width="40" Height="40" Click="PageNumbersBtn_Click" Background="{Binding SelectedButtonIndex,  Converter={StaticResource ButtonBackgroundConverter}}">
+                        CommandParameter="{Binding}" HorizontalAlignment="Center" Width="40" Height="40" Click="PageNumbersBtn_Click" >
+                                <Button.Background>
+                                    <MultiBinding Converter="{StaticResource PageNumberToBackgroundColorConverter}">
+                                        <Binding Path="DataContext.CurrentPage" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                        <Binding/>
+                                    </MultiBinding>
+                                </Button.Background>
+
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Grid>
@@ -287,8 +355,14 @@
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Grid>
                                         <ControlTemplate.Triggers>
+                                            <Trigger Property="IsFocused" Value="True" >
+                                                <Setter TargetName="EllipseBackground" Property="Fill"  Value="#005fb8"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="EllipseBackground" Property="Fill" Value="LightGray"/>
+                                            </Trigger>
                                             <Trigger Property="IsPressed" Value="True">
-                                                <Setter TargetName="EllipseBackground" Property="Fill" Value="Blue"/>
+                                                <Setter TargetName="EllipseBackground" Property="Fill" Value="#005fb8"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -298,7 +372,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button x:Name="NextBtn" Content=">" Click="btnNextPage_Click" Style="{StaticResource PaginationBtnStyle}" HorizontalAlignment="Right"/>
+                <Button x:Name="NextBtn" Content=">" Click="btnNextPage_Click" Style="{StaticResource PaginationBtnStyle}" Margin="10,0,0,0" HorizontalAlignment="Right"/>
 
             </StackPanel>
         </Grid>

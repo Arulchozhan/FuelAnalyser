@@ -17,10 +17,14 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using static PaeoniaTechSpectroMeter.Model.History;
 using Image = iText.Layout.Element.Image;
 using TextAlignment = iText.Layout.Properties.TextAlignment;
+
+
 //using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace PaeoniaTechSpectroMeter.Views
@@ -32,7 +36,7 @@ namespace PaeoniaTechSpectroMeter.Views
         // Lisa_ lisa = null;
         SPC spcObj = new SPC();
 
-        
+        private Thickness originalMargin= new Thickness(0, 180, 5, 0);
 
         public static BrosweLocationViewModel brosweLocationViewModel;
         public CtrlMeasurement(MainManager mmgr)
@@ -46,8 +50,41 @@ namespace PaeoniaTechSpectroMeter.Views
             this.DataContext = mmgr.ReadDetector;
             brosweLocationViewModel = new BrosweLocationViewModel();
 
+            SampleName.GotFocus += TextBox_GotFocus;
+            OpearatorName.GotFocus += TextBox_GotFocus;
+            SampleName.LostFocus += TextBox_LostFocus;
+            OpearatorName.LostFocus += TextBox_LostFocus;
+            ////Inputpane
+            //CompositionTarget.Rendering += CompositionTarget_Rendering;
         }
 
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            // Adjust layout when textbox gets focus
+            AdjustLayoutForKeyboard(true);
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // Adjust layout when textbox loses focus
+            AdjustLayoutForKeyboard(false);
+        }
+
+        private void AdjustLayoutForKeyboard(bool isKeyboardVisible)
+        {
+            // Define the margin to shift the Grid containing the textboxes
+            //int bottomMargin = isKeyboardVisible ? 300 : 0; // Adjust this value as needed
+
+            //// Apply margin to the Grid
+            //textBoxGrid.Margin = new Thickness(0, 55, 5, bottomMargin);
+            //Thickness margin = isKeyboardVisible ? new Thickness(originalMargin.Left, originalMargin.Top, originalMargin.Right, 300) : originalMargin;
+            Thickness margin = isKeyboardVisible ? new Thickness(0, 53, 0, 300) : originalMargin;
+
+            // Apply margin to the Grid
+            textBoxGrid.Margin = margin;
+        }
+
+       
 
         void timer_Tick(object sender, EventArgs e)
         {

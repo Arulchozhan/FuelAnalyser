@@ -941,6 +941,7 @@ namespace PaeoniaTechSpectroMeter.Model
                 LoadingStatus = "Loading User Access Configurations";
                 InitUserAccess();
                 serr = InitialTryLogIn1();
+               // serr = InitialTryLogIn();
                 if (serr != "")
                     break;
 

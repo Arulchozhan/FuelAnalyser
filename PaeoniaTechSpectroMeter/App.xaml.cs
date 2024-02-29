@@ -4,7 +4,9 @@ namespace PaeoniaTechSpectroMeter
 {
     using FSM;
     using MessageHandler;
+    using PaeoniaTechSpectroMeter.Database;
     using PaeoniaTechSpectroMeter.Model;
+    using System.Configuration;
     using System.Diagnostics;
     using System.Threading;
     using System.Windows.Input;
@@ -23,7 +25,29 @@ namespace PaeoniaTechSpectroMeter
         public static DispatcherUIHelper UIDispatcher = null;
         public static MCPNet.MCPNet McpNet = null;
         public static bool HasPauseStartUpKeyPressed = false;
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
+        
 
+
+        //Added method to check Database ready to proceed
+      
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            try
+            {            
+                DatabaseInitializer initializer = new DatabaseInitializer(_connectionString); // Initialize the database
+                initializer.InitializeDatabase();
+                
+                ApplicationStartup(null, null);// Continue with application startup
+            }
+            catch (Exception ex)
+            {
+                // Log or display the exception message
+                MessageBox.Show($"Error initializing database: {ex.Message}");
+            }
+        }
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
             string serr = "";

@@ -39,8 +39,8 @@ namespace PaeoniaTechSpectroMeter.Views
     /// </summary>
     public partial class CtrlHistory : UserControl
     {
+        MainManager mmgr = null;
         public bool IsSelected { get; set; }
-        private readonly string connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
         private int currentPage = 1;
         private int pageSize = 10;
         private int totalRecords;
@@ -50,7 +50,7 @@ namespace PaeoniaTechSpectroMeter.Views
         private List<DataItem> currentPageItems;
         private List<DataItem> allDataItems;
         private ObservableCollection<DataItem> _dataItems;
-        private Dictionary<int, List<DataItem>> selectedItemsPerPage = new Dictionary<int, List<DataItem>>();
+        
 
         public static BrosweLocationViewModel brosweLocationViewModel;
 
@@ -95,116 +95,54 @@ namespace PaeoniaTechSpectroMeter.Views
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
 
-
-        MainManager mmgr = null;
+        
         public CtrlHistory(MainManager mmgr)
         {
             this.mmgr = mmgr;
             InitializeComponent();
-            // connectionString=mmgr.AppConfig.ConnectionString;
-            //   connectionString = $"Data Source={connectionString};Initial Catalog=fuelanalyser;Integrated Security=True";
 
-            //DataContext = new History(mmgr);
-            //DataContext = new History(mmgr);
-            this.history = new History(mmgr);
-            this.DataContext = history;
+            this.DataContext = mmgr.History;
 
-            LoadData();
+            
             brosweLocationViewModel = new BrosweLocationViewModel();
 
         }
 
-
-
-        private void LoadData()
+        public void RefreshData()
         {
-            try
-            {
-                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(currentPage - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+            mmgr.History.CurrentPage = this.currentPage;
+            mmgr.History.TotalPages = this.totalPages;
 
-                dataAccess = new DataAccess(connectionString);
-                dataTable = dataAccess.GetData(listOfMeasurements);
-                List<DataItem> dataItemList = new List<DataItem>();
-
-
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    DataItem item = new DataItem
-                    {
-                        Timestamp = row["Time Stamp"] is DateTime timestamp ? timestamp : default,
-                        Name = row["Name"].ToString(),
-                        PassNo = row["Pass No."].ToString(),
-                        Operator = row["Operator"].ToString(),
-                        AnalysisType = row["Analysis Type"].ToString(),
-                        SampleType = row["Sample Type"].ToString(),
-                        Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null,
-                        Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null,
-                        Methanol = row["Methanol"] is double methanol ? (double?)methanol : null,
-                        Water = row["Water"] is double water ? (double?)water : null,
-                        Batch = row["Batch"] is int batch ? (int?)batch : null,
-                    };
-
-                    dataItemList.Add(item);
-                    //DataItems.Add(item);
-                }
-
-                // Preserve the selected items on the current page
-                //var selectedItemsOnCurrentPage = new List<DataItem>(history_dataGrid.SelectedItems.Cast<DataItem>());
-                //foreach (var selectedItem in selectedItemsOnCurrentPage)
-                //{
-                //    if (DataItems.Contains(selectedItem))
-                //    {
-                //        history_dataGrid.SelectedItems.Add(selectedItem);
-                //    }
-                //}
-
-                //history_dataGrid.ItemsSource = dataItemList;
-
-                DataItems = new ObservableCollection<DataItem>(dataItemList);
-                history_dataGrid.ItemsSource = DataItems;
-
-                // Update PageNumbers collection
-                totalRecords = GetTotalRecords(); // Implement GetTotalRecords() method
-                totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
-                if (selectedItemsPerPage.ContainsKey(currentPage))
-                {
-                    // Set the selected items in the DataGrid
-                    foreach (var selectedItem in selectedItemsPerPage[currentPage])
-                    {
-                        history_dataGrid.SelectedItems.Add(selectedItem);
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+            mmgr.History.LoadData();
+        }        
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
         {
             HeaderCheckBox.IsChecked = false;
-            selectedItemsPerPage[currentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
-            if (currentPage < totalPages)
+            mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
+            if (mmgr.History.CurrentPage < mmgr.History.TotalPages)
             {
-                currentPage++;
-                LoadData();
+                mmgr.History.CurrentPage++;
+                mmgr.History.LoadData();
             }
         }
 
         private void btnPreviousPage_Click(object sender, RoutedEventArgs e)
         {
             HeaderCheckBox.IsChecked = false;
-            selectedItemsPerPage[currentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
-            if (currentPage > 1)
+            mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage] = history_dataGrid.SelectedItems.Cast<DataItem>().ToList();
+            if (mmgr.History.CurrentPage > 1)
             {
-                currentPage--;
-                LoadData();
+                mmgr.History.CurrentPage--;
+                mmgr.History.LoadData();
                 //UpdateDataGrid();
             }
         }
@@ -222,17 +160,18 @@ namespace PaeoniaTechSpectroMeter.Views
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void PageNumbersBtn_Click(object sender, RoutedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            if (sender is Button button)
+            {
+                HeaderCheckBox.IsChecked = false;
+                CtrlHistory vm = DataContext as CtrlHistory;
 
-        private void PageButton_Click(int pageNumber)
-        {
-            CurrentPage = pageNumber;
-            LoadData();
+                if (vm != null)
+                {
+                    vm.SelectedButtonIndex = Convert.ToInt32(button.Content);
+                }
+            }
         }
 
         private void Chk_Checked(object sender, RoutedEventArgs e)
@@ -253,9 +192,9 @@ namespace PaeoniaTechSpectroMeter.Views
 
         private void SelectAll_Checked(object sender, RoutedEventArgs e)
         {
-            if (!selectedItemsPerPage.ContainsKey(currentPage))
+            if (!mmgr.History.SelectedItemsPerPage.ContainsKey(mmgr.History.CurrentPage))
             {
-                selectedItemsPerPage[currentPage] = new List<DataItem>();
+                mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage] = new List<DataItem>();
             }
 
             foreach (var item in history_dataGrid.Items)
@@ -265,9 +204,9 @@ namespace PaeoniaTechSpectroMeter.Views
                     dataItem.IsSelected = true;
 
                     // Add the item to the selected items list for the current page
-                    if (!selectedItemsPerPage[currentPage].Contains(dataItem))
+                    if (!mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage].Contains(dataItem))
                     {
-                        selectedItemsPerPage[currentPage].Add(dataItem);
+                        mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage].Add(dataItem);
                     }
                 }
             }
@@ -280,7 +219,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 if (item is DataItem dataItem)
                 {
                     dataItem.IsSelected = false;
-                    selectedItemsPerPage[currentPage].Remove(dataItem);
+                    mmgr.History.SelectedItemsPerPage[mmgr.History.CurrentPage].Remove(dataItem);
                 }
             }
         }
@@ -330,15 +269,23 @@ namespace PaeoniaTechSpectroMeter.Views
             else
             {
                 string serr = "";
-                serr = history.BrowseLocation();
-                SaveCSVFile(serr);
+                serr = mmgr.History.BrowseLocation();
+                if(serr == "")
+                {
+                    // Do nothing, as there is no directory selected
+                }
+                else
+                {
+                    SaveCSVFile(serr);
+                }
+                
             }
 
         }
 
         private void SaveCSVFile(string Dir)
         {
-            List<DataItem> allDataItems = GetAllDataItems();
+            List<DataItem> allDataItems = mmgr.History.GetAllDataItems();
 
             if (allDataItems.Count > 0)
             {
@@ -373,35 +320,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 }
             }
         }
-        private List<DataItem> GetAllDataItems()
-        {
-            string listOfMeasurements = "select * from Measurement ORDER BY [Time Stamp] desc";
-
-            dataAccess = new DataAccess(connectionString);
-            dataTable = dataAccess.GetData(listOfMeasurements);
-            List<DataItem> allItems = new List<DataItem>();
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                DataItem dataItem = new DataItem();
-
-                dataItem.Timestamp = row["Time Stamp"] is DateTime timestamp ? timestamp : default;
-                dataItem.Name = row["Name"]?.ToString();
-                dataItem.PassNo = row["Pass No."]?.ToString();
-                dataItem.Operator = row["Operator"]?.ToString();
-                dataItem.AnalysisType = row["Analysis Type"]?.ToString();
-                dataItem.SampleType = row["Sample Type"]?.ToString();
-                dataItem.Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null;
-                dataItem.Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null;
-                dataItem.Methanol = row["Methanol"] is double methanol ? (double?)methanol : null;
-                dataItem.Water = row["Water"] is double water ? (double?)water : null;
-                dataItem.Batch = row["Batch"] is int batch ? (int?)batch : null;
-
-                allItems.Add(dataItem);
-            }
-
-            return allItems;
-        }
+       
 
         private void ExportAsPDFBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -414,8 +333,16 @@ namespace PaeoniaTechSpectroMeter.Views
             else
             {
                 string serr = "";
-                serr = history.BrowseLocation();
-                SavePDFFile(serr);
+                serr = mmgr.History.BrowseLocation();
+                if (serr == "")
+                {
+                    // Do nothing, as there is no directory selected
+                }
+                else
+                {
+                    SavePDFFile(serr);
+                }
+                
             }
             
         }
@@ -472,7 +399,7 @@ namespace PaeoniaTechSpectroMeter.Views
                         document.Add(new Paragraph("\n"));
 
                         //History history = new History(mmgr);
-                        Table additionalInfoTable = history.CreateAdditionalInfoTable(Dir);// Add iTextSharp table with additional information
+                        Table additionalInfoTable = mmgr.History.CreateAdditionalInfoTable(Dir);// Add iTextSharp table with additional information
                         document.Add(additionalInfoTable);
 
                         document.Add(new Paragraph("\n"));
@@ -482,7 +409,7 @@ namespace PaeoniaTechSpectroMeter.Views
                         document.Add(equipmentInfo);
                         document.Add(new Paragraph("\n"));
 
-                        Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+                        Table equipmentInfoTable = mmgr.History.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
                         document.Add(equipmentInfoTable);
 
 
@@ -514,7 +441,7 @@ namespace PaeoniaTechSpectroMeter.Views
                             string concatenatedOperatorNames = string.Join(", ", operatorNames);
 
                             // Add summary information for the batch
-                            Table summarySelectedItemsTable = history.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
+                            Table summarySelectedItemsTable = mmgr.History.CreateSummarySelectedItemsTable(itemGroup.First(), itemGroup.Count(), concatenatedOperatorNames);
                             document.Add(summarySelectedItemsTable);
 
                             document.Add(new Paragraph("\n"));
@@ -541,7 +468,7 @@ namespace PaeoniaTechSpectroMeter.Views
 
 
                             // Create a single row table for average results
-                            Table avgResultItemsTable = history.CreateAverageResultItemsTable(
+                            Table avgResultItemsTable = mmgr.History.CreateAverageResultItemsTable(
                                 new DataItem
                                 {
                                     Ethanol = (double)avgEthanol,
@@ -657,24 +584,12 @@ namespace PaeoniaTechSpectroMeter.Views
             return (int)Math.Ceiling((double)totalRecords / pageSize);
         }
 
-        private void PageNumbersBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                HeaderCheckBox.IsChecked = false;
-                CtrlHistory vm = DataContext as CtrlHistory;
-
-                if (vm != null)
-                {
-                    vm.SelectedButtonIndex = Convert.ToInt32(button.Content);
-                }
-            }
-        }
+        
 
         private void BtnChangeLocationForBothCSV_PDF_Click(object sender, RoutedEventArgs e)
         {
             string serr = "";
-            serr = history.BrowseLocation();
+            serr = mmgr.History.BrowseLocation();
         }
 
        

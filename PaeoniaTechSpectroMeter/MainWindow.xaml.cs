@@ -291,7 +291,8 @@ namespace PaeoniaTechSpectroMeter
             else if (selectedTabItem.Header.ToString() == "History")
             {
                 //if (historyPage == null)
-                     historyPage = new CtrlHistory(mmgr);
+                historyPage = new CtrlHistory(mmgr);
+                historyPage.RefreshData();
                 Image historyIconImage = FindChild<Image>(selectedTabItem, "HistoryIconImage");
                 TextBlock historyTextBlockTabItem = FindChild<TextBlock>(selectedTabItem, "HistoryTextBlockTabItem");
                 if (historyTextBlockTabItem != null)

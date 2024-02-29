@@ -48,13 +48,11 @@ namespace PaeoniaTechSpectroMeter.Model
     public class History : INotifyPropertyChanged
     {
         private int _currentPage = 1;
-        private int _pageSize = 10;
-        private int _totalRecords;
-        private int _totalPages;
+        private int pageSize = 9;
+        private int totalRecords;
+        private int totalPages;
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
         // private readonly string _connectionString = //ConfigurationManager.ConnectionStrings["FuelAnalyser"].ConnectionString;
-        private DataAccess _dataAccess;
-        private DataTable _dataTable;
         private DataView _dataView;
         MainManager mmgr;
 
@@ -68,6 +66,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
 
         private ObservableCollection<DataItem> _dataItems = new ObservableCollection<DataItem>();
+        private Dictionary<int, List<DataItem>> selectedItemsPerPage = new Dictionary<int, List<DataItem>>();
         public ObservableCollection<DataItem> DataItems
         {
             get { return _dataItems; }
@@ -92,7 +91,7 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         public RelayCommand<int> PageButtonClickCommand { get; private set; }
 
-        public ObservableCollection<int> PageNumbers { get; set; } = new ObservableCollection<int>();
+        public ObservableCollection<object> PageNumbers { get; set; } = new ObservableCollection<object>();
 
         public object DataContext { get; private set; }
 
@@ -106,6 +105,26 @@ namespace PaeoniaTechSpectroMeter.Model
                     _currentPage = value;
                     OnPropertyChanged(nameof(CurrentPage));
                 }
+            }
+        }
+
+        public int TotalPages
+        {
+            get { return totalPages; }
+            set
+            {
+                totalPages = value;
+                OnPropertyChanged(nameof(TotalPages));
+            }
+        }
+
+        public Dictionary<int, List<DataItem>> SelectedItemsPerPage
+        {
+            get { return selectedItemsPerPage; }
+            set
+            {
+                selectedItemsPerPage = value;
+                OnPropertyChanged(nameof(SelectedItemsPerPage));
             }
         }
 
@@ -155,49 +174,49 @@ namespace PaeoniaTechSpectroMeter.Model
         }
         public History(MainManager mmgr)
         {
-            //connectionstrin=
-            // _connectionString=
-            Initialize();
-            PageButtonClickCommand = new RelayCommand<int>(PageButton_Click);
             this.mmgr = mmgr;
-
+            //Initialize();
+            dataAccess = new DataAccess(_connectionString);
+            PageButtonClickCommand = new RelayCommand<int>(PageButton_Click);
+            LoadData();
+            PageNumberInitialize();
             HistoryInfoIconSource = @"C:\FuelAnalyzer\bin\Icon\Info_Icon.png";
             ExportMessageCompleted = $"The button for exporting to PDF will be accessible when the checkbox is checked.";
             HistoryMessageText = true;
         }
 
-        private void Initialize()
-        {
+        //private void Initialize()
+        //{
 
+        //    try
+        //    {
+        //        _dataAccess = new DataAccess(_connectionString);
+        //        DataItems = new ObservableCollection<DataItem>();
+        //        //LoadData();
+        //        _totalRecords = GetTotalRecords();
+        //        totalPages = (int)Math.Ceiling((double)_totalRecords / _pageSize);
+        //        PageNumbers.Clear();
+        //        for (int i = 1; i <= totalPages; i++)
+        //        {
+        //            PageNumbers.Add(i);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"An error occurred during initialization: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
+        public void LoadData()
+        {
             try
             {
-                _dataAccess = new DataAccess(_connectionString);
-                DataItems = new ObservableCollection<DataItem>();
-                //LoadData();
-                _totalRecords = GetTotalRecords();
-                _totalPages = (int)Math.Ceiling((double)_totalRecords / _pageSize);
-                PageNumbers.Clear();
-                for (int i = 1; i <= _totalPages; i++)
-                {
-                    PageNumbers.Add(i);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred during initialization: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        private void LoadData()
-        {
-            try
-            {
-                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(_currentPage - 1) * _pageSize} ROWS FETCH NEXT {_pageSize} ROWS ONLY";
-                _dataTable = _dataAccess.GetData(listOfMeasurements);
+                string listOfMeasurements = $"SELECT * FROM Measurement ORDER BY [Time Stamp] desc OFFSET {(_currentPage - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+                dataTable = dataAccess.GetData(listOfMeasurements);
                 ObservableCollection<DataItem> dataItemList = new ObservableCollection<DataItem>();
 
 
-                foreach (DataRow row in _dataTable.Rows)
+                foreach (DataRow row in dataTable.Rows)
                 {
                     DataItem item = new DataItem
                     {
@@ -216,20 +235,75 @@ namespace PaeoniaTechSpectroMeter.Model
 
                     dataItemList.Add(item);
                 }
+                DataItems = new ObservableCollection<DataItem>(dataItemList);
+                PageNumberInitialize();
                 //DataItems = dataItemList;
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    DataItems.Clear();
-                    foreach (var item in dataItemList)
-                    {
-                        DataItems.Add(item);
-                    }
-                });
-                OnPropertyChanged(nameof(DataItems));
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
+                //    DataItems.Clear();
+                //    foreach (var item in dataItemList)
+                //    {
+                //        DataItems.Add(item);
+                //    }
+                //});
+                //OnPropertyChanged(nameof(DataItems));
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void PageNumberInitialize()
+        {
+            try
+            {
+                totalRecords = GetTotalRecords();
+                totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+                PageNumbers.Clear();
+
+                int maxPagesToShow = 3; //Maximum number of page numbers to show
+                int startPage = Math.Max(1, CurrentPage - (maxPagesToShow - 1) / 2);
+                //int startPage = Math.Max(1, CurrentPage - 1);
+                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                // Add the "Previous" button
+                if (CurrentPage >= 1)
+                {
+                    PageNumbers.Add(1);
+                    if (startPage > 2)
+                    {
+                        PageNumbers.Add(new EllipsisItem()); // Indicate ellipsis
+                    }
+                }
+
+                // Add page numbers between startPage and endPage
+                for (int i = startPage; i <= endPage; i++)
+                {
+                    if (i != 1 && i != totalPages)
+                        PageNumbers.Add(i);
+                }
+
+                // Add the "Next" button
+                if (CurrentPage <= totalPages)
+                {
+                    if (endPage < totalPages - 1)
+                    {
+                        PageNumbers.Add(new EllipsisItem()); // Indicate ellipsis
+                    }
+                    PageNumbers.Add(totalPages);
+                }
+
+
+                //for (int i = 1; i <= totalPages; i++)
+                //{
+                //    PageNumbers.Add(i);
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during initialization: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private int GetTotalRecords()
@@ -237,7 +311,7 @@ namespace PaeoniaTechSpectroMeter.Model
             try
             {
                 string countQuery = "SELECT COUNT(*) FROM Measurement";
-                int totalCount = _dataAccess.ExecuteScalar<int>(countQuery);
+                int totalCount = dataAccess.ExecuteScalar<int>(countQuery);
 
                 return totalCount;
             }
@@ -251,6 +325,36 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             CurrentPage = pageNumber;
             LoadData();
+        }
+
+        public List<DataItem> GetAllDataItems()
+        {
+            string listOfMeasurements = "select * from Measurement ORDER BY [Time Stamp] desc";
+
+            dataAccess = new DataAccess(_connectionString);
+            dataTable = dataAccess.GetData(listOfMeasurements);
+            List<DataItem> allItems = new List<DataItem>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DataItem dataItem = new DataItem();
+
+                dataItem.Timestamp = row["Time Stamp"] is DateTime timestamp ? timestamp : default;
+                dataItem.Name = row["Name"]?.ToString();
+                dataItem.PassNo = row["Pass No."]?.ToString();
+                dataItem.Operator = row["Operator"]?.ToString();
+                dataItem.AnalysisType = row["Analysis Type"]?.ToString();
+                dataItem.SampleType = row["Sample Type"]?.ToString();
+                dataItem.Ethanol = row["Ethanol"] is double ethanol ? (double?)ethanol : null;
+                dataItem.Denaturant = row["Denaturant"] is double denaturant ? (double?)denaturant : null;
+                dataItem.Methanol = row["Methanol"] is double methanol ? (double?)methanol : null;
+                dataItem.Water = row["Water"] is double water ? (double?)water : null;
+                dataItem.Batch = row["Batch"] is int batch ? (int?)batch : null;
+
+                allItems.Add(dataItem);
+            }
+
+            return allItems;
         }
 
         public Table CreateAdditionalInfoTable(string UserChooseDir)
@@ -586,4 +690,14 @@ namespace PaeoniaTechSpectroMeter.Model
 
        
     }
+}
+
+public class EllipsisItem
+{
+    //public string Type { get; } = "...";
+    public override string ToString()
+    {
+        return "...";
+    }
+    public bool IsClickable { get; } = false;
 }
