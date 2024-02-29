@@ -1125,7 +1125,7 @@ namespace PaeoniaTechSpectroMeter.Model
                     document.Add(reportTitle);
                     document.Add(new Paragraph("\n"));
 
-                    Table additionalInfoTable = history.CreateAdditionalInfoTable(Dir);// Add iTextSharp table with additional information
+                    Table additionalInfoTable = mmgr.History.CreateAdditionalInfoTable(Dir);// Add iTextSharp table with additional information
                     document.Add(additionalInfoTable);
 
                     document.Add(new Paragraph("\n"));
@@ -1135,7 +1135,7 @@ namespace PaeoniaTechSpectroMeter.Model
                     document.Add(equipmentInfo);
                     document.Add(new Paragraph("\n"));
 
-                    Table equipmentInfoTable = history.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
+                    Table equipmentInfoTable = mmgr.History.CreateEquipmentInfoTable();// Add iTextSharp table with additional information
                     document.Add(equipmentInfoTable);
 
                     int pageNumber = 1;
@@ -1146,7 +1146,7 @@ namespace PaeoniaTechSpectroMeter.Model
                     document.Add(sampleReport);
                     document.Add(new Paragraph("\n"));
 
-                    Table summarySelectedItemsTable = history.CreateMeasurementReportTable();
+                    Table summarySelectedItemsTable = mmgr.History.CreateMeasurementReportTable();
                     document.Add(summarySelectedItemsTable);
 
                     document.Add(new Paragraph("\n"));
@@ -1157,7 +1157,7 @@ namespace PaeoniaTechSpectroMeter.Model
                     document.Add(passesResultInfo);
                     document.Add(new Paragraph("\n"));
 
-                    Table selectedItemsTable = history.PassResultTable();
+                    Table selectedItemsTable = mmgr.History.PassResultTable();
                     document.Add(selectedItemsTable);
 
 
