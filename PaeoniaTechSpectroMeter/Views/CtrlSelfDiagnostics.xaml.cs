@@ -725,7 +725,7 @@ namespace PaeoniaTechSpectroMeter.Views
             {
                 testvalue = Math.Abs((currentOff[k] - spectrum[k] - ftydiff[k]) / ftydiff[k]);
                 average += testvalue;
-                if (testvalue >= 0.3)
+                if (testvalue >= 0.6)
                 {
 
 
@@ -768,7 +768,7 @@ namespace PaeoniaTechSpectroMeter.Views
                 }
             }
             average /= spectrum.Length;
-            if (average >= 0.2)
+            if (average >= 0.5)
             {
                 mmgr.AppConfig.Perfchk = "Failed";
                 mmgr.AppConfig.PerfchkTime = currentTime.ToString("dd/MM/yyyy hh:mm");
@@ -955,6 +955,10 @@ namespace PaeoniaTechSpectroMeter.Views
             MessageBox.Show($"Data saved to CSV file", "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void chart_Loaded()
+        {
+
+        }
     }
 }
 

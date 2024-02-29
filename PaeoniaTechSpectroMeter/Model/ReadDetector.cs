@@ -1275,7 +1275,7 @@ namespace PaeoniaTechSpectroMeter.Model
             MeasuremantBtnContent = "New Measurement";
         }
 
-
+        static int currentMeasurecount = 0;
 
         void PAT_Sensor_Read(bool isBackgroundRead)
         {
@@ -1293,19 +1293,21 @@ namespace PaeoniaTechSpectroMeter.Model
             int ms = mmgr.MeasurementConfigurationData.DelaybtwnMeasurement.HoldValue;
             int Sec = mmgr.MeasurementConfigurationData.DelaybtwnMeasurement1.HoldValue;
             int measurementCount = mmgr.MeasurementConfigurationData.RepeatMeasurement.HoldValue;
-            MeasurementMaxCont = measurementCount - 1;
+            int measurementAvg = mmgr.MeasurementConfigurationData.Avaragecount.HoldValue;
+            MeasurementMaxCont = measurementAvg*measurementCount;
             int delay = (Sec * 1000) + ms;
             IsReading = true;
             ReadBaselineInfo("");
             ReadBackground("");
-
+            currentMeasurecount = 0;
             int i = 0;
             try
             {
 
                 while (i < measurementCount)
                 {
-                    MeasurementStatusCont = i;
+                   // currentMeasurecount ++;
+                  //  MeasurementStatusCont = i;
 
                     if (ls != Dias_Lisa.Lisa.LISA_Status.LISA_OK)
                     {
@@ -1379,6 +1381,7 @@ namespace PaeoniaTechSpectroMeter.Model
         {
             // IsDataSavedDB = false;
             PassNo = 1;
+            currentMeasurecount = 0;
             MeasurementStatusCont = 0;
             AnalysisSelectionEnable = true;
             IsRepeatmeasure = false;
@@ -1544,6 +1547,11 @@ namespace PaeoniaTechSpectroMeter.Model
 
                     lsStatus = GetPixelVoltage(ref pixelvolt, lisaPixelSize);
                     Dias_Lisa.Lisa.Action();
+                    if (!isBackgroundRead)
+                    {
+                        currentMeasurecount++;
+                        MeasurementStatusCont = currentMeasurecount;
+                    }
                     List<double> adcData = new List<double>();
                     adcData.Clear();
                     // adcData.Clear();
@@ -1619,6 +1627,8 @@ namespace PaeoniaTechSpectroMeter.Model
                     // DateTime.Now.ToString(" h:mm:ss fff")//totaltime.ToString()
                     if (!isBackgroundRead)
                     {
+                        currentMeasurecount++;
+                        MeasurementStatusCont = currentMeasurecount;
 
                         RawAbsorbanceDataLogger.WriteToLog(DateTime.Now.ToString("HH:mm:ss fff") + "," + i.ToString() + "," + pixel_cm.ToString() + "," + Rawavolt[i].ToString("F6") + "," + Rawabsorbance[i].ToString("F6") + "," + DetectorTemperature + "", true); //DateTime.Now.ToString("h:mm:ss tt") + "," +  Math.Log10((Eoff_ref_data1[i] - avgout)/(Eoff_ref_data1[i] - bReadrefData1[i]))
 
