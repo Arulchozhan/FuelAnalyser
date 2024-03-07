@@ -1451,7 +1451,8 @@ namespace PaeoniaTechSpectroMeter.Model
            // string rawDataPath = "C:\\FuelAnalyzer\\2023-12-11-Raw_AbsorbanceC011_Sample4563.csv";
             string prototypeName = "P6";
             //mmgr.AppConfig.InstrumentSN;
-            string plsModelPath = mmgr.AppConfig.InstrumentSN;//@"C:\FuelAnalyzer\P6_PLS_model.pkl";  @"C:\Users\MuruganArulchozhan\.conda\envs\Novel_PAT\Lib\site-packages\"
+            string plsModelPath = mmgr.AppConfig.ModuleSN;
+          //  string plsModelPath = mmgr.AppConfig.InstrumentSN;//@"C:\FuelAnalyzer\P6_PLS_model.pkl";  @"C:\Users\MuruganArulchozhan\.conda\envs\Novel_PAT\Lib\site-packages\"ModelSN
             List<List<string>> rawSPCList = new List<List<string>>();
             List<List<string>> myList = new List<List<string>>();
             // List<Pixelresult_data> Sensorpixelresult = new List<Pixelresult_data>();

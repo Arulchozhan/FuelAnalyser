@@ -178,7 +178,20 @@ namespace PaeoniaTechSpectroMeter.Model
                 OnPropertyChanged("InstrumentSN");
             }
         }
-        string folderPath = "C:\\\\Users\\\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\ite-packages\\";
+
+        string moduleSN = "SAL0001F";
+        [Category("COMPANY INFORMATION")]
+        [Description("Model Serial Number")]
+        public string ModuleSN
+        {
+            get => moduleSN;
+            set
+            {
+                moduleSN= value;
+                OnPropertyChanged("ModuleSN");
+            }
+        }
+        string folderPath = "C:\\Users\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\ite-packages\\";
         [Category("COMPANY INFORMATION")]
         [Description("Folder Path")]
         public string FolderPath

@@ -56,6 +56,8 @@ namespace PaeoniaTechSpectroMeter.Views
             OpearatorName.LostFocus += TextBox_LostFocus;
             ////Inputpane
             //CompositionTarget.Rendering += CompositionTarget_Rendering;
+
+            this.PreviewMouseDown += MainWindow_PreviewMouseDown;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -70,7 +72,19 @@ namespace PaeoniaTechSpectroMeter.Views
             AdjustLayoutForKeyboard(false);
         }
 
-        private void AdjustLayoutForKeyboard(bool isKeyboardVisible)
+        private void MainWindow_PreviewMouseDown(object sender, RoutedEventArgs e)
+        {
+            //Check if the focus is moving away from any TextBox control
+            if (!(e.OriginalSource is TextBox))
+            {
+                //Keyboard.ClearFocus();
+                AdjustLayoutForKeyboard(false);
+
+
+            }
+        }
+
+            private void AdjustLayoutForKeyboard(bool isKeyboardVisible)
         {
             // Define the margin to shift the Grid containing the textboxes
             //int bottomMargin = isKeyboardVisible ? 300 : 0; // Adjust this value as needed
