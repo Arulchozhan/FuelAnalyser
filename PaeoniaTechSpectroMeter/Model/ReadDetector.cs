@@ -1451,8 +1451,9 @@ namespace PaeoniaTechSpectroMeter.Model
            // string rawDataPath = "C:\\FuelAnalyzer\\2023-12-11-Raw_AbsorbanceC011_Sample4563.csv";
             string prototypeName = "P6";
             //mmgr.AppConfig.InstrumentSN;
-            string plsModelPath = mmgr.AppConfig.ModuleSN;
-          //  string plsModelPath = mmgr.AppConfig.InstrumentSN;//@"C:\FuelAnalyzer\P6_PLS_model.pkl";  @"C:\Users\MuruganArulchozhan\.conda\envs\Novel_PAT\Lib\site-packages\"ModelSN
+            string plsModelPath = ""; //mmgr.AppConfig.ModuleSN;
+            string plsModulePath = mmgr.AppConfig.ModuleSN;
+            //  string plsModelPath = mmgr.AppConfig.InstrumentSN;//@"C:\FuelAnalyzer\P6_PLS_model.pkl";  @"C:\Users\MuruganArulchozhan\.conda\envs\Novel_PAT\Lib\site-packages\"ModelSN
             List<List<string>> rawSPCList = new List<List<string>>();
             List<List<string>> myList = new List<List<string>>();
             // List<Pixelresult_data> Sensorpixelresult = new List<Pixelresult_data>();
@@ -1507,6 +1508,13 @@ namespace PaeoniaTechSpectroMeter.Model
             //pixelvolt = new int[Lisapixelsize];
             // List<Pixelresult_data> Sensorpixelresult = new List<Pixelresult_data>();
             string lsStatus = "";
+            if (mmgr.ReadDetector.SelectedAnalysistype == 0)
+            {
+                plsModelPath = "ethanol";
+            }
+            else
+                plsModelPath = "methanol" ;  // plsModelPath= plsModelPath;
+
 
             try
             {
@@ -1664,7 +1672,13 @@ namespace PaeoniaTechSpectroMeter.Model
                 if (!isBackgroundRead)
                 {
 
-                    string concentrationResultArray = ImportPythonTest(backgroundPath, baselinePath, rawDataPath, plsModelPath);
+                    if (mmgr.ReadDetector.SelectedAnalysistype == 0)
+                    {
+                    }
+                    else
+                        ;  // plsModelPath= plsModelPath;
+
+                        string concentrationResultArray = ImportPythonTest(backgroundPath, baselinePath, rawDataPath,plsModulePath, plsModelPath);
                     if (concentrationResultArray != null)
                     {
                         // Remove the brackets and split the string by space
@@ -1746,7 +1760,7 @@ namespace PaeoniaTechSpectroMeter.Model
 
 
 
-        public string ImportPythonTest(string Emitter_On_Background_Path, string Emitter_Off_Background_Path, string Raw_Data_Path, string plsModel_Path)
+        public string ImportPythonTest(string Emitter_On_Background_Path, string Emitter_Off_Background_Path, string Raw_Data_Path, string plsModule_Path, string plsModel_Path)
         {
             List<object> myList = new List<object>();
             PythonEngine.Initialize();
@@ -1761,8 +1775,8 @@ namespace PaeoniaTechSpectroMeter.Model
 
                     // dynamic PaeoniaPLS = Py.Import("PaeoniaModel");
                    
-                     dynamic PaeoniaPLS = Py.Import(plsModel_Path);
-                    string plsModelPath =mmgr.AppConfig.FolderPath + plsModel_Path;
+                     dynamic PaeoniaPLS = Py.Import(plsModule_Path+"."+plsModel_Path);
+                    string plsModelPath =mmgr.AppConfig.FolderPath + plsModule_Path+"\\"+ plsModel_Path;
                     dynamic result = PaeoniaPLS.Predict_Y(Emitter_On_Background_Path, Emitter_Off_Background_Path, Raw_Data_Path, plsModelPath);// $"C:\\Users\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\site-packages\\" +plsModel_Path);//  "C:\\Users\\Admin\\anaconda3\\envs\\Paeoniaenv\\Lib\\site-packages\\"  //C:\\Users\\MuruganArulchozhan\\.conda\\envs\\Novel_PAT\\Lib\\site-packages\\
                     myList = ((object[])result).ToList<object>();
                     pythonConcentrationArrayString = $"{myList[0].ToString()} {myList[1].ToString()} {myList[2].ToString()} {myList[3].ToString()}";
